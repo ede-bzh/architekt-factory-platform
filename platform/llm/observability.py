@@ -157,6 +157,14 @@ class LLMTracer:
         conn.commit()
         conn.close()
 
+        if session_id or mission_id:
+            try:
+                from .budget import check_and_pause_if_over_budget
+
+                check_and_pause_if_over_budget(session_id, mission_id)
+            except Exception as exc:
+                logger.debug("LLM budget check failed: %s", exc)
+
         logger.info(
             "LLM trace %s: %s/%s %din/%dout $%.4f %dms",
             trace_id,

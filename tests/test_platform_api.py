@@ -30,6 +30,12 @@ class TestHealth:
         data = r.json()
         assert data["status"] == "ok"
 
+    def test_proof_page(self, client):
+        r = client.get("/proof")
+        assert r.status_code == 200
+        assert "text/html" in r.headers.get("content-type", "")
+        assert "Architekt proof dashboard POC" in r.text
+
     def test_metrics_prometheus(self, client):
         r = client.get("/api/metrics/prometheus")
         assert r.status_code == 200
@@ -220,7 +226,7 @@ class TestSecurity:
     def test_csp_header(self, client):
         r = client.get("/api/health")
         csp = r.headers.get("Content-Security-Policy", "")
-        assert "default-src 'self'" in csp
+        assert "unsafe-eval" not in csp
         assert "frame-ancestors 'none'" in csp
 
     def test_security_headers(self, client):

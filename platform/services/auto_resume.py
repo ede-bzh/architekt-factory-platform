@@ -226,6 +226,9 @@ async def _resume_batch(stagger: float = 3.0) -> int:
     for run_id, wf_id, mname, mtype, mstatus in paused_rows:
         if mstatus not in ("active", None, ""):
             continue
+        if _is_budget_paused_run(run_id):
+            logger.info("auto_resume: skipping budget-paused run %s", run_id)
+            continue
         if _is_continuous(mname, mtype):
             continuous_paused.append(run_id)
         else:

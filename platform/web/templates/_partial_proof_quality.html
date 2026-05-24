@@ -1,0 +1,21 @@
+{% if projects %}
+<table class="proof-table">
+    <thead>
+        <tr><th>Project</th><th>Score</th><th>Scanned</th></tr>
+    </thead>
+    <tbody>
+        {% for p in projects %}
+        <tr>
+            <td>{{ p.project_id }}</td>
+            <td>{{ p.global_score | default(0) }}/100</td>
+            <td style="color:var(--text-secondary);font-size:0.75rem">{{ p.timestamp | default('—') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p style="font-size:0.72rem;color:var(--text-secondary);margin:0.5rem 0 0">
+    Source: <a class="proof-link" href="/api/quality" target="_blank" rel="noopener">/api/quality</a>
+</p>
+{% else %}
+<p class="proof-empty">No quality snapshots yet. Source: <a class="proof-link" href="/api/quality" target="_blank" rel="noopener">/api/quality</a></p>
+{% endif %}
