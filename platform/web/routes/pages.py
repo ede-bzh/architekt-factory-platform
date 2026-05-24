@@ -1757,6 +1757,11 @@ async def proof_page(request: Request):
 async def finops_page(request: Request):
     """FinOps POC — LLM cost summary from llm_traces."""
     from ...db.migrations import get_db
+    from ...metrics.finops_summary import global_summary, margin_alerts, missions_summary
+
+    finops_global = global_summary()
+    finops_alerts = margin_alerts()
+    finops_missions = missions_summary()
 
     db = get_db()
     try:
@@ -1834,5 +1839,8 @@ async def finops_page(request: Request):
             "total_calls": total_calls,
             "by_provider": by_provider,
             "by_mission": by_mission,
+            "finops_global": finops_global,
+            "finops_alerts": finops_alerts,
+            "finops_missions": finops_missions,
         },
     )

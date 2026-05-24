@@ -33,47 +33,30 @@ def import_time():
     return time.time()
 
 
-def _app_version() -> str:
-    """Platform version tag (VERSION file or git describe)."""
-    import subprocess
-    from pathlib import Path
-
-    root = Path(__file__).resolve().parents[2]
-    ver_file = root / "VERSION"
-    if ver_file.exists():
-        parts = ver_file.read_text().strip().split(":")
-        return parts[0] if parts else "unknown"
-    try:
-        return (
-            subprocess.check_output(
-                ["git", "describe", "--tags", "--always"],
-                stderr=subprocess.DEVNULL,
-                cwd=root,
-            )
-            .decode()
-            .strip()
-        )
-    except Exception:
-        return "unknown"
-
-
 @router.get("/api/health", responses={200: {"model": HealthResponse}})
 async def health_check():
     """Liveness/readiness probe for Docker healthcheck."""
     from ....db.migrations import get_db
 
-    ts = datetime.utcnow().isoformat() + "Z"
     try:
         db = get_db()
         db.execute("SELECT 1")
+        version = "architekt-platform"
+        try:
+            from .... import __version__ as _v
+
+            version = str(_v)
+        except Exception:
+            pass
         return JSONResponse(
-            {"status": "ok", "version": _app_version(), "timestamp": ts}
+            {
+                "status": "ok",
+                "version": version,
+                "timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
         )
     except Exception as e:
-        return JSONResponse(
-            {"status": "error", "detail": str(e), "version": _app_version(), "timestamp": ts},
-            status_code=503,
-        )
+        return JSONResponse({"status": "error", "detail": str(e)}, status_code=503)
 
 
 @router.get("/api/metrics/load")

@@ -223,6 +223,36 @@ async def prometheus_metrics():
             labels=f'provider="{provider}"',
         )
 
+    # Architekt alias metrics (same values — ADR-001 dual naming)
+    architekt_lines = []
+    for line in lines:
+        if line.startswith("macaron_"):
+            architekt_lines.append(line.replace("macaron_", "architekt_", 1))
+        elif line.startswith("# HELP macaron_"):
+            architekt_lines.append(line.replace("macaron_", "architekt_", 1))
+        elif line.startswith("# TYPE macaron_"):
+            architekt_lines.append(line.replace("macaron_", "architekt_", 1))
+    lines.extend(architekt_lines)
+
+    try:
+        from ....metrics.finops_summary import global_summary
+
+        finops = global_summary()
+        _m(
+            "architekt_finops_margin_pct",
+            finops.get("margin_pct", 0),
+            "FinOps margin percent",
+        )
+        _m(
+            "architekt_finops_cost_usd",
+            finops.get("cost_usd", 0),
+            "Total LLM cost USD",
+        )
+        if finops.get("below_target"):
+            _m("architekt_finops_margin_alert", 1, "Margin below target (1=yes)")
+    except Exception:
+        pass
+
     return "\n".join(lines) + "\n"
 
 
