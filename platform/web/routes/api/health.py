@@ -36,14 +36,34 @@ def import_time():
 @router.get("/api/health", responses={200: {"model": HealthResponse}})
 async def health_check():
     """Liveness/readiness probe for Docker healthcheck."""
+    import os
+    from datetime import datetime, timezone
+
     from ....db.migrations import get_db
 
+    version = os.getenv("PLATFORM_VERSION", "2.2.0")
+    timestamp = (
+        datetime.now(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
     try:
         db = get_db()
         db.execute("SELECT 1")
-        return JSONResponse({"status": "ok"})
+        return JSONResponse(
+            {"status": "ok", "version": version, "timestamp": timestamp}
+        )
     except Exception as e:
-        return JSONResponse({"status": "error", "detail": str(e)}, status_code=503)
+        return JSONResponse(
+            {
+                "status": "error",
+                "version": version,
+                "timestamp": timestamp,
+                "detail": str(e),
+            },
+            status_code=503,
+        )
 
 
 @router.get("/api/metrics/load")
@@ -873,9 +893,7 @@ async def monitoring_live(request: Request, hours: int = 24):
         if hasattr(request, "state")
         else False
     )
-    from ....branding import get_api_key
-
-    if not is_authed and get_api_key():
+    if not is_authed and os.getenv("MACARON_API_KEY"):
         # Strip container IDs, kernel, server version, git branch, Azure details
         for d in docker_info:
             d.pop("id", None)
