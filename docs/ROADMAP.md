@@ -16,7 +16,7 @@
 - **Équipe** : 2 personnes (CPO + CTO).
 - **Plateforme** = outil interne (anciennement *Software Factory*) qui orchestre des agents IA pour livrer des projets clients.
 - **Repo** : `ede-bzh/architekt-factory-platform`.
-- **État runtime aujourd'hui** : code sur GitHub uniquement, rien n'est déployé.
+- **État runtime aujourd'hui** : code sur GitHub (`main`, PR #7 mergé) — CI + tests locaux ; pas encore déployé prod.
 
 ## Principes directeurs (10)
 
@@ -33,11 +33,11 @@
 
 ## Phases (vue d'ensemble)
 
-| # | Nom | Durée | Gate de sortie | Statut |
-|---|-----|-------|----------------|--------|
-| **0** | Foundation & Rebrand | 1 semaine | Marque, licence, legal pack, positionnement écrits | À démarrer |
-| **1** | Offer & Stack Catalogue | 1 semaine | 9 offres packagées + catalogue tierisé + 18 ADR | À démarrer |
-| **2** | Delivery Doctrine | 1 semaine | 14 skills Architekt + CI + SAST + SCA + SBOM | À démarrer |
+| # | Nom | Durée | Gate de sortie | Statut | Note plateforme vs business |
+|---|-----|-------|----------------|--------|----------------------------|
+| **0** | Foundation & Rebrand | 1 semaine | Marque, licence, legal pack, positionnement écrits | **Partiel** | **Plateforme** : rebrand UI, auth, CI, demo LLM (waves 0–1). **Business** : legal pack, landing, licence formalisée ouverts. |
+| **1** | Offer & Stack Catalogue | 1 semaine | 9 offres packagées + catalogue tierisé + 18 ADR | **Partiel** | **Docs** : 9 offres, catalogue A/B/C, INTAKE, ADR 029–045 écrits. **Business** : packaging commercial et validation terrain non faits. |
+| **2** | Delivery Doctrine | 1 semaine | 14 skills Architekt + CI + SAST + SCA + SBOM | **En cours** | **Plateforme** : 14 skills, CI sécu/SBOM, L0, L2 déterministe, FinOps, audit logs, E2E smoke (waves 2–4). **Reste wave 5** : `docs/architekt/PLATFORM-BACKLOG.md` § Wave 5. |
 | **3** | Public Pilot | 2 semaines | architekt.* live + Quality Report public + IMDA appli | À démarrer |
 | **4** | First Paid Clients (APAC) | 1-3 mois | 3 clients payants, marge mesurée, 2 case studies | À démarrer |
 | **5** | Internal Developer Platform + MENA/EMEA expansion | 1-3 mois | IDP fonctionnel + 1er client MENA ou EMEA | À démarrer |
@@ -45,6 +45,9 @@
 | **7** | SaaS Option | déclencheur 10+ clients | Multi-tenant + billing + marketplace (optionnel) | Conditionnel |
 
 Détails par phase : voir `docs/architekt/phase-{0..7}.md`.
+
+> **Livraisons plateforme (waves 0–4, PR #2→#7)** : backlog détaillé `docs/architekt/PLATFORM-BACKLOG.md`.
+> **Wave 5 en cours** : câblage L2 dans `run_guard`, HITL deploy, `MAX_ARCHITEKT_SKILLS`, i18n/DPA, rebrand dashboard, L2 LLM, confirmation CI verte.
 
 ## Documents pivots (16)
 

@@ -2,8 +2,9 @@
 Adversarial Guard — Detect slop, hallucination, mock, and lies in agent output.
 ================================================================================
 
-Two-layer Swiss Cheese model:
+Three-layer Swiss Cheese model:
 - L0: Deterministic fast checks (regex, heuristics) — 0ms
+- L2: Architecture / security checks on code writes — 0ms
 - L1: Semantic LLM check (different model than producer) — optional, ~5s
 
 Runs INSIDE _execute_node() after agent produces output, BEFORE storing in memory.
@@ -457,6 +458,7 @@ def check_l2(
     content: str,
     agent_role: str = "",
     tool_calls: list = None,
+    task: str = "",
 ) -> GuardResult:
     """L2: Deterministic architecture / security checks on code writes."""
     tool_calls = tool_calls or []
@@ -658,10 +660,11 @@ async def run_guard(
     pattern_type: str = "",
     enable_l1: bool = True,
 ) -> GuardResult:
-    """Run the full adversarial guard pipeline: L0 then L1.
+    """Run the full adversarial guard pipeline: L0 → L2 → L1.
 
     L0 always runs (deterministic, 0ms).
-    L1 runs only for execution patterns (not discussions) and if L0 passes.
+    L2 runs after L0 passes — architecture/security on code writes (dev roles).
+    L1 runs last for execution patterns and dev roles when enabled.
     """
     # L0: Fast deterministic
     l0 = check_l0(content, agent_role, tool_calls, task)
@@ -670,9 +673,6 @@ async def run_guard(
         logger.info(f"GUARD L0 REJECT [{agent_name}]: {l0.summary}")
         return l0
 
-    # L1: Semantic LLM check — only for execution patterns AND dev/ops roles
-    # Discussion patterns (network, human-in-the-loop) are debating, not producing code
-    # Strategic/business/management roles produce analysis, not code — skip L1
     execution_patterns = {
         "sequential",
         "hierarchical",
@@ -694,15 +694,26 @@ async def run_guard(
     }
     role_lower = (agent_role or "").lower()
     is_dev_role = not any(nr in role_lower for nr in _non_dev_roles)
+
+    # L2: Architecture / security — check_l2 skips non-dev roles and non-writes
+    l2 = check_l2(content, agent_role, tool_calls, task)
+    if not l2.passed:
+        logger.info(f"GUARD L2 REJECT [{agent_name}]: {l2.summary}")
+        l2.issues = l0.issues + l2.issues
+        l2.score = max(l0.score, l2.score)
+        return l2
+
+    # L1: Semantic LLM check — only for execution patterns AND dev/ops roles
+    # Discussion patterns (network, human-in-the-loop) are debating, not producing code
+    # Strategic/business/management roles produce analysis, not code — skip L1
     if enable_l1 and pattern_type in execution_patterns and is_dev_role:
         l1 = await check_l1(
             content, task, agent_role, agent_name, tool_calls, pattern_type
         )
         if not l1.passed:
             logger.info(f"GUARD L1 REJECT [{agent_name}]: {l1.summary}")
-            # Merge L0 warnings with L1 issues
-            l1.issues = l0.issues + l1.issues
-            l1.score = max(l0.score, l1.score)
+            l1.issues = l0.issues + l2.issues + l1.issues
+            l1.score = max(l0.score, l2.score, l1.score)
             return l1
 
     level = "L0+L2"
@@ -711,7 +722,7 @@ async def run_guard(
 
     return GuardResult(
         passed=True,
-        score=l0.score,
+        score=max(l0.score, l2.score),
         issues=l0.issues + l2.issues,
         level=level,
     )

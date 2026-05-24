@@ -85,6 +85,7 @@ jobs:
             tests/test_prometheus_architekt.py \
             tests/test_ai_audit_logs.py \
             tests/test_case_study.py \
+            tests/test_architekt_delivery_audit.py \
             -q
 
   mutation:
