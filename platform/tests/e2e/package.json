@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "npx playwright test",
-    "test:smoke": "npx playwright test portfolio pages",
+    "test:smoke": "npx playwright test smoke.spec.ts",
     "test:journeys": "npx playwright test journeys",
     "test:projects": "npx playwright test project-chat",
     "test:ideation": "npx playwright test ideation",

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-area" style="padding:2rem;max-width:960px">
+    <h1 style="font-size:1.6rem;font-weight:700;margin-bottom:0.25rem">
+        FinOps — LLM Cost (POC)
+    </h1>
+    <p style="color:var(--text-secondary);margin-bottom:1.5rem;font-size:0.9rem">
+        Aggregated from <code>llm_traces</code> — same data as <a href="/api/analytics/costs">/api/analytics/costs</a>.
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem">
+        <div class="metric-card" style="padding:1rem;border-radius:10px;background:var(--bg-secondary);border:1px solid var(--border)">
+            <div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase">Total cost</div>
+            <div style="font-size:1.75rem;font-weight:700;color:var(--purple-light)">${{ "%.4f"|format(total_cost_usd) }}</div>
+        </div>
+        <div class="metric-card" style="padding:1rem;border-radius:10px;background:var(--bg-secondary);border:1px solid var(--border)">
+            <div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase">LLM calls</div>
+            <div style="font-size:1.75rem;font-weight:700">{{ total_calls }}</div>
+        </div>
+        <div class="metric-card" style="padding:1rem;border-radius:10px;background:var(--bg-secondary);border:1px solid var(--border)">
+            <div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase">Providers</div>
+            <div style="font-size:1.75rem;font-weight:700">{{ by_provider|length }}</div>
+        </div>
+    </div>
+
+    {% if by_provider %}
+    <h2 style="font-size:1rem;font-weight:600;margin-bottom:0.75rem">By provider</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+        <thead>
+            <tr style="border-bottom:1px solid var(--border);text-align:left;color:var(--text-secondary)">
+                <th style="padding:0.5rem">Provider</th>
+                <th style="padding:0.5rem">Model</th>
+                <th style="padding:0.5rem">Calls</th>
+                <th style="padding:0.5rem">Cost (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in by_provider %}
+            <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.5rem">{{ row.provider }}</td>
+                <td style="padding:0.5rem">{{ row.model }}</td>
+                <td style="padding:0.5rem">{{ row.calls }}</td>
+                <td style="padding:0.5rem">${{ "%.6f"|format(row.cost_usd) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:var(--text-secondary)">No LLM traces recorded yet.</p>
+    {% endif %}
+
+    <p style="margin-top:2rem">
+        <a href="/proof" style="color:var(--purple-light)">Back to Proof of Concepts</a>
+    </p>
+</div>
+{% endblock %}

@@ -1726,45 +1726,6 @@ async def ops_page(request: Request):
     )
 
 
-# ── Architekt proof dashboard (POC) ──────────────────────────────
-
-
-@router.get("/proof", response_class=HTMLResponse)
-async def proof_dashboard_page(request: Request):
-    """Architekt proof dashboard POC — health, quality, DORA snippets."""
-    return _templates(request).TemplateResponse(
-        "proof.html",
-        {"request": request, "page_title": "Proof Dashboard"},
-    )
-
-
-@router.get("/proof/partial/quality", response_class=HTMLResponse)
-async def proof_partial_quality(request: Request):
-    """HTMX partial — latest quality scores from /api/quality data."""
-    from ...metrics.quality import QualityScanner
-
-    projects = QualityScanner.get_all_projects_scores()
-    return _templates(request).TemplateResponse(
-        "_partial_proof_quality.html",
-        {"request": request, "projects": projects},
-    )
-
-
-@router.get("/proof/partial/dora", response_class=HTMLResponse)
-async def proof_partial_dora(request: Request):
-    """HTMX partial — DORA metrics snippet if available."""
-    from ...metrics.dora import get_dora_metrics
-
-    try:
-        dora = get_dora_metrics().summary("", 30)
-    except Exception:
-        dora = None
-    return _templates(request).TemplateResponse(
-        "_partial_proof_dora.html",
-        {"request": request, "dora": dora},
-    )
-
-
 @router.get("/manifest.json")
 async def manifest_json():
     """Serve PWA manifest."""
@@ -1781,3 +1742,61 @@ async def analytics_page(request: Request):
     from starlette.responses import RedirectResponse
 
     return RedirectResponse("/metrics?tab=analytics", status_code=302)
+
+
+@router.get("/proof", response_class=HTMLResponse)
+async def proof_page(request: Request):
+    """Proof-of-concept index — links to wave-2 experiments."""
+    return _templates(request).TemplateResponse(
+        "proof.html",
+        {"request": request, "page_title": "Proof of Concepts"},
+    )
+
+
+@router.get("/finops", response_class=HTMLResponse)
+async def finops_page(request: Request):
+    """FinOps POC — LLM cost summary from llm_traces."""
+    from ...db.migrations import get_db
+
+    db = get_db()
+    try:
+        total_cost = float(
+            db.execute(
+                "SELECT COALESCE(SUM(cost_usd), 0) FROM llm_traces"
+            ).fetchone()[0]
+            or 0
+        )
+        total_calls = int(
+            db.execute("SELECT COUNT(*) FROM llm_traces").fetchone()[0] or 0
+        )
+        rows = db.execute("""
+            SELECT provider, model,
+                   COUNT(*) AS calls,
+                   COALESCE(SUM(cost_usd), 0) AS cost_usd
+            FROM llm_traces
+            GROUP BY provider, model
+            ORDER BY cost_usd DESC
+            LIMIT 20
+        """).fetchall()
+        by_provider = [
+            {
+                "provider": r["provider"],
+                "model": r["model"],
+                "calls": r["calls"],
+                "cost_usd": float(r["cost_usd"] or 0),
+            }
+            for r in rows
+        ]
+    finally:
+        db.close()
+
+    return _templates(request).TemplateResponse(
+        "finops.html",
+        {
+            "request": request,
+            "page_title": "FinOps",
+            "total_cost_usd": round(total_cost, 6),
+            "total_calls": total_calls,
+            "by_provider": by_provider,
+        },
+    )

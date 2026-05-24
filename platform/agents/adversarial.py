@@ -51,6 +51,14 @@ _SLOP_PATTERNS = [
     (r"\bXXX\b", "XXX marker — needs attention"),
 ]
 
+# ZERO SKIP — forbidden test/lint bypass patterns (VETO ABSOLU)
+_ZERO_SKIP_PATTERNS = [
+    (r"\btest\.skip\s*\(", "test.skip()"),
+    (r"@ts-ignore\b", "@ts-ignore"),
+    (r"#\[ignore\]", "#[ignore]"),
+    (r"except\s*:\s*\n\s*pass\b", "except: pass"),
+]
+
 # Mock/stub patterns — fake implementations
 _MOCK_PATTERNS = [
     (r"#\s*TODO\s*:?\s*implement", "TODO implement marker"),
@@ -227,6 +235,12 @@ def check_l0(
             issues.append(f"SLOP: {desc}")
             score += 3
 
+    # Check ZERO SKIP patterns in agent output
+    for pattern, desc in _ZERO_SKIP_PATTERNS:
+        if re.search(pattern, content, re.IGNORECASE | re.MULTILINE):
+            issues.append(f"ZERO_SKIP: {desc}")
+            score += 7
+
     # Check mock/stub in agent output
     for pattern, desc in _MOCK_PATTERNS:
         if re.search(pattern, content, re.IGNORECASE | re.MULTILINE):
@@ -260,6 +274,12 @@ def check_l0(
                 f"FAKE_BUILD: Suspiciously small build script ({len(file_content)} chars) in {file_path}"
             )
             score += 7
+        # Check ZERO SKIP patterns in written files
+        for pattern, desc in _ZERO_SKIP_PATTERNS:
+            if re.search(pattern, file_content, re.IGNORECASE | re.MULTILINE):
+                issues.append(f"ZERO_SKIP_IN_CODE: {desc} in {file_path}")
+                score += 7
+                break
         # Check mock/stub patterns in written files
         for pattern, desc in _MOCK_PATTERNS:
             if re.search(pattern, file_content, re.IGNORECASE | re.MULTILINE):

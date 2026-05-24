@@ -50,7 +50,7 @@ Détails par phase : voir `docs/architekt/phase-{0..7}.md`.
 
 | Document | Rôle |
 |----------|------|
-| **`ROADMAP.md`** (ce fichier) | Master plan |
+| **`ROADMAP.md`** (ce fichier) | Master plan + catalogue features |
 | **`OFFERS.md`** | 9 offres packagées (Launch, MVP, Portal, Internal Tool, AI Workflow, Commerce, Modernize, Audit, Run) |
 | **`CLIENTS.md`** | 9 typologies clients (scale-ups, SMEs, professional services, hospitality, industrial, education, healthcare wellness, e-commerce, government) |
 | **`PROJECTS.md`** | 10 types de projets techniques |
@@ -65,6 +65,7 @@ Détails par phase : voir `docs/architekt/phase-{0..7}.md`.
 | **`GTM.md`** | Stratégie commerciale globale (APAC + MENA + EMEA + USA) |
 | **`RISKS.md`** | 25 risques + 5 nouveaux globaux (R21-R25) |
 | **`CATALOG.md`** | Catalogue technos tierisé |
+| **`architekt/PLATFORM-BACKLOG.md`** | Backlog plateforme P0–P3 aligné Tier S/A/B/C |
 | **`adr/`** | 36 ADR (001-020 + 029-045) |
 
 ## Phase 0 — Foundation & Rebrand (1 semaine)
@@ -168,6 +169,299 @@ Cf. `docs/architekt/phase-6-client-portal.md`.
 
 Cf. `docs/architekt/phase-7-saas.md`.
 
+
+---
+
+## Catalogue features plateforme
+
+> **Objectif** : inventorier ce que la plateforme Architekt doit faire, prioriser sans sur-construire, et mapper chaque feature aux phases 0–7.
+> Détail exécution : `docs/architekt/PLATFORM-BACKLOG.md`. Offres commerciales : `docs/OFFERS.md` (ne pas dupliquer ici).
+
+### Vision produit
+
+Architekt Platform = **GitHub** (code, PR, CI) + **Linear** (backlog, sprints, WSJF) + **Backstage** (catalogue services/templates) + **CI/CD** (gates qualité/sécu) + **agents IA** (156 skills orchestrés) + **quality gates** (adversarial L0–L2, SBOM, mutation testing).
+
+```
+┌─────────────┐   ┌──────────────┐   ┌─────────────────┐
+│  Intake /   │   │   Mission    │   │  Repo + CI/CD   │
+│  Offre      │──▶│  Control     │──▶│  (GitHub-like)  │
+│  (OFFERS)   │   │  (Linear)    │   │                 │
+└─────────────┘   └──────┬───────┘   └────────┬────────┘
+                         │                      │
+                         ▼                      ▼
+                  ┌──────────────┐      ┌─────────────────┐
+                  │ Agent Loop   │      │ Quality Gates   │
+                  │ + Patterns   │      │ SAST/SCA/SBOM   │
+                  │ + Workflows  │      │ Adversarial     │
+                  └──────┬───────┘      └────────┬────────┘
+                         │                      │
+                         └──────────┬───────────┘
+                                    ▼
+                         ┌─────────────────────┐
+                         │ quality-report.pdf  │  ← killer feature
+                         │ (preuve client)     │
+                         └─────────────────────┘
+```
+
+**Différenciation** : les concurrents vendent du code ou des heures ; Architekt vend une **preuve automatisée** de qualité, sécurité et architecture — exportable en PDF client-ready.
+
+### Killer feature — `quality-report.pdf`
+
+| Attribut | Détail |
+|----------|--------|
+| **Quoi** | Rapport PDF auto-généré à chaque release / fin de sprint / fin de mission |
+| **Contenu** | DORA metrics, couverture tests, mutation score (modules critiques), Lighthouse, WCAG 2.2 AA, SAST/SCA résumé, SBOM CycloneDX signé, ADR architecture, threat model light, FinOps LLM/mission |
+| **Format** | PDF brandé Architekt + JSON machine-readable (API `/api/missions/{id}/quality-report`) |
+| **Public** | Version anonymisée sur `architekt.*/proof` (Phase 3) ; version complète en livrable client (Phase 4+) |
+| **Tier** | **S** — différenciateur commercial (ADR-015) |
+| **Phase** | POC Phase 2 → public Phase 3 → standard livrable Phase 4 |
+
+Cf. `skills/architekt-qa.md`, `docs/METRICS.md`, Phase 3 livrable #8.
+
+### 8 blocs fonctionnels
+
+#### 1. CORE — Orchestration agents & missions
+
+| Feature | Description | Tier | Phase |
+|---------|-------------|------|-------|
+| Agent loop + message bus | Exécution agents, SSE temps réel, négociation A2A | **S** | 0–2 |
+| 156 agents + skills YAML | Registry, injection contexte Architekt | **S** | 2 |
+| 15 patterns orchestration | solo, sequential, parallel, hierarchical, adversarial… | **S** | 2 |
+| 36 workflows builtin | product-lifecycle, feature-sprint, security-hacking… | **A** | 2–4 |
+| Mission control 11 phases | Idéation → déploiement → TMA | **S** | 2 |
+| LLM multi-provider + FinOps | minimax/azure/demo, cooldown 429, coût/mission | **S** | 0–2 |
+| Mémoire 4 couches | session → pattern → project → global (FTS5) | **A** | 3–5 |
+| MCP bridge | fetch, memory-kg, playwright, LRM | **B** | 4–5 |
+
+#### 2. Platform — IDP interne (Backstage-like, sans Backstage)
+
+| Feature | Description | Tier | Phase |
+|---------|-------------|------|-------|
+| Mission manifest YAML | client, offre, stack, budget, équipe agents | **A** | 5 |
+| Template registry | workflows par offre, stack kits Tier A, repo templates | **A** | 5 |
+| Provisioning env (Terraform) | Cloudflare Pages, Hetzner, modules cloud client | **B** | 5 |
+| Service catalog | Services, APIs, ownership (light catalog) | **B** | 5–6 |
+| Time-to-new-mission < 10 min | mission → repo → CI → report | **A** | 5 |
+| CLI `architekt` / `sf` | status, ideation, missions, streaming SSE | **S** | 0–2 |
+| Dashboard monitoring | DORA, LLM traces, live SSE `/monitoring` | **A** | 3–4 |
+
+#### 3. Security — NIST SSDF + adversarial
+
+| Feature | Description | Tier | Phase |
+|---------|-------------|------|-------|
+| Auth fail-closed (`ARCHITEKT_API_KEY`) | Bearer, rate limit PG-backed | **S** | 0 |
+| CI SAST + SCA + secret scan | Bandit, Semgrep, Safety, TruffleHog | **S** | 2 |
+| SBOM CycloneDX signé | Syft, gate release | **S** | 2 |
+| Adversarial L0 (deterministic) | test.skip, @ts-ignore, empty catch → VETO | **S** | 2 |
+| Adversarial L1 (LLM semantic) | slop, hallucination, logic → VETO | **A** | 2–3 |
+| Adversarial L2 (architecture) | RBAC, validation, API design → VETO + escalation | **A** | 3–4 |
+| Threat model light + incident IR | 1 page STRIDE, playbook 7j post-mortem | **A** | 2–4 |
+| Pentest externe workflow | L3 regulated only, Phase 6+ | **C** | 6+ |
+
+Cf. `docs/SECURITY.md` (niveaux projet L0–L3, distinct des gates adversarial plateforme).
+
+#### 4. Global delivery — i18n, compliance, régions
+
+| Feature | Description | Tier | Phase |
+|---------|-------------|------|-------|
+| Intake checklist global | PDPA, GDPR, PDPL UAE/KSA, data residency | **S** | 1–2 |
+| i18n EN/FR/ZH (+ RTL AR) | locale, timezone, currency (ICU) | **A** | 2–3 |
+| Compliance matrix régionale | `docs/COMPLIANCE.md` templates DPA | **A** | 2–4 |
+| UX régional par marché | mobile-first APAC, premium MENA, a11y EMEA | **A** | 3–5 |
+| Data residency flags | SG, EU, UAE, US — choix hébergement | **B** | 5 |
+| Regulated industry gate | Refus L3 HIPAA/banque/gouv (ADR-041) | **S** | 1 |
+
+Cf. `docs/I18N.md`, `docs/UX-REGIONAL.md`, `docs/INTAKE.md`, `docs/CLIENTS.md`.
+
+#### 5. Client-facing — preuve & portail
+
+| Feature | Description | Tier | Phase |
+|---------|-------------|------|-------|
+| **`quality-report.pdf`** | Killer feature (voir ci-dessus) | **S** | 2–4 |
+| Mini dashboard public `/proof` | Scores DORA, a11y, Lighthouse, SBOM | **S** | 3 |
+| Case study generator | Template + métriques mission | **A** | 3–4 |
+| Client portal read-only | statut, docs, factures, messages | **B** | 6 |
+| Devis < 48h pipeline | BANT, offre packagée → SOW | **A** | 3–4 |
+| Site commercial Astro | architekt.* (Phase 3, hors plateforme runtime) | **A** | 3 |
+
+#### 6. Advanced AI — gouvernance & qualité LLM
+
+| Feature | Description | Tier | Phase |
+|---------|-------------|------|-------|
+| HITL gates L0–L4 | human approval deploy, AI decisions sensibles | **A** | 2–4 |
+| CoVe anti-hallucination | Draft→Verify→Answer→Final | **A** | 3–4 |
+| Multi-vendor adversarial | Brain=Opus, Worker=MiniMax, Security=GLM | **B** | 4–5 |
+| AI audit logs append-only | hash chain, transparence client | **A** | 2–4 |
+| Auto-pause budget LLM 100% | ADR-011 FinOps | **S** | 2 |
+| Darwin teams / Thompson scoring | Sélection agents optimale | **C** | 7 |
+
+Cf. `skills/architekt-ai-governance.md`.
+
+#### 7. SRE/Ops — fiabilité & observabilité
+
+| Feature | Description | Tier | Phase |
+|---------|-------------|------|-------|
+| Health check `/api/health` | Liveness, DB, LLM provider | **S** | 0 |
+| CI verte gate merge | 100% main (Phase 2+) | **S** | 2 |
+| Backup/restore runbook | RPO 24h SQLite, snapshots VM | **A** | 3–4 |
+| OTEL → Jaeger (opt-in) | Traces LLM + FastAPI | **B** | 4–5 |
+| Auto-heal + chaos workflows | tma-autoheal, chaos-scheduled | **B** | 5 |
+| Canary deployment workflow | 1%→10%→50%→100% + HITL | **C** | 6–7 |
+| SLO + error budget | Par mission/client | **B** | 5 |
+
+Cf. `skills/architekt-sre.md`, `docs/architekt/phase-5-idp.md`.
+
+#### 8. Business — SAFe, FinOps, GTM
+
+| Feature | Description | Tier | Phase |
+|---------|-------------|------|-------|
+| Product backlog WSJF | Epic→Feature→Story, Kanban | **A** | 4 |
+| FinOps dashboard | Marge > 50%, coût LLM/mission | **S** | 2–4 |
+| Pipeline commercial | Offres → devis → contrat | **A** | 3–4 |
+| Velocity / burndown Chart.js | Métriques delivery | **B** | 4–5 |
+| IMDA listing workflow | SME Digital Solutions | **A** | 3 |
+| Multi-tenant + billing SaaS | Stripe, isolation tenant | **C** | 7 |
+| Marketplace skills/templates | Communauté externe | **C** | 7 |
+
+Cf. `docs/GTM.md`, `docs/METRICS.md`, `docs/OFFERS.md`.
+
+### Priorisation Tier S / A / B / C
+
+| Tier | Signification | Règle | Horizon |
+|------|---------------|-------|---------|
+| **S** | Survie studio — sans ça, pas de client ni de preuve | Build **maintenant** (Phase 0–3) | 0–6 mois |
+| **A** | Différenciation — qualité, sécu, delivery répétable | Build **dès CI verte** (Phase 2–4) | 3–12 mois |
+| **B** | Scale — IDP, portail, ops avancés | Build **après 3 clients payants** | 6–18 mois |
+| **C** | Optionnel — SaaS, marketplace, pentest L3 | Build **sur déclencheur explicite** | 18+ mois |
+
+**Tier S (14 features critiques)** : agent loop, mission control, LLM FinOps, auth fail-closed, CI SAST/SCA/SBOM, adversarial L0, **`quality-report.pdf`**, intake/compliance gate, regulated refusal, health check, CLI, rebrand Architekt, FinOps dashboard, auto-pause LLM.
+
+**Tier A (20+ features)** : workflows, mémoire, HITL, i18n, DPA templates, template registry, time-to-mission, dashboard monitoring, WSJF backlog, pipeline commercial, CoVe, AI audit logs, backup runbook, case study generator, site `/proof`.
+
+**Tier B** : MCP avancé, provisioning Terraform, service catalog, client portal, OTEL, auto-heal, SLO, data residency, multi-vendor adversarial.
+
+**Tier C** : multi-tenant SaaS, billing, marketplace, canary deploy, pentest L3 workflow, Darwin teams.
+
+### Ne pas construire tôt (liste explicite)
+
+| Feature | Pourquoi attendre | Alternative Phase 0–4 |
+|---------|-------------------|------------------------|
+| Backstage / Port / Humanitec | Trop lourd pour 2 personnes ; besoin équipe plateforme | Étendre Architekt Platform (Phase 5) |
+| Multi-tenant SaaS | Pas de product-market fit ; studio d'abord | Outil interne mono-tenant |
+| Marketplace skills public | Pas de communauté | Skills privés `skills/` |
+| Microservices par défaut | Complexité prématurée | Modular monolith (ADR-002) |
+| Mobile natif iOS/Android | Hors catalogue Tier A initial | PWA / API-first si besoin |
+| Projets L3 régulés (HIPAA, banque, gouv) | Capacité compliance insuffisante | Refus systématique (R24) |
+| Pentest externe systématique | Coût 5–15k SGD/projet | SAST/SCA/SBOM + threat model light |
+| E2E Playwright complet (82 specs) | Flaky, coût maintenance | Smoke login + health en CI |
+| Custom CMS from scratch | Réinventer la roue | Astro, WordPress, Payload (Tier A stacks) |
+| 10+ stacks simultanées | Dilution expertise | Catalogue Tier A/B/C strict |
+| Darwin / auto-évolution agents | Recherche, pas delivery | Patterns fixes + HITL |
+| Billing Stripe / facturation auto | Pas de clients récurrents massifs | Facturation manuelle Phase 4 |
+
+### Typologies projet (A–G) & clients régionaux
+
+> Types A–G = cœur delivery Phase 3–5. Types H–J (dashboard, modernisation, audit) : cf. `docs/PROJECTS.md`.
+
+| Type | Projet | Stack défaut | Sécu | Régions prioritaires | Offre |
+|------|--------|--------------|------|----------------------|-------|
+| **A** | Corporate / marketing | Astro + Tailwind + shadcn | L0 | APAC, MENA, EMEA, USA | Launch |
+| **B** | Product MVP | Next.js + FastAPI + PG | L1–L2 | APAC, EMEA, USA | MVP |
+| **C** | Internal business tool | Next.js + FastAPI + RBAC | L1–L2 | Toutes | Internal Tool |
+| **D** | AI workflow automation | Python/FastAPI + queue + vector DB | L1–L2 | Toutes | AI Workflow |
+| **E** | E-commerce headless | Shopify + frontend | L1–L2 | APAC, MENA, EMEA | Commerce |
+| **F** | CMS / content platform | WordPress ou Payload/Strapi | L0–L1 | Toutes | Launch / Internal |
+| **G** | Client portal | Next.js + PG + object storage | **L2** | Toutes | Portal |
+
+**Clients régionaux** (cf. `docs/CLIENTS.md`, `docs/GTM.md`) :
+
+| Région | Phase | Typologies client prioritaires | Contraintes plateforme |
+|--------|-------|-------------------------------|------------------------|
+| **APAC** (base SG) | 3–4 | Scale-ups B2B, SMEs, professional services | PDPA, IMDA, mobile-first, EN/ZH |
+| **MENA** | 5 | Hospitality/luxury, industrial, SMEs | PDPL UAE/KSA, **RTL AR**, premium UX |
+| **EMEA** | 5 | Professional services, industrial | GDPR, WCAG 2.2 + EAA, FR/DE/EN |
+| **USA** | 5+ | Scale-ups, professional services | CCPA, SOC2-ready, conversion UX |
+
+### Arbre de décision architecture
+
+```
+Intake rempli (docs/INTAKE.md)
+        │
+        ▼
+  Contenu statique, pas d'auth ?
+    │ oui ──▶ A ou F ──▶ Pattern 1 Static-first (Astro)
+    │ non
+    ▼
+  Besoin e-commerce ?
+    │ oui ──▶ E ──▶ Pattern 4 Headless commerce (Shopify)
+    │ non
+    ▼
+  Workflow IA / extraction docs ?
+    │ oui ──▶ D ──▶ Pattern 5 AI workflow (+ HITL obligatoire)
+    │ non
+    ▼
+  Portail client documents/factures ?
+    │ oui ──▶ G ──▶ Pattern 3 API-first + RBAC L2
+    │ non
+    ▼
+  App métier / MVP / internal tool ?
+    │ oui ──▶ B ou C ──▶ Pattern 2 Modular monolith (défaut)
+    │ non
+    ▼
+  Éditeurs non-techniques, contenu riche ?
+         oui ──▶ F ──▶ WordPress vs headless (besoin éditeur)
+```
+
+Référence complète : `docs/ARCHITECTURES.md` (6 patterns), `docs/STACK-MATRIX.md`, ADR-037.
+
+### Sécurité projet — niveaux L0 à L3
+
+| Niveau | Exemples (types A–G) | Contrôles clés | Phase Architekt |
+|--------|----------------------|----------------|-----------------|
+| **L0** | A (marketing), F statique | Headers, SCA, anti-bot | Dès Phase 2 |
+| **L1** | B MVP early, C internal, D AI light | + Auth, RBAC basique, audit logs, ASVS L1 | Phase 2–4 |
+| **L2** | G portal, B B2B, C RH/finance | + Encryption at rest, RBAC fin, DPIA light | Phase 4–5 |
+| **L3** | Secteur régulé (healthcare-adjacent, finance) | + ASVS L2/L3, pentest, data residency stricte | **Refus** jusqu'à maturité Phase 6+ |
+
+Gate plateforme : **aucun deploy prod** sans CI verte + SBOM + niveau sécu documenté en ADR projet.
+Détail : `docs/SECURITY.md`, ADR-031, ADR-041.
+
+### Mapping features → phases 0–7
+
+| Phase | Focus plateforme | Features Tier S/A clés |
+|-------|------------------|------------------------|
+| **0** | Rebrand, stabilité | Auth, health, CLI, demo LLM, branding Jinja |
+| **1** | Catalogue offres/stacks | Intake, typologies A–G, regulated gate, ADR |
+| **2** | Delivery doctrine | CI SAST/SCA/SBOM, adversarial L0–L1, skills, **`quality-report.pdf` POC**, FinOps |
+| **3** | Pilot public | `/proof`, site Astro, case study, IMDA, i18n EN/FR/ZH |
+| **4** | 3 clients APAC | WSJF backlog, pipeline commercial, quality report livrable, L2 portals |
+| **5** | IDP + MENA/EMEA | Mission manifest, templates, time-to-mission < 10 min, OTEL |
+| **6** | Client portal | Portail read-only, canary (Tier C), premier L3 pilote si mûr |
+| **7** | SaaS option | Multi-tenant, billing, marketplace (déclencheur 10+ clients) |
+
+### Backlog plateforme P0 / P1 / P2 / P3
+
+Aligné sur Tier S/A/B/C — détail tickets : `docs/architekt/PLATFORM-BACKLOG.md`.
+
+| Priorité | Tier | Horizon | Exemples |
+|----------|------|---------|----------|
+| **P0** | **S** | Phase 0–2 | Rebrand, auth, CI verte, SAST/SCA/SBOM, adversarial L0, quality-report POC, tests API |
+| **P1** | **A** | Phase 2–4 | Skills Architekt injectés, HITL, i18n, `/proof`, WSJF, FinOps dashboard, mutation testing |
+| **P2** | **B** | Phase 4–6 | Mission manifest, Terraform modules, client portal, OTEL, auto-heal, MCP LRM |
+| **P3** | **C** | Phase 6–7+ | Multi-tenant, billing Stripe, marketplace, canary prod, Darwin teams, pentest L3 |
+
+### Sources recherche (catalogue features)
+
+| Source | Insight pour Architekt | Lien |
+|--------|------------------------|------|
+| **DORA 2025** | 90 % des orgs ont adopté le platform engineering ; plateforme interne = prérequis valeur IA | [Google Research](https://research.google/pubs/dora-2025-state-of-ai-assisted-software-development-report/) · [Google Cloud Blog](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) |
+| **NIST SSDF SP 800-218** | Secure Software Development Framework — baseline SAST/SCA/SBOM | [NIST SP 800-218](https://csrc.nist.gov/publications/detail/sp/800-218/final) · [v1.2 IPD déc. 2025](https://csrc.nist.gov/projects/ssdf) |
+| **Modular monolith 2026** | Shopify, Prime Video, Spring Modulith 2.x — défaut avant microservices | ADR-002 · [Spring Modulith](https://spring.io/projects/spring-modulith) |
+| **IMDA SGDE 2025** | Adoption IA PME SG : **4,2 % → 14,5 %** en 1 an ; opportunité SME Digital Solutions | [IMDA Digital Economy](https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/press-releases/2025/singapore-digital-economy) · [SGDE Report PDF](https://www.imda.gov.sg/-/media/imda/files/about/resources/corporate-publications/annual-report/imda-sgde-report-fy2024-2025.pdf) |
+| **Gartner MENA 2026** | Dépenses IT MENA **169 Mds USD** (+8,9 %), software +13,9 % — marché cible Phase 5 | [Gartner Press Release](https://www.gartner.com/en/newsroom/press-releases/2025-08-04-gartner-forecasts-mena-it-spending-to-reach-169-billion-us-dollars-in-2026) |
+| **Astro (content sites)** | Static-first, i18n, Lighthouse ≥ 95 — stack Tier A types A/F + site Phase 3 | [Astro docs](https://docs.astro.build/) · `docs/architekt/phase-3-pilot.md` |
+
+
 ## ADR (Architecture Decision Records) — 36 total
 
 | Série | Sujets | Phase |
@@ -205,7 +499,10 @@ cf. `docs/RISKS.md` (25 risques). Synthèse P1 :
 | Clients hors APAC | 0 | 0 | ≥ 1 |
 | Listing IMDA | en cours | obtenu | maintenu |
 
-## Sources externes (ce sur quoi cette roadmap s'appuie)
+## Sources externes (référence complète)
+
+> Synthèse catalogue features : section **Catalogue features plateforme → Sources recherche** ci-dessus.
+
 
 - **DORA 2025 Report — State of AI-assisted Software Development** (Google Cloud / Google Research, ~5 000 répondants) — l'IA comme amplificateur
 - **NIST SP 800-218 SSDF v1.1** (févr. 2022) + **v1.2 IPD** (déc. 2025) — Secure Software Development Framework

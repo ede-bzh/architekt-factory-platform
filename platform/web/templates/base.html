@@ -21,7 +21,7 @@
     <script src="/static/js/sse.js" defer></script>
     <script>
     /* JS i18n — mirrors server-side _() */
-    window.__i18n = {{ i18n_catalog() | tojson }};
+    window.__i18n = {{ i18n_catalog | tojson }};
     function _(key) { return window.__i18n[key] || key; }
 
     /* Global error handler → auto-create TMA ticket */

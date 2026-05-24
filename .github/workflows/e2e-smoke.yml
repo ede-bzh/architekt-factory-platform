@@ -1,0 +1,62 @@
+name: E2E Smoke
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: platform/requirements.txt
+
+      - name: Install platform dependencies
+        run: pip install -r platform/requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright (e2e)
+        if: hashFiles('platform/tests/e2e/package.json') != ''
+        working-directory: platform/tests/e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Start platform (demo LLM)
+        env:
+          PLATFORM_ENV: test
+          PLATFORM_LLM_PROVIDER: demo
+        run: |
+          nohup python3 -m uvicorn platform.server:app \
+            --host 0.0.0.0 --port 8099 --ws none --log-level warning \
+            > /tmp/platform-smoke.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8099/api/health > /dev/null; then
+              echo "Platform ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Platform failed to start"
+          cat /tmp/platform-smoke.log
+          exit 1
+
+      - name: Run smoke tests
+        if: hashFiles('platform/tests/e2e/package.json') != ''
+        working-directory: platform/tests/e2e
+        env:
+          BASE_URL: http://localhost:8099
+        run: npx playwright test smoke.spec.ts
