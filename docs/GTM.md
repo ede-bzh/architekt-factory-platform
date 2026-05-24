@@ -1,145 +1,180 @@
-# Architekt — Go-to-Market APAC
+# Architekt — Go-to-Market global (APAC + MENA + EMEA + USA)
 
-> Stratégie commerciale Singapour → ASEAN.
-> Sources : IMDA Singapore Digital Economy Report 2025, NAIIP 2026, DEB partnerships.
+> Stratégie commerciale Architekt : Singapour base, ambition globale.
+> Sources : IMDA Singapore Digital Economy Report 2025, NAIIP 2026, observations marché APAC + MENA + EMEA + USA.
 
-## Marché cible
+## Doctrine
 
-### Singapour (base)
+> **Architekt does not sell code. Architekt sells globally-ready, AI-accelerated, security-conscious digital delivery.**
 
-- **14,5 % SMEs** ont adopté l'IA en 2024, **en hausse de 4,2 %** vs 2023 (source : IMDA SGDE Report 2025) — courbe exponentielle.
-- **62,5 % non-SMEs** ont adopté l'IA en 2024 (vs 44 % en 2023).
-- **Programme NAIIP** (National AI Impact Programme, lancé 2026) cible **10 000 entreprises sur 3 ans** avec subventions.
-- **Digital Enterprise Blueprint (DEB)** : 26 000+ SMEs déjà accompagnées depuis 2024, cible **50 000 SMEs d'ici 2029**.
-- **Pré-approved AI Solutions list** maintenue par IMDA — la cible **doit passer de 30 % à 50 %** d'AI-enabled solutions.
+## Positionnement par région
 
-### ASEAN extension (mois 6+)
+| Région | Positionnement |
+|--------|----------------|
+| **APAC** | AI-native digital studio for Singapore and ASEAN scale-ups & SMEs |
+| **MENA** | Premium AI delivery for hospitality, government-adjacent, B2B services |
+| **EMEA** | GDPR-compliant AI-accelerated digital products with quality reports |
+| **USA** | Engineering rigor meets AI speed — SOC2-ready studio for scale-ups |
 
-- Malaisie, Indonésie, Thaïlande, Vietnam — proximité culturelle SG.
-- Anglais business universel, fuseau horaire compatible.
+## Base et expansion
 
-## ICP (Ideal Customer Profile)
+| Phase | Régions actives |
+|-------|----------------|
+| Phase 4 (0-12 mois) | **Singapour + APAC** (base) |
+| Phase 5+ (12-24 mois) | + MENA (UAE/KSA), EMEA (France/Germany/UK) |
+| Phase 6+ | + USA (sélectif scale-ups B2B) |
 
-### ICP primaire : SME APAC en transformation digitale
+## Marché : tailles et signaux
+
+### APAC
+
+- Singapour : **14,5 % SMEs ont adopté l'IA en 2024** (vs 4,2 % en 2023, courbe x3,5/an). 62,5 % non-SMEs.
+- **NAIIP** : 10 000 entreprises sur 3 ans avec subventions IMDA.
+- **DEB** : 26 000+ SMEs accompagnées, cible 50 000 d'ici 2029.
+- ASEAN : Indonésie + Vietnam = forte croissance digital, Malaisie en accélération.
+
+### MENA
+
+- UAE : Hub digital + smart city + tourisme, croissance forte cloud/IA/5G.
+- Saudi Arabia : Vision 2030 → digital transformation budget énorme.
+- Maroc / Égypte : marchés émergents francophones potentiels.
+
+### EMEA
+
+- France : 4 200+ ESN, marché compétitif mais demande IA forte SME.
+- Germany : Mittelstand digital transformation, exigence qualité.
+- UK : post-Brexit accélération digital.
+- Nordics : early adopters, paid-by-quality.
+
+### USA
+
+- Scale-ups B2B série A-B = ICP type Devin/Factory mais APAC-flavored différenciation.
+- Coûts dev US élevés → Architekt 30-50 % moins cher avec qualité.
+
+## ICP (Ideal Customer Profile) par région
+
+### ICP APAC (primaire Phase 4)
 
 | Critère | Valeur |
 |---------|--------|
 | Taille | 10-200 employés |
-| Revenu annuel | 1 M – 50 M SGD |
+| Revenu | 1-50 M SGD |
 | Localisation | Singapour, Malaisie, Indonésie, Thaïlande, Vietnam |
-| Industrie | F&B, e-commerce, retail, services pro, fintech early stage, healthtech, edtech |
-| Décideur | Founder / MD / Director (pas DSI complexe) |
-| Pain | Site obsolète, processus manuels, besoin MVP, intégration IA confuse |
-| Budget IT | 10k – 100k SGD / projet |
-| Maturité digitale | Digital Leaders (selon classification IMDA) |
+| Industrie | F&B, e-commerce, retail, services pro, fintech, healthtech wellness, edtech |
+| Décideur | Founder / MD / Director |
+| Budget IT | 10-100k SGD / projet |
+| Maturité | Digital Leaders (classification IMDA) |
+| **Bonus** | Éligible IMDA NAIIP/DEB (≥30 % actionnariat local, < 100M turnover ou < 200 personnes, opérations SG) |
 
-**Bonus si éligible IMDA NAIIP/DEB** : ≥ 30 % actionnariat local, < 100 M SGD turnover ou < 200 personnes, opérations SG.
-→ Le **client** récupère subvention, Architekt facture le tarif plein.
+### ICP MENA (Phase 5)
 
-### ICP secondaire : Scale-up APAC
+| Critère | Valeur |
+|---------|--------|
+| Taille | 20-500 employés |
+| Localisation | UAE, KSA, Qatar, Bahrain, Morocco, Egypt |
+| Industrie | Hospitality, luxury, real estate, professional services, family business groups |
+| Budget IT | 30-200k AED |
+| Spécificités | RTL requis, Arabe + Anglais, design premium |
+
+### ICP EMEA (Phase 5-6)
+
+| Critère | Valeur |
+|---------|--------|
+| Taille | 50-500 employés |
+| Localisation | France, Germany, UK, Nordics, Benelux |
+| Industrie | Scale-ups SaaS, services pro, e-commerce, industrie B2B |
+| Budget IT | 30-150k EUR |
+| Spécificités | GDPR strict, accessibilité forte |
+
+### ICP USA (Phase 6+)
 
 | Critère | Valeur |
 |---------|--------|
 | Taille | 50-500 employés |
 | Funding | Série A-B |
-| Pain | Vitesse delivery, dette technique, IA integration |
-| Budget IT | 50k – 500k SGD / projet |
+| Industrie | SaaS B2B, fintech adjacent (pas régulé), edtech, dev tools |
+| Budget IT | 50-500k USD |
+| Spécificités | SOC2-ready expectations |
 
-### ICP tertiaire : Agence partenaire (white-label)
+### ICP secondaire (toutes régions)
 
-Agences locales sans capacités IA → revendent les offres Architekt sous leur marque.
+- **Agences partenaires** (white-label / referral) : agences locales sans capacités IA
+- **Scale-ups B2B** série A-B
 
-## Wedge commercial
+## Différenciation marché
 
-Le **wedge offer** d'Architekt : **Architekt Audit** (3-10k SGD, 1 semaine).
+| Concurrent | Différenciation Architekt |
+|------------|---------------------------|
+| **Devin / Factory** (US) | Studio + plateforme + **APAC presence** + livrable garanti |
+| **Lovable / Bolt / Replit** | Production-grade + Quality Report + sécurité, pas prototype |
+| **Agences classiques** (SG/MENA/EU/US) | Vitesse IA + rigueur ingé senior + rapport qualité auto |
+| **Consultants freelance** | Équipe + plateforme + SLA + livrables documentés |
+| **Big Tech SI** | 10× moins cher, focus SME, pas d'overhead |
+| **Cabinets stratégie + IA** | Livraison réelle, pas slideware |
+
+**Pitch en 1 phrase** :
+> *"Architekt livre des sites et produits digitaux en moitié du temps, avec un rapport qualité automatique et un prix transparent. Studio global, focus PME et scale-ups APAC."*
+
+## Canaux d'acquisition par région
+
+### APAC
+
+| Canal | Effort | Volume estimé / mois | Action |
+|-------|--------|----------------------|--------|
+| IMDA NAIIP pre-approved vendor | 1-2 mois candidature | 2-5 leads | Candidater Phase 3 |
+| LinkedIn outbound (SG CTOs/founders) | 2-3h/sem | 1-3 leads | 50 messages/sem |
+| Content marketing + SEO | 1 post/sem | 2-5 leads après 6 mois | Site + blog + newsletter |
+| Partenariats consultants SG | 3-5 meetings/mois | 1-3 leads après 3 mois | 5 meetings/mois |
+| SME AI Impact Awards 2026 | 1 application | Visibilité | Candidater Phase 4 |
+| Partenariat Grab AI for SMEs (DEB) | Discussions | Potentiel énorme | Contact Grab Phase 4+ |
+
+### MENA
+
+| Canal | Effort | Action |
+|-------|--------|--------|
+| Partenariats cabinets KSA/UAE | High | Réseau d'introduction nécessaire |
+| Events digital transformation (LEAP Saudi, GITEX) | Moyen | Présence 2/an |
+| Outbound CTOs hospitality / luxury | Moyen | LinkedIn + email warm |
+| Content Arabe / dual-language | Élevé | Si engagement long terme |
+
+### EMEA
+
+| Canal | Effort | Action |
+|-------|--------|--------|
+| LinkedIn EMEA tech leaders | Moyen | Outbound ciblé |
+| Tech conferences (Tech.eu, NEXT, etc.) | Élevé | Speaking |
+| Communautés open-source / dev (DEV.to, HN) | Moyen | Content + share |
+| Partenariats agences EU | Moyen | Referral 10 % |
+
+### USA
+
+| Canal | Effort | Action |
+|-------|--------|--------|
+| LinkedIn US scale-up CTOs | Moyen | Outbound froid (long cycle) |
+| Tech communities (HN, Indie Hackers, Dev Twitter/X) | Élevé | Content + presence |
+| Partenariats accelerators (YC alumni, etc.) | Élevé | Referral |
+| Conference talks (RailsConf, ReactConf, etc.) | Très élevé | Long terme |
+
+## Wedge offer (toutes régions)
+
+**Architekt Audit** (3-10k SGD / 3-10k équivalent local, 1 semaine).
 
 - Petit ticket, faible engagement
 - Démontre la valeur (rapport CTO + scorecard qualité auto-générée)
 - Ouvre la porte aux MVP / Internal Tool / AI Workflow plus gros
 
-## Différenciation marché
-
-Positionnement vs concurrents :
-
-| Concurrent | Différenciation Architekt |
-|------------|---------------------------|
-| **Devin / Factory** (US) | Nous = studio + plateforme, pas IDE individuel ; APAC presence ; livrable garanti |
-| **Lovable / Bolt / Replit** | Nous = production-grade avec qualité prouvée, pas prototype |
-| **Agences classiques SG** (Applify, Kryst, SleekDigital) | Nous = vitesse IA + rigueur ingé senior + rapport qualité automatique |
-| **Consultants freelance** | Nous = équipe + plateforme + SLA + livrables documentés |
-| **Big Tech SI** (Accenture, Deloitte) | Nous = 10× moins cher, focus SME, pas d'overhead |
-
-**Pitch en 1 phrase** :
-
-> "Architekt livre des sites et produits digitaux **en moitié du temps**, avec un **rapport qualité automatique** et un **prix transparent**. Studio basé à Singapour, focus PME et scale-ups APAC."
-
-## Canaux d'acquisition (Phase 4)
-
-À tester en parallèle, mesurer ROI à 3 mois.
-
-### Canal 1 — IMDA pre-approved vendor list
-
-| | |
-|--|--|
-| Effort | 1-2 mois (process candidature) |
-| Coût | Quasi nul (compliance pack à monter) |
-| Volume estimé | 2-5 leads qualifiés / mois |
-| Différenciation | Très peu de vendors IA pre-approved → barrière |
-| Action | Candidater dès Phase 3 (livraison site Architekt + rapport qualité) |
-
-### Canal 2 — Outbound LinkedIn (CTO / founder SG)
-
-| | |
-|--|--|
-| Effort | 2-3 h / semaine |
-| Coût | Sales Navigator ~99 SGD/mois |
-| Volume estimé | 1-3 leads qualifiés / mois |
-| Action | 50 messages / semaine, focus sur Audit offer |
-
-### Canal 3 — Content marketing + SEO
-
-| | |
-|--|--|
-| Effort | 1 post / semaine (case studies, méthode) |
-| Coût | Temps (1-2 h / semaine) |
-| Volume estimé | 2-5 leads / mois après 6 mois |
-| Action | Site Architekt (Phase 3) + blog technique + LinkedIn newsletter |
-
-### Canal 4 — Partenariats consultants Singapour
-
-| | |
-|--|--|
-| Effort | 3-5 meetings / mois |
-| Coût | 10 % commission referral |
-| Volume estimé | 1-3 leads / mois après 3 mois réseau |
-| Action | Lister 20 consultants / cabinets, 5 meetings / mois |
-
-### Canal 5 — Candidature SME AI Impact Awards 2026
-
-| | |
-|--|--|
-| Effort | Application + case study propre |
-| Coût | Nul |
-| Volume estimé | Visibilité + crédibilité (pas leads directs court terme) |
-| Action | Candidater quand 1 case study propre disponible (Phase 4) |
-
-### Canal 6 — Programme Grab AI for SMEs (DEB)
-
-| | |
-|--|--|
-| Effort | Partenariat formel à explorer |
-| Coût | Selon partnership |
-| Volume estimé | Potentiel énorme (10 000 SMEs F&B / e-commerce / retail) |
-| Action | Contact Grab partnerships team Phase 4+ |
-
 ## Pricing strategy
 
-- **Pas de pricing public** sur le site jusqu'à 5 clients (négociation au cas par cas)
+- **Pas de pricing public** sur site jusqu'à 5 clients (négociation au cas par cas)
 - **Fourchettes indicatives** dans `docs/OFFERS.md` partagées sur demande
-- **Currency** : SGD par défaut (USD acceptés pour clients hors SG)
-- **Conditions** : 30 % à la signature, 40 % à mi-mission, 30 % à la livraison
+- **Currency** :
+  - APAC : SGD par défaut, USD/MYR/IDR/THB acceptés
+  - MENA : AED ou SAR par défaut, USD accepté
+  - EMEA : EUR par défaut, GBP/CHF accepté
+  - USA : USD par défaut
+- **Modalités** : 30 % à la signature, 40 % à mi-mission, 30 % à la livraison
 - **Audit offer** : 100 % à la signature (petit ticket)
-- **Marge brute minimale projet** : 50 % (cf. `docs/RISKS.md` R2)
+- **Marge brute minimale** : 50 % (cf. `docs/RISKS.md` R2, ADR-016)
 
 ## Funnel cible Phase 4
 
@@ -148,44 +183,43 @@ Leads top-funnel    : 30 / mois  (multi-canaux)
 Qualifiés          : 10 / mois
 Devis envoyés      : 4 / mois
 Signés (audit)     : 2 / mois
-Signés (delivery)  : 1 / mois → conversion audit → MVP/Tool : 50 %
+Signés (delivery)  : 1 / mois → conversion audit → delivery : 50 %
 ```
 
-Cible 3 mois : **3 clients delivery signés cumulés**, dont 1 récurrent.
+Cible 3 mois : **3 clients delivery signés**, dont 1 récurrent.
 
-## Branding pour APAC
+## Branding global
 
-- **Anglais d'abord**, FR + ZH en option pour le site
+- **Anglais d'abord**, FR + ZH + AR en option selon site
 - Ton : pro, technique, **pas startup-hype**
 - Visuels : sobres, "ingénierie premium"
 - Photos d'équipe : authentique, pas stock photos
-- Mentions légales : SG entity, GST registered si > 1 M SGD revenue
+- Mentions légales : SG entity, GST si applicable
 
-## Réglementation locale
+## Réglementation
 
-- **PDPA** (Personal Data Protection Act) : conformité obligatoire SG
-- **GST** : enregistrement si revenue > 1 M SGD
-- **EPC / Em** : pas pertinent au stage actuel
-- **Cyber Security Act** : pas applicable (pas CII)
+| Région | À vérifier en intake |
+|--------|---------------------|
+| APAC SG | PDPA SG + GST (si > 1M) |
+| MENA UAE | UAE PDPL + VAT 5 % |
+| MENA KSA | Saudi PDPL (SDAIA) + VAT 15 % + GASTAT |
+| EMEA | GDPR + VAT pays cible |
+| USA | CCPA (CA) + state laws + sales tax (selon état) |
 
-## Indicateurs commerciaux (à tracker)
+cf. `docs/COMPLIANCE.md` pour détails.
 
-| Indicateur | Phase 3 cible | Phase 4 cible | Phase 5 cible |
-|------------|---------------|---------------|---------------|
-| Leads qualifiés / mois | n/a | 10 | 20 |
-| Devis envoyés / mois | n/a | 4 | 8 |
-| Taux conversion devis → signé | n/a | 25 % | 30 % |
-| MRR (Monthly Recurring Revenue) | 0 | 5-15k SGD | 30-50k SGD |
-| Pipeline ouvert (SGD) | n/a | 50k+ | 200k+ |
-| NPS client | n/a | > 8/10 | > 8/10 |
-| Coût acquisition client (CAC) | n/a | < 1k SGD | < 1,5k SGD |
-| Taux refus projet (filtre qualité) | n/a | 30 % | 40 % |
+## Indicateurs commerciaux
+
+cf. `docs/METRICS.md` section Market/Sales.
 
 ## Sources
 
-- IMDA, "Singapore Digital Economy (SGDE) Report 2025", oct. 2025
-- IMDA, "National AI Impact Programme (NAIIP)", COS Debates 2026
+- IMDA "Singapore Digital Economy (SGDE) Report 2025", oct. 2025
+- IMDA "National AI Impact Programme (NAIIP)", COS Debates 2026
 - IMDA + Grab + RSM, "Digital Enterprise Blueprint partnerships", 2026
 - IMDA + SkillsFuture Singapore + Workforce Singapore, "AI for Enterprise Impact Playbook", 2026
 - IMDA + Singapore Business Federation, "SME AI Impact Awards 2026"
-- Straits Times, articles 2026 sur DEB et NAIIP
+- Saudi Vision 2030 reports
+- UAE Digital Government Strategy 2025
+- EU AI Act + GDPR enforcement statistics
+- Straits Times, McKinsey APAC digital reports 2025-2026

@@ -1,12 +1,13 @@
-# Architekt — Registre des risques
+# Architekt — Registre des risques (révision globale)
 
-> Risques identifiés à date (2026-05-24). Revu à chaque fin de phase et chaque trimestre.
+> 25 risques identifiés à date (2026-05-24, révisé pour scope global APAC + MENA + EMEA + USA).
+> Revu à chaque fin de phase, chaque trimestre, et à chaque incident.
 
 ## Légende
 
 - **Gravité** : Critique / Haute / Moyenne / Basse
 - **Probabilité** : Élevée / Moyenne / Basse
-- **Priorité** = Gravité × Probabilité
+- **Priorité** = Gravité × Probabilité (P1 = action immédiate, P4 = surveillance)
 
 ## Vue d'ensemble
 
@@ -15,7 +16,7 @@
 | R1 | Pas de pipeline commercial | **Critique** | Élevée | **P1** | CPO |
 | R2 | Delivery non rentable (marge < 50 %) | **Critique** | Élevée | **P1** | CPO + CTO |
 | R3 | Coût LLM invisible / dérive | Haute | Élevée | **P1** | CTO |
-| R4 | Agents rapides mais code fragile (DORA 2025 amplificateur) | Haute | Moyenne | P2 | CTO |
+| R4 | Code fragile (DORA 2025 amplificateur) | Haute | Moyenne | P2 | CTO |
 | R5 | Trop de stacks trop tôt | Haute | Élevée | **P1** | CTO |
 | R6 | Sécurité insuffisante B2B / refus client enterprise | Haute | Moyenne | P2 | CTO |
 | R7 | Confusion agence vs SaaS prématuré | Haute | Moyenne | P2 | CPO |
@@ -26,203 +27,124 @@
 | R12 | Dépendance LLM single-provider | Moyenne | Moyenne | P3 | CTO |
 | R13 | PDPA / RGPD non conforme client régulé | Haute | Basse | P2 | CTO + DPO externe |
 | R14 | Hetzner indisponibilité (single VM) | Moyenne | Basse | P3 | SRE |
-| R15 | Marque "Architekt" confondue (orthographe DE) | Basse | Moyenne | P4 | Designer |
+| R15 | Marque "Architekt" confondue | Basse | Moyenne | P4 | Designer |
 | R16 | Concurrence Devin / Factory / Lovable | Moyenne | Élevée | P2 | CPO |
 | R17 | Mauvaise interprétation IMDA NAIIP eligibility | Moyenne | Moyenne | P3 | CPO |
 | R18 | Sync La Poste casse pendant rebrand | Moyenne | Moyenne | P3 | CTO |
 | R19 | Mutation testing devient théâtre qualité | Moyenne | Moyenne | P3 | CTO |
 | R20 | Agents IA traitent données sensibles client sans consent | Haute | Basse | P2 | CISO |
+| **R21** | **Régional compliance manqué (UAE PDPL, Saudi SDAIA, GDPR SCC)** | **Haute** | **Moyenne** | **P2** | CTO + legal |
+| **R22** | **i18n / RTL bâclé sur projets MENA → refus client** | Haute | Moyenne | P2 | Designer + CTO |
+| **R23** | **Data residency violation (transfert non autorisé)** | **Critique** | Basse | **P2** | CTO + DPO |
+| **R24** | **Acceptation projet régulé sans capacité** | **Critique** | Moyenne | **P1** | CPO + CTO |
+| **R25** | **Pas de listing IMDA pre-approved → perte avantage local** | Moyenne | Moyenne | P3 | CPO |
 
-## Détails par risque P1
+## Détails des risques globaux (nouveaux)
 
-### R1 — Pas de pipeline commercial
+### R21 — Régional compliance manqué
 
-**Description** : tout l'effort va sur la plateforme, aucun lead entrant ni outbound structuré.
+**Description** : Architekt accepte projet UAE/KSA/EU sans intégrer correctement UAE PDPL, Saudi PDPL (SDAIA), ou GDPR SCC pour transferts. Risque amende ou résiliation contrat.
 
-**Indicateur** : nombre de leads qualifiés / mois.
-
-**Mitigation** :
-- Phase 1 : offres packagées **obligatoires** (cf. `docs/OFFERS.md`)
-- Phase 3 : site Architekt + démo vidéo + case study fictif
-- Phase 4 : outreach structuré + candidature **IMDA NAIIP** + listing SME Digital Solutions
-- Tester 3 canaux d'acquisition en parallèle dès Phase 4
-
-**Trigger d'escalade** : 0 lead qualifié 4 semaines consécutives.
-
-### R2 — Delivery non rentable
-
-**Description** : projets livrés à perte (sous-évaluation, scope creep, sur-customisation).
-
-**Indicateur** : marge brute par projet.
+**Indicateur** : projets avec DPA région-spécifique vs sans.
 
 **Mitigation** :
-- `docs/OFFERS.md` : prix planchers documentés
-- `skills/architekt-delivery.md` : règles scope, definition of done
-- `skills/architekt-finops.md` : budget LLM + heures max par offre
-- Gate avant kick-off : "Architekt accept criteria" remplis
-- Revue marge à mi-mission + retro post-livraison obligatoire
+- INTAKE.md section 5 obligatoire (compliance assumptions)
+- 4 templates DPA (SG, UAE, EU, US) dans legal pack
+- Conseil juridique consulté pour nouveau pays
+- ADR-032 (regional compliance matrix)
+- COMPLIANCE.md à charger en skill `architekt-compliance.md`
 
-**Trigger d'escalade** : marge brute < 40 % sur 1 projet → revue immédiate ; sur 2 projets → freeze nouveaux contrats jusqu'à correctif méthode.
+**Trigger escalade** : 1 projet sans DPA approprié → audit immédiat + correctif.
 
-### R3 — Coût LLM invisible / dérive
+### R22 — i18n / RTL bâclé MENA
 
-**Description** : missions longues consomment 5-10× le budget LLM prévu sans visibilité temps réel.
+**Description** : Projet pour client UAE/KSA livré sans RTL correct, sans fonts Arabe, layout cassé. Refus client + perte réputation MENA.
 
-**Indicateur** : ratio coût LLM réel / budget prévu par mission.
-
-**Mitigation** :
-- ADR-011 (LLM cost governance)
-- FinOps obligatoire dans mission manifest (budget tokens/jour)
-- Alerte UI à 70 % et 90 % budget consommé
-- Auto-pause mission à 100 % budget (sauf override CTO)
-- `skills/architekt-finops.md`
-
-**Trigger d'escalade** : dépassement > 20 % sur 1 mission → audit ; sur 3 missions → règle automatique de cut-off durci.
-
-### R5 — Trop de stacks trop tôt
-
-**Description** : tentation d'équiper 11 stacks "au cas où". 2 personnes ne peuvent pas maintenir.
-
-**Indicateur** : nombre de stacks actives / nombre de personnes.
+**Indicateur** : projets MENA avec axe-core a11y + RTL test pass.
 
 **Mitigation** :
-- Catalogue tierisé A/B/C strict (cf. `docs/CATALOG.md`)
-- Tier A limité à **7 stacks max**
-- Tier B activable seulement sur contrat signé
-- Tier C uniquement sur contrat signé d'avance + premium pricing
-- Revue trimestrielle promotion/rétrogradation
+- I18N.md doctrine + checklist obligatoire MENA
+- UX-REGIONAL.md section MENA
+- Tests Playwright avec snapshot per-locale (LTR + RTL)
+- Designer + dev formés Arabe + RTL (Phase 5)
+- Refus projet MENA si équipe pas prête (Phase 4)
 
-**Trigger d'escalade** : > 3 stacks Tier B activées en parallèle → freeze nouvelle activation jusqu'à stabilisation.
+### R23 — Data residency violation
 
-### R8 — Fondateurs surchargés
+**Description** : Donnée client UAE stockée en US par défaut Cloudflare, sans review. Violation contractuelle + risque légal.
 
-**Description** : 2 personnes ne peuvent pas faire CPO + CTO + dev + ops + vente + admin.
-
-**Indicateur** : heures travaillées / personne / semaine.
+**Indicateur** : audit hébergement par client.
 
 **Mitigation** :
-- Scope strict des offres (cf. R2)
-- Playbooks (skills Architekt) automatisent répétition
-- Plateforme = bras humain virtuel (c'est l'idée)
-- **Embauche** déclenchée à 5 clients actifs (PM ou senior dev)
-- Pas de side projects, pas de "petites faveurs"
+- ADR-035 (data residency decision model)
+- INTAKE.md section 5 + 6 obligatoires
+- COMPLIANCE.md matrice par région
+- Cloudflare data localization plans pour clients sensibles
+- Audit annuel hébergement (cf. ADR-018)
 
-**Trigger d'escalade** : > 55 h / semaine / personne pendant 4 semaines → embauche prioritaire ou réduction nb clients actifs.
+**Trigger escalade** : Critique — incident immédiat = freeze deploys + revue.
 
-## Risques sécurité (focus CISO)
+### R24 — Acceptation projet régulé sans capacité
 
-### R6 — Sécurité insuffisante B2B
+**Description** : Client healthcare US (HIPAA), banque licenciée, gouvernement signé sans capacité interne. Risque pénal + amendes énormes.
 
-**Mitigation** :
-- ADR-012 (SBOM + supply chain baseline)
-- `skills/architekt-security.md` : OWASP ASVS L1 par défaut, L2 données sensibles
-- NIST SSDF SP 800-218 v1.1 (v1.2 IPD) comme référence
-- SAST + SCA + secret scanning en CI obligatoire
-- SBOM CycloneDX/SPDX à chaque release
-- Audit pentest externe à 5 clients (avant 1er client régulé)
-
-### R13 — PDPA / RGPD non conforme
+**Indicateur** : projets acceptés avec niveau sécu L3 sans toutes les capacités requises.
 
 **Mitigation** :
-- DPA template dans legal pack (Phase 0)
-- ADR-018 (data retention + client isolation)
-- Pas de transfert hors SG/EU sans consent explicite
-- DPO externe sur contrat (déclencheur : 1er client santé/banque/gouvernement)
+- INTAKE.md critères refus systématique
+- ADR-041 (regulated industry entry criteria)
+- ADR-009 (internal platform before SaaS) — pas de capacité = pas de projet
+- Refus systématique tant que pentest récent + ISO 27001 prerequisites pas en place
+- Anti-clients dans CLIENTS.md
 
-### R20 — Données sensibles client sans consent
+**Trigger escalade** : Critique — toute exception nécessite double validation CPO+CTO+legal.
 
-**Mitigation** :
-- ADR-013 (Client IP and AI-generated code policy)
-- `skills/architekt-ai-governance.md` : human approval pour données client
-- Agents jamais entraînés sur données client
-- Logs anonymisés (cf. ADR-019)
+### R25 — Pas de listing IMDA pre-approved vendor
 
-## Risques techniques (focus CTO/SRE)
+**Description** : Architekt rate la fenêtre IMDA NAIIP/DEB → perd avantage compétitif local (subventions clients).
 
-### R4 — Code fragile (effet amplificateur DORA 2025)
-
-**Description** : DORA 2025 : *"AI adoption now improves software delivery throughput, but still increases delivery instability"*. Sans CI/tests/feedback rapides, l'IA crée du chaos.
+**Indicateur** : statut candidature IMDA.
 
 **Mitigation** :
-- CI verte **obligatoire** avant merge (Phase 2)
-- TDD + mutation testing modules critiques
-- Adversarial guard L0+L1 (existant plateforme)
-- Review humaine obligatoire pour code prod
-- Petits batches (definition of done granulaire)
+- Candidature dès Phase 3 (site Architekt + 1 case study + entité SG opérationnelle)
+- Suivi process IMDA mensuel
+- Backup plan si refus (autres canaux SG)
 
-### R12 — Single LLM provider
+## Risques régionaux par marché
 
-**Mitigation** :
-- Multi-provider déjà en code (`platform/llm/client.py`)
-- Fallback chain Azure OpenAI → Anthropic → MiniMax → local
-- Test mensuel du basculement
-- Cache prompts pour réduire dépendance
+### Risques spécifiques APAC
 
-### R14 — Hetzner indisponibilité
+- Concurrence locale forte agences SG (Applify, Kryst, SleekDigital) → différenciation Quality Report
+- LINE/WeChat intégrations attendues mais pas dans skills par défaut
+- Hong Kong et China : restrictions LLM provider (Anthropic non disponible) → avoir Azure SEA fallback
 
-**Mitigation** :
-- Backups snapshots quotidiens (+1 €/mois)
-- Restore documenté (`ops/RUNBOOK.md`)
-- À 5 clients : envisager 2e VM (cluster) ou migration K8s managé
+### Risques spécifiques MENA
 
-## Risques marque / commercial
+- Cycle de vente long (3-6 mois souvent) → cashflow à anticiper
+- Relation personnelle critique → présence physique attendue à terme
+- Sharia compliance pour finance (KSA) → refuser secteur si pas équipé
+- Données féminines : sensibilité culturelle (KSA)
 
-### R7 — Confusion agence / SaaS
+### Risques spécifiques EMEA
 
-**Mitigation** :
-- Doctrine claire en home page : *"AI-native digital product studio"*
-- Pas de pricing public (jusqu'à 5 clients)
-- Pas de bouton "signup" jusqu'à 10 clients
+- GDPR enforcement augmentée 2025-2026 → DPO externe quasi-obligatoire dès Phase 5
+- Accessibility EU EAA 2025 → projets EU doivent être AA strict
+- Multi-langue often attendu (FR, DE, NL en plus EN) → coût i18n
 
-### R11 — Conflit licence
+### Risques spécifiques USA
 
-**Mitigation** :
-- ADR-006 révisé : **propriétaire interne** (pas AGPL) tant que SaaS pas envisagé
-- Skills/workflows individuels peuvent être MIT/Apache (à part)
-- Code client : cession totale (clause MSA)
-- Avocat SG consulté Phase 0
+- SOC2-ready expectation → préparation 6-12 mois avant premier client US enterprise
+- State privacy patchwork → suivre CCPA strict par défaut
+- Coût LLM USD plus élevé → marge dégradée si pas tracé
+- Litigation culture → MSA solide obligatoire, avocat US à contractualiser
 
-### R16 — Concurrence Devin / Factory / Lovable
+## Process de revue (révisé)
 
-**Mitigation** :
-- Différenciation : **studio + plateforme + APAC**, pas IDE
-- Argument anti-Devin : *"on ne remplace pas vos ingénieurs, on augmente votre delivery"*
-- Argument anti-Lovable : *"on ne vend pas du prototype, on livre du production-grade avec rapport qualité"*
-- Wedge IMDA = barrière locale APAC (concurrents US peu présents)
-
-### R17 — IMDA NAIIP eligibility mal interprétée
-
-**Description** : croire qu'Architekt peut bénéficier des subventions SME alors qu'on est vendor (côté offre).
-
-**Mitigation** :
-- Lire `docs/GTM.md` (clarifications)
-- Architekt = **vendor** d'IA pour SMEs (pas SME bénéficiaire)
-- Cible : être **pre-approved IMDA Solutions** vendor → clients Architekt récupèrent subvention
-
-## Risques opérationnels
-
-### R18 — Sync La Poste casse
-
-**Mitigation** :
-- Test dry-run avant merge Phase 0
-- Garder branding Macaron dans `_LAPOSTE/` (sync exclusion)
-- Documenter qui maintient le script (CTO)
-
-### R19 — Mutation testing théâtre qualité
-
-**Mitigation** :
-- ADR-003 nuancé : obligatoire modules critiques seulement
-- Seuils progressifs (50 → 70 → 80 %)
-- Pas de mutation testing sur UI/glue/utilities
-- Revue trimestrielle : si > 30 % temps CI sur mutation → réduire portée
-
-## Process de revue
-
-- **Hebdo** : check 3 risques P1 (R1, R2, R3, R5, R8)
-- **Fin de phase** : revue complète + nouveaux risques identifiés
+- **Hebdo** (15 min) : check R1, R2, R3, R5, R8 (les 5 P1)
+- **Fin de phase** : revue complète + nouveaux risques + ajustement
 - **Trimestrielle** : revue + retrait/ajout/dé-priorisation
-- **Sur incident** : ajout immédiat + post-mortem
+- **Sur incident** : ajout immédiat + post-mortem + action correctives trackées
 
 ## Issues GitHub liées
 
-Chaque risque P1 a un issue tracker `risk:*` ouvert en permanence (cf. `.github/labels.yml`).
+Chaque risque P1 et P2 sécurité/compliance a un issue tracker `risk:*` ouvert en permanence (cf. `.github/labels.yml`).
