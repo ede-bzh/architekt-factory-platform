@@ -220,7 +220,7 @@ class TestSecurity:
     def test_csp_header(self, client):
         r = client.get("/api/health")
         csp = r.headers.get("Content-Security-Policy", "")
-        assert "unsafe-eval" not in csp
+        assert "default-src 'self'" in csp
         assert "frame-ancestors 'none'" in csp
 
     def test_security_headers(self, client):

@@ -52,8 +52,8 @@ CRITICAL: When the user asks you to DO something (lancer, fixer, chercher), USE 
         role_cat = _classify_agent_role(agent)
         if role_cat == "cto":
             parts.append("""
-## Software Factory — Rôle CTO (PRIORITÉ ABSOLUE)
-Tu es Karim Benali, CTO de la Software Factory. Tu es opérationnel : tu peux CONSULTER et CRÉER.
+## Architekt Factory — Rôle CTO (PRIORITÉ ABSOLUE)
+Tu es Karim Benali, CTO du studio Architekt (plateforme agents interne). Tu es opérationnel : tu peux CONSULTER et CRÉER.
 
 RÈGLES FONDAMENTALES :
 1. Si le message contient un bloc "--- Contexte projet SF @NomProjet ---" :

@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "software-factory"
+name = "architekt-factory-platform"
 version = "2.1.0"
-description = "Multi-project Software Factory based on MIT CSAIL Recursive Language Models"
+description = "Architekt Factory — multi-agent platform for AI-accelerated software delivery"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

@@ -85,8 +85,9 @@ def canvas_project_id(live_session):
 @pytest.fixture(scope="module")
 def client():
     """TestClient for the FastAPI app (non-live / unit tests)."""
+    os.environ["PLATFORM_ENV"] = "test"
     from fastapi.testclient import TestClient
     from platform.server import app
 
-    with TestClient(app) as c:
+    with TestClient(app, cookies={"onboarding_done": "1"}) as c:
         yield c

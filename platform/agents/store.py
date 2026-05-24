@@ -270,7 +270,8 @@ class AgentStore:
                 tagline="I see the big picture",
                 is_builtin=True,
                 tags=["orchestrator", "planning"],
-                system_prompt="You are the Brain — strategic orchestrator of the Software Factory.\n"
+                system_prompt="You are the Brain — strategic orchestrator of Architekt Factory "
+                "(studio interne Architekt, plateforme agents).\n"
                 "Your role: analyze codebases deeply, decompose into atomic tasks (FRACTAL),\n"
                 "prioritize by WSJF, and coordinate workers. Use CoVe (Chain-of-Verification)\n"
                 "to validate every claim before acting. Never hallucinate — verify with tools.",

@@ -11,15 +11,15 @@
 
 <div align="center">
 
-# Software Factory
+# Architekt Factory Platform
 
-**멀티 에이전트 소프트웨어 팩토리 — 전체 제품 라이프사이클을 오케스트레이션하는 자율 AI 에이전트**
+**AI 가속·보안 중심 소프트웨어 전달을 위한 멀티 에이전트 플랫폼** (Architekt Pte. Ltd. 스튜디오 내부 도구)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-**[라이브 데모: sf.macaron-software.com](https://sf.macaron-software.com)** — "Skip (Demo)"를 클릭하여 탐색
+*레거시 데모(리브랜드 이전):* [sf.macaron-software.com](https://sf.macaron-software.com) — 이용 불가할 수 있음. [빠른 시작](#빠른-시작)의 **로컬 Demo 모드** 권장
 
 [기능](#기능) · [빠른 시작](#빠른-시작) · [스크린샷](#스크린샷) · [아키텍처](#아키텍처) · [기여하기](#기여하기)
 
@@ -29,9 +29,11 @@
 
 ## 이것은 무엇인가?
 
-Software Factory는 아이디어 구상부터 배포까지 전체 소프트웨어 개발 라이프사이클을 오케스트레이션하는 **자율 멀티 에이전트 플랫폼**입니다. 전문화된 AI 에이전트들이 협업하여 작업을 수행합니다.
+**Architekt Factory Platform**은 **Architekt**의 **내부 멀티 에이전트 오케스트레이션 엔진**입니다 — APAC 스케일업과 중소기업을 위한 AI 네이티브 디지털 제품 스튜디오.
 
-**가상 소프트웨어 공장**으로 생각하면 됩니다. 161개의 AI 에이전트가 구조화된 워크플로우를 통해 협업하며, SAFe 방법론, TDD 실천, 자동화된 품질 게이트를 따릅니다.
+> **Architekt는 코드를 팔지 않습니다. Architekt는 글로벌 대응·AI 가속·보안 중심의 디지털 전달을 제공합니다** — AI의 속도, 시니어 엔지니어링의 엄격함, 자동화된 품질 보고서를 통한 증명, 첫날부터의 글로벌 readiness를 결합합니다.
+
+이 플랫폼(구 *Software Factory*)은 전문 AI 에이전트를 구조화된 워크플로우로 오케스트레이션하여 — 아이디어 구상부터 배포까지 — 스튜디오가 SAFe, TDD, 자동 품질 게이트로 고객 프로젝트를 전달할 수 있게 합니다.
 
 ### 주요 특징
 
@@ -989,6 +991,6 @@ SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 
 ## 지원
 
-- 라이브 데모: https://sf.macaron-software.com
+- 레거시 데모(리브랜드 이전): https://sf.macaron-software.com
 - 이슈: https://github.com/macaron-software/software-factory/issues
 - 토론: https://github.com/macaron-software/software-factory/discussions

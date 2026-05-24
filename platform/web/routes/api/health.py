@@ -873,7 +873,9 @@ async def monitoring_live(request: Request, hours: int = 24):
         if hasattr(request, "state")
         else False
     )
-    if not is_authed and os.getenv("MACARON_API_KEY"):
+    from ....auth.api_key import get_platform_api_key
+
+    if not is_authed and get_platform_api_key():
         # Strip container IDs, kernel, server version, git branch, Azure details
         for d in docker_info:
             d.pop("id", None)

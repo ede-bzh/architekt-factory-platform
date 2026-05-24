@@ -11,15 +11,15 @@
 
 <div align="center">
 
-# Software Factory
+# Architekt Factory Platform
 
-**Multi-Agenten-Softwarefabrik — Autonome KI-Agenten orchestrieren den vollstaendigen Produktlebenszyklus**
+**Multi-Agenten-Plattform für KI-beschleunigte, sicherheitsbewusste Software-Lieferung** (internes Studio-Tool für Architekt Pte. Ltd.)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-**[Live-Demo: sf.macaron-software.com](https://sf.macaron-software.com)** — klicken Sie auf "Skip (Demo)" zum Erkunden
+*Legacy-Demo (Pre-Rebrand):* [sf.macaron-software.com](https://sf.macaron-software.com) — ggf. nicht verfügbar; **lokalen Demo-Modus** in [Schnellstart](#schnellstart) nutzen
 
 [Funktionen](#funktionen) · [Schnellstart](#schnellstart) · [Screenshots](#screenshots) · [Architektur](#architektur) · [Mitwirken](#mitwirken)
 
@@ -29,9 +29,11 @@
 
 ## Was ist das?
 
-Software Factory ist eine **autonome Multi-Agenten-Plattform**, die den gesamten Software-Entwicklungszyklus orchestriert — von der Ideenfindung bis zur Bereitstellung — mithilfe spezialisierter KI-Agenten, die zusammenarbeiten.
+**Architekt Factory Platform** ist die **interne Multi-Agenten-Orchestrierungs-Engine** von **Architekt** — einem KI-nativen Digital-Product-Studio für APAC-Scale-ups und KMU.
 
-Stellen Sie sich eine **virtuelle Softwarefabrik** vor, in der 161 KI-Agenten ueber strukturierte Workflows zusammenarbeiten, der SAFe-Methodik folgen, TDD-Praktiken anwenden und automatisierte Qualitaets-Gates nutzen.
+> **Architekt verkauft keinen Code. Architekt liefert global einsatzbereite, KI-beschleunigte und sicherheitsbewusste digitale Delivery** — mit der Geschwindigkeit von KI, der Strenge von Senior Engineering, Nachweis durch automatisierte Qualitätsberichte und Global Readiness ab Tag eins.
+
+Diese Plattform (ehemals *Software Factory*) orchestriert spezialisierte KI-Agenten über strukturierte Workflows — von der Ideenfindung bis zum Deployment — damit das Studio Kundenprojekte mit SAFe, TDD und automatisierten Quality Gates ausliefern kann.
 
 ### Hauptmerkmale
 
@@ -989,6 +991,6 @@ Dieses Projekt ist unter der AGPL v3 Lizenz lizenziert — siehe die [LICENSE](L
 
 ## Support
 
-- Live-Demo: https://sf.macaron-software.com
+- Legacy-Demo (Pre-Rebrand): https://sf.macaron-software.com
 - Issues: https://github.com/macaron-software/software-factory/issues
 - Diskussionen: https://github.com/macaron-software/software-factory/discussions

@@ -65,7 +65,7 @@ function showCLITab() {
                 CLI - Command Line Interface
             </h1>
             <p style="color:var(--text-secondary);margin-bottom:1.5rem">
-                Terminal interactif pour exécuter les commandes de la Software Factory. Tapez <code style="background:var(--bg-tertiary);padding:0.2rem 0.4rem;border-radius:4px">help</code> pour voir les commandes disponibles.
+                Terminal interactif pour exécuter les commandes de la {{ product_full_name }}. Tapez <code style="background:var(--bg-tertiary);padding:0.2rem 0.4rem;border-radius:4px">help</code> pour voir les commandes disponibles.
             </p>
 
             <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.1)">
@@ -83,7 +83,7 @@ function showCLITab() {
                     </div>
                 </div>
                 <div id="cli-terminal" style="padding:1.5rem;background:#1e1e1e;color:#d4d4d4;font-family:'SF Mono', 'Consolas', 'Monaco', monospace;font-size:13px;line-height:1.6;min-height:500px;max-height:70vh;overflow-y:auto;cursor:text" onclick="document.getElementById('cli-input').focus()">
-                    <div style="color:#608b4e;margin-bottom:0.5rem">┌─ Welcome to Software Factory CLI v1.0.0 ─────────────────────────┐</div>
+                    <div style="color:#608b4e;margin-bottom:0.5rem">┌─ Welcome to {{ product_full_name }} CLI v1.0.0 ─────────────────────────┐</div>
                     <div style="color:#608b4e;margin-bottom:0.3rem">│ Interactive terminal for SF platform and system commands         │</div>
                     <div style="color:#608b4e;margin-bottom:1rem">└──────────────────────────────────────────────────────────────────┘</div>
                     
@@ -335,7 +335,7 @@ async function executeCLICommand(commandLine) {
 function clearTerminal() {
     const terminal = document.getElementById('cli-terminal');
     terminal.innerHTML = `
-        <div style="color:#608b4e;margin-bottom:0.5rem">Welcome to Software Factory CLI v1.0.0</div>
+        <div style="color:#608b4e;margin-bottom:0.5rem">Welcome to {{ product_full_name }} CLI v1.0.0</div>
         <div style="color:#608b4e;margin-bottom:1rem">Type 'help' for available commands.</div>
     `;
 }
@@ -346,7 +346,7 @@ function showCLIHelp() {
     helpDiv.style.marginLeft = '1rem';
     helpDiv.style.marginTop = '0.5rem';
     helpDiv.innerHTML = `
-        <div style="color:#dcdcaa;font-weight:600;margin-bottom:0.8rem">Software Factory CLI Commands</div>
+        <div style="color:#dcdcaa;font-weight:600;margin-bottom:0.8rem">{{ product_full_name }} CLI Commands</div>
         
         <div style="color:#4ec9b0;margin-bottom:0.3rem">Interactive:</div>
         <div style="margin-left:1rem;margin-bottom:0.8rem;color:#d4d4d4">

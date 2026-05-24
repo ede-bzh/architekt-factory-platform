@@ -110,7 +110,7 @@ async def test_notification_channel(request: Request):
 
     payload = NotificationPayload(
         event="test",
-        title="🧪 Test — Software Factory",
+        title=f"🧪 Test — {PRODUCT_FULL_NAME}",
         message="Ceci est un test de notification. Si vous voyez ce message, le canal fonctionne !",
         project_id="test",
         severity="info",

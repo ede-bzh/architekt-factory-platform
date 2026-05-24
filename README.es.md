@@ -11,15 +11,15 @@
 
 <div align="center">
 
-# Software Factory
+# Architekt Factory Platform
 
-**Fabrica de Software Multi-Agente — Agentes IA autonomos orquestando el ciclo de vida completo del producto**
+**Plataforma multiagente para entrega de software acelerada por IA y consciente de la seguridad** (herramienta interna del estudio Architekt Pte. Ltd.)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-**[Demo en vivo: sf.macaron-software.com](https://sf.macaron-software.com)** — haz clic en "Skip (Demo)" para explorar
+*Demo legacy (pre-rebrand):* [sf.macaron-software.com](https://sf.macaron-software.com) — puede no estar disponible; usa el **modo Demo local** en [Inicio rapido](#inicio-rapido)
 
 [Caracteristicas](#caracteristicas) · [Inicio rapido](#inicio-rapido) · [Capturas de pantalla](#capturas-de-pantalla) · [Arquitectura](#arquitectura) · [Contribuir](#contribuir)
 
@@ -29,9 +29,11 @@
 
 ## Que es esto?
 
-Software Factory es una **plataforma multi-agente autonoma** que orquesta todo el ciclo de desarrollo de software — desde la ideacion hasta el despliegue — usando agentes IA especializados trabajando juntos.
+**Architekt Factory Platform** es el **motor interno de orquestacion multiagente** de **Architekt** — un estudio de productos digitales nativo en IA para scale-ups y pymes de APAC.
 
-Piensa en ello como una **fabrica de software virtual** donde 161 agentes IA colaboran a traves de flujos de trabajo estructurados, siguiendo la metodologia SAFe, practicas TDD y puertas de calidad automatizadas.
+> **Architekt no vende codigo. Architekt vende entrega digital globalmente lista, acelerada por IA y consciente de la seguridad** — combinando la velocidad de la IA, el rigor de la ingenieria senior, prueba via informes de calidad automatizados y preparacion global desde el dia uno.
+
+Esta plataforma (anteriormente *Software Factory*) orquesta agentes IA especializados mediante flujos de trabajo estructurados — desde la ideacion hasta el despliegue — para que el estudio entregue proyectos de clientes con metodologia SAFe, TDD y quality gates automatizados.
 
 ### Puntos clave
 
@@ -989,6 +991,6 @@ Este proyecto esta licenciado bajo la Licencia AGPL v3 - consulta el archivo [LI
 
 ## Soporte
 
-- Demo en vivo: https://sf.macaron-software.com
+- Demo legacy (pre-rebrand): https://sf.macaron-software.com
 - Issues: https://github.com/macaron-software/software-factory/issues
 - Discusiones: https://github.com/macaron-software/software-factory/discussions

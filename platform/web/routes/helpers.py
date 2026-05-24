@@ -51,8 +51,26 @@ def get_mission_semaphore() -> asyncio.Semaphore:
 _AVATAR_DIR = Path(__file__).parent.parent / "static" / "avatars"
 
 
+class _CompatTemplates:
+    """Starlette ≥0.37 requires TemplateResponse(request, name, context)."""
+
+    def __init__(self, templates):
+        self._templates = templates
+
+    def TemplateResponse(self, name, context, *args, **kwargs):
+        request = (context or {}).get("request")
+        if request is None:
+            raise ValueError("Template context must include 'request'")
+        return self._templates.TemplateResponse(
+            request, name, context, *args, **kwargs
+        )
+
+    def __getattr__(self, name):
+        return getattr(self._templates, name)
+
+
 def _templates(request: Request):
-    return request.app.state.templates
+    return _CompatTemplates(request.app.state.templates)
 
 
 def _avatar_url(agent_id: str) -> str:

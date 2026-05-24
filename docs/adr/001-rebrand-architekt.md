@@ -79,3 +79,9 @@ Rebrand complet en **trois niveaux** appliqués progressivement :
 
 - Issue tracker : milestone **Phase 0 — Rebrand**
 - Revue : à la fin de Phase 1 (post-merge ADR-006 licence)
+
+## Implémentation — alias API (2026-05-24)
+
+- `platform/auth/api_key.py` : `get_platform_api_key()` lit `ARCHITEKT_API_KEY` puis `MACARON_API_KEY`.
+- Middlewares `platform/security.py`, `platform/security/__init__.py`, `platform/auth/middleware.py` et health redaction utilisent ce helper.
+- Fenêtre de migration documentée : **6 mois** — les deux noms restent valides ; préférer `ARCHITEKT_API_KEY` pour les nouveaux déploiements.

@@ -1935,7 +1935,7 @@ function buildBushes() {
 }
 
 // ═══════════════════════════════════════════════════════
-// CAMPUS SIGN — "Macaron Software" at entrance
+// CAMPUS SIGN — "{{ product_name }}" at entrance
 // ═══════════════════════════════════════════════════════
 function buildCampusSign() {
     // Position at front of layout
@@ -1959,10 +1959,10 @@ function buildCampusSign() {
     scene.add(signBoard);
 
     // Text
-    const signText = makeTextSprite('MACARON SOFTWARE', 0x7c3aed, 0.5);
+    const signText = makeTextSprite('{{ product_name | upper }}', 0x7c3aed, 0.5);
     signText.position.set(0, 2.3, frontZ + 0.1);
     scene.add(signText);
-    const subText = makeTextSprite('Software Factory', 0xaaaaaa, 0.25);
+    const subText = makeTextSprite('{{ product_full_name }}', 0xaaaaaa, 0.25);
     subText.position.set(0, 1.85, frontZ + 0.1);
     scene.add(subText);
 }

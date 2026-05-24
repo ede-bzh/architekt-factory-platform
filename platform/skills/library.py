@@ -13,7 +13,7 @@ from typing import Optional
 
 import yaml
 
-from ..config import SKILLS_DIR, LEGACY_SKILLS_DIR, DATA_DIR
+from ..config import SKILLS_DIR, LEGACY_SKILLS_DIR, DATA_DIR, ARCHITEKT_SKILLS_DIR
 from ..db.migrations import get_db
 
 logger = logging.getLogger(__name__)
@@ -122,17 +122,28 @@ class SkillLibrary:
         """Scan all sources and return unified sorted list."""
         self._cache.clear()
         self.scan_md_skills()
+        self.scan_architekt_md_skills()
         self.scan_yaml_roles()
         self.scan_github_cache()
         return sorted(self._cache.values(), key=lambda s: (s.source, s.name.lower()))
 
     def scan_md_skills(self) -> list[SkillInfo]:
         """Read all .md files from the SF skills directory."""
-        results = []
         if not self._md_dir.exists():
             logger.warning("MD skills dir not found: %s", self._md_dir)
+            return []
+        return self._scan_md_dir(self._md_dir, source="local-md")
+
+    def scan_architekt_md_skills(self) -> list[SkillInfo]:
+        """Read Architekt studio doctrine skills (platform/skills/architekt/*.md)."""
+        return self._scan_md_dir(ARCHITEKT_SKILLS_DIR, source="architekt-md")
+
+    def _scan_md_dir(self, directory: Path, *, source: str = "local-md") -> list[SkillInfo]:
+        """Index markdown skills from a directory."""
+        results: list[SkillInfo] = []
+        if not directory.exists():
             return results
-        for path in sorted(self._md_dir.glob("*.md")):
+        for path in sorted(directory.glob("*.md")):
             try:
                 text = path.read_text(encoding="utf-8")
                 fm = _parse_md_frontmatter(text)
@@ -141,7 +152,7 @@ class SkillLibrary:
                 meta = fm.get("metadata", {}) if isinstance(fm.get("metadata"), dict) else {}
                 cat = meta.get("category", "")
                 trigs = meta.get("triggers", [])
-                tags = fm.get("tags", [])
+                tags = list(fm.get("tags", []) or [])
                 if cat and cat not in tags:
                     tags = [cat] + tags
                 info = SkillInfo(
@@ -149,7 +160,7 @@ class SkillLibrary:
                     name=fm.get("name", heading or skill_id),
                     description=fm.get("description", _first_paragraph(text)),
                     content=text,
-                    source="local-md",
+                    source=source,
                     source_url=str(path),
                     tags=tags,
                     file_path=str(path),

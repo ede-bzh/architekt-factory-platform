@@ -11,15 +11,15 @@
 
 <div align="center">
 
-# Software Factory
+# Architekt Factory Platform
 
-**Multi-Agent Software Factory — Autonomous AI agents orchestrating the full product lifecycle**
+**Multi-agent platform for AI-accelerated, security-conscious software delivery** (internal studio tool for Architekt Pte. Ltd.)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-**[Live Demo: sf.macaron-software.com](https://sf.macaron-software.com)** — click "Skip (Demo)" to explore
+*Legacy demo (pre-rebrand):* [sf.macaron-software.com](https://sf.macaron-software.com) — may be unavailable; use **local Demo mode** in [Quick Start](#quick-start)
 
 [Features](#features) · [Quick Start](#quick-start) · [Screenshots](#screenshots) · [Architecture](#architecture) · [Contributing](#contributing)
 
@@ -29,9 +29,11 @@
 
 ## What is this?
 
-Software Factory is an **autonomous multi-agent platform** that orchestrates the entire software development lifecycle — from ideation to deployment — using specialized AI agents working together.
+**Architekt Factory Platform** is the **internal multi-agent orchestration engine** for **Architekt** — an AI-native digital product studio for APAC scale-ups and SMEs.
 
-Think of it as a **virtual software factory** where 161 AI agents collaborate through structured workflows, following SAFe methodology, TDD practices, and automated quality gates.
+> **Architekt does not sell code. Architekt sells globally-ready, AI-accelerated, security-conscious digital delivery** — combining the speed of AI, the rigor of senior engineering, proof via automated quality reports, and global readiness from day one.
+
+This platform (formerly *Software Factory*) orchestrates specialized AI agents through structured workflows — from ideation to deployment — so the studio can ship client projects with SAFe methodology, TDD practices, and automated quality gates. Think of it as a **virtual delivery factory** where 161 agents collaborate under human oversight.
 
 ### Key Highlights
 
@@ -117,8 +119,8 @@ Think of it as a **virtual software factory** where 161 AI agents collaborate th
 The Docker image includes: **Node.js 20**, **Playwright + Chromium**, **bandit**, **semgrep**, **ripgrep**.
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
-cd software-factory
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
+cd architekt-factory-platform
 make setup   # copies .env.example → .env (edit it to add your LLM API key)
 make run     # builds & starts the platform
 ```
@@ -128,8 +130,8 @@ Open http://localhost:8090 — click **"Skip (Demo)"** to explore without an API
 ### Option 2: Local Installation
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
-cd software-factory
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
+cd architekt-factory-platform
 cp .env.example .env                # create your config (edit to add LLM key — see Step 3)
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r platform/requirements.txt
@@ -604,8 +606,8 @@ Mission Created
                      ┌───────┴────────┐
                      │                │
           ┌──────────▼─────┐  ┌───────▼────────┐
-          │ Azure VM (Prod)│  │ OVH VPS (Demo) │
-          │ sf.macaron-software.com   │  │ demo.macaron-software.com  │
+          │ Azure VM (legacy)│  │ OVH VPS (legacy)│
+          │ sf.macaron-* (pre-rebrand)│  │ demo.macaron-* (pre-rebrand)│
           │                │  │                │
           │ Nginx :443     │  │ Nginx :443     │
           │   │            │  │   │            │
@@ -625,8 +627,8 @@ Mission Created
                              │
                     ┌────────▼────────┐
                     │ GitHub          │
-                    │ macaron-software│
-                    │ /software-factory│
+                    │ ede-bzh         │
+                    │ /architekt-factory-platform│
                     └─────────────────┘
 ```
 
@@ -726,7 +728,7 @@ docker-compose up -d
 ### Kubernetes (Helm)
 
 ```bash
-helm install software-factory ./deploy/helm/
+helm install architekt-factory ./deploy/helm/
 ```
 
 ### Environment Variables
@@ -1048,6 +1050,6 @@ This project is licensed under the AGPL v3 License - see the [LICENSE](LICENSE) 
 
 ## Support
 
-- Live Demo: https://sf.macaron-software.com
-- Issues: https://github.com/macaron-software/software-factory/issues
-- Discussions: https://github.com/macaron-software/software-factory/discussions
+- Legacy demo (pre-rebrand): https://sf.macaron-software.com
+- Issues: https://github.com/ede-bzh/architekt-factory-platform/issues
+- Discussions: https://github.com/ede-bzh/architekt-factory-platform/discussions

@@ -1078,10 +1078,6 @@ def create_app() -> FastAPI:
         async def dispatch(self, request, call_next):
             lang = _get_lang(request)
             _i18n_global._current_lang = lang
-            # Update JS catalog for current lang
-            templates.env.globals["i18n_catalog"] = _catalog.get(
-                lang, _catalog.get("en", {})
-            )
             request.state.lang = lang
             response = await call_next(request)
             return response

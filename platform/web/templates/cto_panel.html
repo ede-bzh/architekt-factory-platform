@@ -191,7 +191,7 @@
       <img class="cto-header-avatar" src="/static/avatars/strat-cto.jpg" alt="Karim Benali">
       <div class="cto-header-info">
         <div class="cto-header-name">Karim Benali</div>
-        <div class="cto-header-role" id="cto-conv-title">Chief Technology Officer · Software Factory</div>
+        <div class="cto-header-role" id="cto-conv-title">Chief Technology Officer · {{ product_full_name }}</div>
       </div>
       <div class="cto-header-status">
         <span class="cto-header-dot"></span>
@@ -652,7 +652,7 @@
       list.querySelectorAll('.cto-conv-item').forEach(function(el){ el.classList.remove('active'); });
       list.insertBefore(item, list.firstChild);
       // Update header
-      document.getElementById('cto-conv-title').textContent = 'Chief Technology Officer · Software Factory';
+      document.getElementById('cto-conv-title').textContent = 'Chief Technology Officer · {{ product_full_name }}';
       // Focus input
       document.getElementById('cto-input').focus();
     });

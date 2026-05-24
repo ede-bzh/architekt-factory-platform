@@ -11,15 +11,15 @@
 
 <div align="center">
 
-# Software Factory
+# Architekt Factory Platform
 
-**マルチエージェントソフトウェアファクトリー — 製品ライフサイクル全体を統括する自律AIエージェント**
+**AI加速・セキュリティ重視のソフトウェアデリバリー向けマルチエージェントプラットフォーム**（Architekt Pte. Ltd. スタジオ内部ツール）
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-**[Live Demo: sf.macaron-software.com](https://sf.macaron-software.com)** — 「Skip (Demo)」をクリックして探索
+*レガシーデモ（リブランド前）:* [sf.macaron-software.com](https://sf.macaron-software.com) — 利用できない場合があります。[クイックスタート](#quick-start)の**ローカル Demo モード**を推奨
 
 [Features](#features) · [Quick Start](#quick-start) · [Screenshots](#screenshots) · [Architecture](#architecture) · [Contributing](#contributing)
 
@@ -29,9 +29,11 @@
 
 ## これは何か？
 
-Software Factory は**自律型マルチエージェントプラットフォーム**で、専門AIエージェントが連携して、アイデア出しからデプロイまでのソフトウェア開発ライフサイクル全体を統括します。
+**Architekt Factory Platform** は **Architekt** の**内部マルチエージェントオーケストレーションエンジン**です — APAC のスケールアップと SME 向け AI ネイティブのデジタルプロダクトスタジオ。
 
-161のAIエージェントが構造化されたワークフローを通じて協働する**仮想ソフトウェアファクトリー**と考えてください。SAFe方法論、TDDプラクティス、自動品質ゲートに従います。
+> **Architekt はコードを売りません。Architekt はグローバル対応・AI 加速・セキュリティ重視のデジタルデリバリーを提供します** — AI の速度、シニアエンジニアリングの厳密さ、自動品質レポートによる証明、初日からのグローバル readiness を組み合わせます。
+
+このプラットフォーム（旧 *Software Factory*）は、専門 AI エージェントを構造化ワークフローで統括し — アイデア出しからデプロイまで — スタジオが SAFe、TDD、自動品質ゲートでクライアントプロジェクトを届けられるようにします。
 
 ### 主な特徴
 
@@ -989,6 +991,6 @@ Every project automatically gets 4 operational missions:
 
 ## サポート
 
-- Live Demo: https://sf.macaron-software.com
+- レガシーデモ（リブランド前）: https://sf.macaron-software.com
 - Issues: https://github.com/macaron-software/software-factory/issues
 - Discussions: https://github.com/macaron-software/software-factory/discussions

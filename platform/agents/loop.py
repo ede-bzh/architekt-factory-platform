@@ -473,13 +473,13 @@ class AgentLoop:
 
         # Skills - Auto-inject relevant skills based on mission context
         skills_prompt = ""
+        mission_desc = None
 
         # Try automatic skills injection first
         try:
             from .skills_integration import enrich_agent_with_skills
 
             # Get mission description for context
-            mission_desc = None
             if history_dicts:
                 # Use first user message as mission context
                 for msg in history_dicts:
@@ -511,6 +511,23 @@ class AgentLoop:
                     skills_prompt = "\n\n".join(parts)
                 except Exception:
                     pass
+
+        try:
+            from .architekt_skills import inject_architekt_skills
+
+            doctrine = inject_architekt_skills(
+                self.agent.id,
+                self.agent.role,
+                mission_desc,
+            )
+            if doctrine:
+                skills_prompt = (
+                    f"{skills_prompt}\n\n{doctrine}".strip()
+                    if skills_prompt
+                    else doctrine
+                )
+        except Exception as exc:
+            logger.debug("Architekt skills injection failed: %s", exc)
 
         # Vision — organizers only (executors don't need strategic vision to implement a task)
         vision = ""
