@@ -1,0 +1,165 @@
+# Architekt GitHub labels
+# Used by scripts/github/setup-project.sh (gh label create)
+
+# ── Phase labels (workflow scheduling) ──
+- name: phase:0-rebrand
+  color: "5319e7"
+  description: "Phase 0 — Rebrand Architekt"
+- name: phase:1-catalog
+  color: "5319e7"
+  description: "Phase 1 — Catalogue technos & ADR"
+- name: phase:2-practices
+  color: "5319e7"
+  description: "Phase 2 — Doctrine bonnes pratiques"
+- name: phase:3-pilot
+  color: "5319e7"
+  description: "Phase 3 — Pilote site Architekt"
+- name: phase:4-on-demand
+  color: "5319e7"
+  description: "Phase 4 — Équipement à la demande"
+
+# ── Area labels (where the work happens) ──
+- name: area:rebrand
+  color: "fbca04"
+  description: "Rebranding (docs, UI, identifiants)"
+- name: area:docs
+  color: "fbca04"
+  description: "Documentation"
+- name: area:ui
+  color: "fbca04"
+  description: "Web UI (templates, CSS, JS)"
+- name: area:platform
+  color: "fbca04"
+  description: "Plateforme Architekt (FastAPI, agents)"
+- name: area:agents
+  color: "fbca04"
+  description: "Agents YAML / skills / workflows"
+- name: area:catalog
+  color: "fbca04"
+  description: "Catalogue technos / kits stack"
+- name: area:ci
+  color: "fbca04"
+  description: "Intégration continue / qualité"
+- name: area:deploy
+  color: "fbca04"
+  description: "Déploiement / hébergement"
+- name: area:security
+  color: "fbca04"
+  description: "Sécurité / RBAC / secrets"
+- name: area:website
+  color: "fbca04"
+  description: "Site Architekt (pilote)"
+
+# ── Kit labels (one per supported stack) ──
+- name: kit:astro
+  color: "0e8a16"
+  description: "Kit Astro"
+- name: kit:nextjs
+  color: "0e8a16"
+  description: "Kit Next.js"
+- name: kit:nuxt
+  color: "0e8a16"
+  description: "Kit Nuxt / Vue"
+- name: kit:wordpress
+  color: "0e8a16"
+  description: "Kit WordPress"
+- name: kit:shopify
+  color: "0e8a16"
+  description: "Kit Shopify"
+- name: kit:fastapi
+  color: "0e8a16"
+  description: "Kit FastAPI"
+- name: kit:nestjs
+  color: "0e8a16"
+  description: "Kit NestJS"
+- name: kit:spring
+  color: "0e8a16"
+  description: "Kit Spring Modulith"
+- name: kit:swiftui
+  color: "0e8a16"
+  description: "Kit SwiftUI"
+- name: kit:android
+  color: "0e8a16"
+  description: "Kit Android / Compose"
+- name: kit:payload
+  color: "0e8a16"
+  description: "Kit Payload CMS"
+
+# ── Type labels ──
+- name: type:adr
+  color: "bfd4f2"
+  description: "Architecture Decision Record"
+- name: type:epic
+  color: "3e4b9e"
+  description: "Epic — gros sujet groupant plusieurs features"
+- name: type:feature
+  color: "a2eeef"
+  description: "Nouvelle fonctionnalité"
+- name: type:chore
+  color: "ededed"
+  description: "Tâche technique sans nouvelle fonctionnalité"
+- name: type:bug
+  color: "d73a4a"
+  description: "Bug"
+- name: type:question
+  color: "d876e3"
+  description: "Question / décision à prendre"
+- name: type:research
+  color: "d876e3"
+  description: "Recherche / benchmark"
+
+# ── Role labels (qui porte le sujet) ──
+- name: role:cpo
+  color: "c2e0c6"
+  description: "Chief Product Officer"
+- name: role:cto
+  color: "c2e0c6"
+  description: "Chief Technology Officer"
+- name: role:designer
+  color: "c2e0c6"
+  description: "Product Designer"
+- name: role:architect
+  color: "c2e0c6"
+  description: "Solution / Enterprise Architect"
+- name: role:sre
+  color: "c2e0c6"
+  description: "Site Reliability Engineer"
+- name: role:security
+  color: "c2e0c6"
+  description: "CISO / Security"
+- name: role:cs
+  color: "c2e0c6"
+  description: "Customer Success"
+- name: role:gtm
+  color: "c2e0c6"
+  description: "Go-to-market / marketing"
+
+# ── Priority labels ──
+- name: priority:must
+  color: "b60205"
+  description: "Doit être fait dans la phase"
+- name: priority:should
+  color: "d93f0b"
+  description: "Devrait être fait"
+- name: priority:could
+  color: "fbca04"
+  description: "Optionnel / nice to have"
+
+# ── Status labels (Kanban) ──
+- name: status:blocked
+  color: "000000"
+  description: "Bloqué — dépendance non résolue"
+- name: status:needs-decision
+  color: "d876e3"
+  description: "Attend décision humaine"
+- name: status:in-review
+  color: "fbca04"
+  description: "En review"
+
+# ── Risk ──
+- name: risk:legal
+  color: "b60205"
+  description: "Risque juridique (licence, contrat)"
+- name: risk:prod
+  color: "b60205"
+  description: "Risque casser une prod existante"

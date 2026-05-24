@@ -1,0 +1,54 @@
+name: Epic
+description: Gros sujet groupant plusieurs features / chores
+title: "[EPIC][P?] "
+labels: ["type:epic"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Architekt Epic
+        Utilisez ce template pour un **gros sujet** qui sera découpé en plusieurs issues feature/chore.
+        Référencez la phase concernée dans le titre (`[P0]`, `[P1]`, etc.) et ajoutez le label `phase:*`.
+
+  - type: input
+    id: phase
+    attributes:
+      label: Phase
+      placeholder: "0-Rebrand / 1-Catalog / 2-Practices / 3-Pilot / 4-OnDemand"
+    validations:
+      required: true
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objectif
+      description: Que veut-on accomplir ? Pourquoi maintenant ?
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Périmètre
+      description: Ce qui est dedans / dehors.
+
+  - type: textarea
+    id: subtasks
+    attributes:
+      label: Sous-tâches (cocher au fur et à mesure)
+      value: |
+        - [ ] Sous-tâche 1
+        - [ ] Sous-tâche 2
+        - [ ] Sous-tâche 3
+
+  - type: textarea
+    id: gate
+    attributes:
+      label: Gate de passage
+      description: Comment sait-on que l'epic est terminé ?
+
+  - type: input
+    id: links
+    attributes:
+      label: Liens (ADR, doc, mission plateforme)
+      placeholder: "docs/ROADMAP.md, docs/adr/00X..."
