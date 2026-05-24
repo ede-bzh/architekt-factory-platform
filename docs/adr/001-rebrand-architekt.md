@@ -61,7 +61,7 @@ Rebrand complet en **trois niveaux** appliqués progressivement :
 
 ### Négatives / coûts
 - ~70+ fichiers à toucher
-- Sync La Poste (`sync-to-laposte.sh`) doit gérer 2 brandings
+- Sync externe legacy retirée (script de sync miroir retiré)
 - Risque casser CI/CD si refactor mal séquencé → niveau 3 reporté à Phase 3+
 
 ### Risques

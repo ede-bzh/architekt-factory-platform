@@ -236,10 +236,10 @@ class OrgStore:
         if existing:
             return
 
-        # Portfolio: Architekt studio
+        # Portfolio: Macaron DSI
         self.create_portfolio(Portfolio(
-            id="portfolio-dsi", name="DSI Architekt",
-            description="Portefeuille studio Architekt — projets clients et plateforme interne",
+            id="portfolio-dsi", name="DSI Macaron",
+            description="Portefeuille principal de la DSI — tous projets logiciels",
             lead_agent_id="dsi", budget_allocated=500000, fiscal_year=2025,
         ))
 
@@ -291,7 +291,7 @@ class OrgStore:
                      {"agent_id": "testeur", "role": "qa"},
                  ]),
             Team(id="team-design", name="Team Design System", art_id="art-platform",
-                 description="Solaris Design System for La Poste", scrum_master_id="scrum_master",
+                 description="Solaris Design System", scrum_master_id="scrum_master",
                  members=[
                      {"agent_id": "ux_designer", "role": "lead"},
                      {"agent_id": "dev_frontend", "role": "frontend"},

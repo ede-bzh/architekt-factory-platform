@@ -34,25 +34,15 @@ _SOFTWARE_FACTORY/     # Agent Platform + Dashboard
 
 Legacy: `_SOFTWARE_FACTORY-old/` (core/, factory CLI, brain, TDD workers — archived)
 
-## REPOSITORIES (2 dépôts séparés)
+## REPOSITORY
 
 ```
-~/_MACARON-SOFTWARE/                         ← GitHub (macaron-software/software-factory)
-  .git/ → origin = github.com/macaron-software/software-factory (AGPL-3.0)
-  platform/  cli/  dashboard/  ...           ← CODE TRACKÉ par git
-  _SOFTWARE_FACTORY/                         ← ⚠️ NON TRACKÉ (.gitignore) = runtime local
-    platform/  dashboard/  data/  logs/      ←   instance de dev en cours (DB, logs, etc.)
-
-~/_LAPOSTE/_SOFTWARE_FACTORY/                ← GitLab La Poste (GITLAB_LAPOSTE_REMOTE dans .env)
-  .git/ → origin = <gitlab-laposte>          ← URL SSH chargée depuis .env (non commitée)
-  platform/  cli/  dashboard/  ...           ← squelette : agents/workflows/projets VIDES
-  Auth: SSH ~/.ssh/gitlab_laposte_ed25519
-  README: FR uniquement, branding "Plateforme Agents La Poste", usage interne La Poste
+architekt-factory-platform/                ← GitHub ede-bzh/architekt-factory-platform (AGPL-3.0)
+  platform/  cli/  dashboard/  ...           ← code tracké
+  data/  logs/  workspace/                 ← runtime local (gitignore)
 ```
 
-**Workflow** : développer dans `~/_MACARON-SOFTWARE/` → `git push origin main` (GitHub).
-**Sync La Poste** (one-way) : `cd ~/_MACARON-SOFTWARE && ./sync-to-laposte.sh`
-⚠️ Ne jamais éditer `~/_LAPOSTE/_SOFTWARE_FACTORY/` directement — écrasé à chaque sync.
+**Workflow** : développer dans ce dépôt → `git push origin main`.
 
 ## ENVIRONMENTS (3 deployments)
 

@@ -26,7 +26,6 @@ Tout le repo + la documentation + le cadre légal portent la marque **Architekt*
 ### Niveau 1 — Visible (P0-N1, doit être fait en Phase 0)
 
 - [x] `README.md` (EN) + variantes (FR, DE, ES, JA, KO, PT, ZH) → marque Architekt + nouveau positionnement
-- [ ] `README.laposte.md` : laisser tel quel (sync interne La Poste)
 - [ ] `CODE_OF_CONDUCT.md`, `SECURITY.md`, `CONTRIBUTING.md` → Architekt
 - [ ] `.env.example` → commentaires Architekt
 - [x] `Makefile` : messages echo → Architekt
@@ -122,14 +121,14 @@ Tout le repo + la documentation + le cadre légal portent la marque **Architekt*
 - [ ] Politique IP/IA écrite (ADR-013)
 - [ ] Landing page placeholder live
 - [ ] CI verte
-- [ ] Sync La Poste vérifiée (dry-run OK)
+- [x] Sync externe legacy retirée du dépôt
 
 ## Risques + mitigations
 
 | Risque | Mitigation |
 |--------|-----------|
 | Casser Azure prod existant | Niveau 3 reporté ; alias env vars |
-| Sync La Poste casse | Test dry-run avant merge |
+| Sync externe legacy | N/A — outil supprimé |
 | Search/replace agressif casse code | Revue PR obligatoire |
 | Legal pack trop léger | Revue avocat SG dès J5 |
 | Décisions ouvertes bloquent | Placeholders documentés, décisions documentées dans ADR |

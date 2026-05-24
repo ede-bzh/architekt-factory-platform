@@ -1,13 +1,3 @@
 #!/bin/bash
-# pre-push hook — sync vers GitLab La Poste en arrière-plan
-# Déclenché à chaque `git push origin` (ne bloque pas le push GitHub)
-
-REPO_ROOT="$(git rev-parse --show-toplevel)"
-SYNC_SCRIPT="$REPO_ROOT/sync-to-laposte.sh"
-
-[ -x "$SYNC_SCRIPT" ] || exit 0
-
-echo "🔄 Sync La Poste en arrière-plan..."
-nohup bash "$SYNC_SCRIPT" > /tmp/sync-laposte.log 2>&1 &
-
+# pre-push hook — no-op (legacy external sync removed)
 exit 0

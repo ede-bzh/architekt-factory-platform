@@ -30,7 +30,7 @@
 | R15 | Marque "Architekt" confondue | Basse | Moyenne | P4 | Designer |
 | R16 | Concurrence Devin / Factory / Lovable | Moyenne | Élevée | P2 | CPO |
 | R17 | Mauvaise interprétation IMDA NAIIP eligibility | Moyenne | Moyenne | P3 | CPO |
-| R18 | Sync La Poste casse pendant rebrand | Moyenne | Moyenne | P3 | CTO |
+| R18 | Sync externe legacy pendant rebrand | Moyenne | Moyenne | P3 | CTO |
 | R19 | Mutation testing devient théâtre qualité | Moyenne | Moyenne | P3 | CTO |
 | R20 | Agents IA traitent données sensibles client sans consent | Haute | Basse | P2 | CISO |
 | **R21** | **Régional compliance manqué (UAE PDPL, Saudi SDAIA, GDPR SCC)** | **Haute** | **Moyenne** | **P2** | CTO + legal |

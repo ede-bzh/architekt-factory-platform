@@ -3,7 +3,7 @@ name: Design System — Component Cycle
 description: >
   Meta-cycle complet pour un composant Solaris : audit Figma → génération code Angular →
   validation a11y WCAG → vérification visuelle → Storybook → PR review.
-  Les agents Solaris utilisent le MCP pour garantir la conformité au design system La Poste.
+  Les agents Solaris utilisent le MCP pour garantir la conformité au design system Solaris.
 icon: layers
 is_builtin: true
 

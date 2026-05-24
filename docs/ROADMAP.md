@@ -32,7 +32,7 @@ Plateforme multi-agents SAFe pour le cycle de vie logiciel. UI **EN / FR** uniqu
 
 ## Vague D — Déploiements clients ✅
 
-- Sync La Poste isolé dans `tools/laposte-sync/`
+- Sync externe legacy supprimé (outil de sync miroir retiré du dépôt)
 - GitLab CI squelette sans trigger Macaron legacy
 
 ## Vague E — Infra (planifié, hors scope auto)

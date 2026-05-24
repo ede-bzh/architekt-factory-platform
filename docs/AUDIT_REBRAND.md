@@ -11,7 +11,7 @@ Méthode : commandes shell + `pytest` sur le dépôt (pas d’affirmation sans p
 | A — Identité & hygiène | **OK** | `platform/branding.py`, templates/manifest/sw sans « Software Factory » (107 tests `test_architekt_branding.py`), code mort supprimé (`dashboard/platform/`, `orchestrator/`, `factory_bridge.py`, `platform/security.py` racine) |
 | B — Documentation | **OK** | `README.md`/`README.fr.md` Architekt, `.env.example`, `docs/ROADMAP.md`, wiki EN/FR, screenshots `en`+`fr` seulement |
 | C — Rationalisation | **OK** | Chiffres ~160+ agents / 41 workflows dans wiki ; `platform/SPECS.md` §14.4 |
-| D — La Poste | **OK** | `tools/laposte-sync/`, `.gitlab-ci.yml` filtré par auteur Macaron |
+| D — Sync externe | **OK** | outil de sync miroir supprimé, `.gitlab-ci.yml` optionnel (wiki) |
 | E — Docker `macaron_platform` | **Hors scope** | Inchangé volontairement |
 
 ## i18n UI (EN/FR)

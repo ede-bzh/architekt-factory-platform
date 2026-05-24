@@ -762,7 +762,7 @@ class MCPLRMServer:
             if not url:
                 # Try to infer from Confluence URL
                 confluence_url = os.environ.get(
-                    "CONFLUENCE_URL", "https://wiki.net.extra.laposte.fr/confluence"
+                    "CONFLUENCE_URL", os.getenv("CONFLUENCE_BASE_URL", "")
                 )
                 # Jira is typically on same domain as Confluence
                 url = confluence_url.replace("/confluence", "/jira").replace(

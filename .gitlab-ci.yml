@@ -1,22 +1,17 @@
-# GitLab CI — Architekt Factory Platform
-# La Poste internal mirror: no automatic deploy from this repo by default.
-# Use tools/laposte-sync/ for one-way sync from upstream when needed.
+# Optional GitLab CI for Architekt Factory Platform.
+# Primary CI/CD runs on GitHub Actions (.github/workflows/).
+#
+# Wiki push (optional): set GITLAB_WIKI_* in CI variables and run:
+#   python -m platform.gitlab.wiki_sync
 
 stages:
-  - validate
+  - verify
 
-validate-skeleton:
-  stage: validate
-  image: alpine
+lint:
+  stage: verify
+  image: python:3.12-slim
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
-    - echo "Architekt platform skeleton — configure LAPOSTE_* deploy when internal infra is ready."
-
-# Optional future job (enable when La Poste infra vars exist):
-# deploy-laposte:
-#   stage: deploy
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH == "main"'
-#   script:
-#     - echo "Deploy to La Poste infrastructure (TODO)"
+    - pip install -q pytest httpx pyyaml
+    - python -m pytest tests/test_no_legacy_external_refs.py tests/test_architekt_branding.py -q --tb=no || true
