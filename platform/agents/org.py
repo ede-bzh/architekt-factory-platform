@@ -236,10 +236,10 @@ class OrgStore:
         if existing:
             return
 
-        # Portfolio: Macaron DSI
+        # Portfolio: Architekt studio
         self.create_portfolio(Portfolio(
-            id="portfolio-dsi", name="DSI Macaron",
-            description="Portefeuille principal de la DSI — tous projets logiciels",
+            id="portfolio-dsi", name="DSI Architekt",
+            description="Portefeuille studio Architekt — projets clients et plateforme interne",
             lead_agent_id="dsi", budget_allocated=500000, fiscal_year=2025,
         ))
 

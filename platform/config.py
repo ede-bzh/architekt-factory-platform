@@ -1,7 +1,7 @@
 """
-Architekt Factory Platform — Configuration
-============================================
-Local-first agent platform. LLM: MiniMax, Azure OpenAI, Azure AI Foundry, demo.
+Software Factory - Configuration
+=======================================
+100% local platform. LLM providers: Anthropic, MiniMax, GLM, Azure Foundry.
 Loads from ~/.config/factory/platform.yaml with env var overrides.
 """
 
@@ -22,6 +22,7 @@ PLATFORM_ROOT = Path(__file__).parent
 FACTORY_ROOT = PLATFORM_ROOT.parent
 DATA_DIR = FACTORY_ROOT / "data"
 SKILLS_DIR = PLATFORM_ROOT / "skills" / "definitions"
+ARCHITEKT_SKILLS_DIR = PLATFORM_ROOT / "skills" / "architekt"
 LEGACY_SKILLS_DIR = FACTORY_ROOT / "skills"
 CONFIG_PATH = Path.home() / ".config" / "factory" / "platform.yaml"
 
