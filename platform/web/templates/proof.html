@@ -1,76 +1,19 @@
 {% extends "base.html" %}
+
 {% block content %}
-<style>
-.proof-wrap { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem; }
-.proof-title { font-size: 1.4rem; font-weight: 700; margin: 0 0 0.35rem; }
-.proof-note {
-    font-size: 0.82rem; color: var(--text-secondary);
-    padding: 0.65rem 0.85rem; margin-bottom: 1.25rem;
-    background: var(--bg-secondary); border: 1px solid var(--border);
-    border-radius: 8px;
-}
-.proof-section {
-    background: var(--bg-secondary); border: 1px solid var(--border);
-    border-radius: 10px; padding: 1rem 1.15rem; margin-bottom: 1rem;
-}
-.proof-section h2 {
-    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em;
-    color: var(--text-secondary); margin: 0 0 0.75rem;
-    display: flex; align-items: center; gap: 0.4rem;
-}
-.proof-section h2 svg { width: 14px; height: 14px; }
-.proof-link { color: var(--purple, #a855f7); text-decoration: none; font-weight: 600; }
-.proof-link:hover { text-decoration: underline; }
-.proof-empty { font-size: 0.85rem; color: var(--text-secondary); }
-.proof-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-.proof-table th {
-    text-align: left; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border);
-    color: var(--text-secondary); font-weight: 600; font-size: 0.72rem;
-}
-.proof-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(255,255,255,.04); }
-.htmx-indicator { opacity: 0; transition: opacity 0.2s; }
-.htmx-request .htmx-indicator { opacity: 1; }
-</style>
+<div class="main-area" style="padding:2rem;max-width:720px">
+    <h1 style="font-size:1.6rem;font-weight:700;margin-bottom:0.5rem">Proof of Concepts</h1>
+    <p style="color:var(--text-secondary);margin-bottom:1.5rem;font-size:0.9rem">
+        Wave 2 experiments — internal previews, not production features.
+    </p>
 
-<div class="proof-wrap">
-    <h1 class="proof-title">Proof Dashboard</h1>
-    <p class="proof-note">Architekt proof dashboard POC</p>
-
-    <div class="proof-section">
-        <h2>
-            <svg class="icon"><use href="#icon-activity"/></svg>
-            Health
-        </h2>
-        <a class="proof-link" href="/api/health" target="_blank" rel="noopener">GET /api/health</a>
-        <span style="color:var(--text-secondary);font-size:0.8rem;margin-left:0.5rem">— JSON health check</span>
-    </div>
-
-    <div class="proof-section">
-        <h2>
-            <svg class="icon"><use href="#icon-chart"/></svg>
-            Quality scores
-            <span class="htmx-indicator" style="font-size:0.7rem;font-weight:400;margin-left:auto">loading…</span>
-        </h2>
-        <div id="proof-quality"
-             hx-get="/proof/partial/quality"
-             hx-trigger="load, every 60s"
-             hx-swap="innerHTML">
-            <p class="proof-empty">Loading quality data…</p>
-        </div>
-    </div>
-
-    <div class="proof-section">
-        <h2>
-            <svg class="icon"><use href="#icon-trending-up"/></svg>
-            DORA
-            <span class="htmx-indicator" style="font-size:0.7rem;font-weight:400;margin-left:auto">loading…</span>
-        </h2>
-        <div id="proof-dora"
-             hx-get="/proof/partial/dora"
-             hx-trigger="load, every 60s"
-             hx-swap="innerHTML">
-            <p class="proof-empty">Loading DORA metrics…</p>
-        </div>
-    </div>
+    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem">
+        <li style="padding:1rem;border-radius:10px;background:var(--bg-secondary);border:1px solid var(--border)">
+            <a href="/finops" style="font-weight:600;color:var(--purple-light);text-decoration:none">FinOps — LLM cost dashboard</a>
+            <p style="margin:0.35rem 0 0;font-size:0.85rem;color:var(--text-secondary)">
+                Total spend and breakdown by provider from <code>llm_traces</code>.
+            </p>
+        </li>
+    </ul>
 </div>
 {% endblock %}

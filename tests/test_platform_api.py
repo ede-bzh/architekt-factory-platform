@@ -30,12 +30,6 @@ class TestHealth:
         data = r.json()
         assert data["status"] == "ok"
 
-    def test_proof_page(self, client):
-        r = client.get("/proof")
-        assert r.status_code == 200
-        assert "text/html" in r.headers.get("content-type", "")
-        assert "Architekt proof dashboard POC" in r.text
-
     def test_metrics_prometheus(self, client):
         r = client.get("/api/metrics/prometheus")
         assert r.status_code == 200
@@ -252,3 +246,13 @@ class TestMemory:
     def test_memory_search(self, client):
         r = client.get("/api/memory/search", params={"q": "architecture"})
         assert r.status_code == 200
+
+
+# ─── FinOps POC ─────────────────────────────────────────────────
+
+class TestFinOps:
+    def test_finops_page(self, client):
+        r = client.get("/finops")
+        assert r.status_code == 200
+        assert "text/html" in r.headers["content-type"]
+        assert "FinOps" in r.text

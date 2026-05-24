@@ -210,6 +210,7 @@ PUBLIC_PATHS = {
     "/api/analytics",
     "/api/teams",
     "/proof",
+    "/finops",
 }
 
 

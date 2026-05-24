@@ -34,6 +34,27 @@ jobs:
           pip install bandit
           bandit -r platform/ -ll -q
 
+      - name: Dependency audit (pip-audit)
+        continue-on-error: true
+        run: |
+          pip install pip-audit
+          pip-audit -r platform/requirements.txt
+
+      - name: Generate SBOM (CycloneDX)
+        continue-on-error: true
+        run: |
+          pip install cyclonedx-bom
+          cyclonedx-py requirements -i platform/requirements.txt -o sbom-platform.json
+
+      - name: Upload SBOM artifact
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-platform
+          path: sbom-platform.json
+          if-no-files-found: ignore
+
       - name: Run unit tests (core gate)
         env:
           PLATFORM_LLM_PROVIDER: demo
@@ -44,6 +65,7 @@ jobs:
             tests/test_events.py \
             tests/test_deterministic_tools.py \
             tests/test_adaptive_intelligence.py \
+            tests/test_adversarial_l0.py \
             tests/test_plugins.py \
             tests/test_llm_cache.py \
             tests/test_platform_api.py \

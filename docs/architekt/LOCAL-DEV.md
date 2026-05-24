@@ -79,3 +79,46 @@ API key alias coverage only:
 ```bash
 PLATFORM_LLM_PROVIDER=demo PLATFORM_ENV=test PYTHONPATH=. pytest tests/test_api_key_alias.py -v
 ```
+
+
+## E2E smoke (Playwright)
+
+# Local Development
+
+## Platform server
+
+```bash
+# From repo root (parent of platform/ package)
+pip install -r platform/requirements.txt
+PLATFORM_LLM_PROVIDER=demo python3 -m uvicorn platform.server:app \
+  --host 0.0.0.0 --port 8099 --ws none --log-level warning
+```
+
+Open http://localhost:8099 — use **Skip Demo** on `/login` if auth is enabled.
+
+## E2E smoke tests (Playwright)
+
+Minimal smoke (2 tests: login + `/api/health`):
+
+```bash
+cd platform/tests/e2e
+npm ci
+npx playwright install chromium
+BASE_URL=http://localhost:8099 PLATFORM_LLM_PROVIDER=demo \
+  npx playwright test smoke.spec.ts
+```
+
+Full E2E suite (82+ tests, longer runtime):
+
+```bash
+cd platform/tests/e2e
+npm test
+```
+
+CI runs only `smoke.spec.ts` via `.github/workflows/e2e-smoke.yml` on push to `main`.
+
+## Unit tests
+
+```bash
+pytest tests/test_platform_api.py -v
+```

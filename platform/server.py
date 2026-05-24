@@ -622,7 +622,9 @@ def create_app() -> FastAPI:
                 "'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net"
             )
             if not path.startswith("/api/"):
-                script_src = f"'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net"
+                script_src = (
+                    "'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net"
+                )
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
                 f"script-src {script_src}; "
@@ -753,13 +755,14 @@ def create_app() -> FastAPI:
                 "/setup",
                 "/onboarding",
                 "/proof",
+                "/finops",
                 "/health",
                 "/favicon.ico",
                 "/manifest.json",
                 "/sw.js",
             )
         )
-        if not skip and not path.startswith("/proof/") and not request.cookies.get("onboarding_done"):
+        if not skip and not request.cookies.get("onboarding_done"):
             from starlette.responses import RedirectResponse
 
             return RedirectResponse(url="/onboarding", status_code=302)
@@ -1043,7 +1046,7 @@ def create_app() -> FastAPI:
         return _catalog.get(_i18n_global._current_lang, _catalog.get("en", {}))
 
     templates.env.globals["_"] = _i18n_global
-    templates.env.globals["i18n_catalog"] = _i18n_catalog_global
+    templates.env.globals["i18n_catalog"] = _i18n_catalog_global()
     templates.env.globals["SUPPORTED_LANGS"] = SUPPORTED_LANGS
 
     # Version + git commit for header display
@@ -1084,6 +1087,10 @@ def create_app() -> FastAPI:
         async def dispatch(self, request, call_next):
             lang = _get_lang(request)
             _i18n_global._current_lang = lang
+            # Update JS catalog for current lang
+            templates.env.globals["i18n_catalog"] = _catalog.get(
+                lang, _catalog.get("en", {})
+            )
             request.state.lang = lang
             response = await call_next(request)
             return response
