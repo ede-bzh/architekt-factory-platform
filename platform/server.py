@@ -1,4 +1,4 @@
-"""Architekt Factory — FastAPI web server.
+"""Software Factory — FastAPI web server.
 
 Serves the HTMX-based UI with SSE real-time updates.
 Runs on port 8090 (separate from Factory dashboard on 8080).
@@ -90,9 +90,7 @@ async def lifespan(app: FastAPI):
     setup_logging(level=os.environ.get("LOG_LEVEL", "WARNING"))
 
     cfg = get_config()
-    from .branding import PRODUCT_FULL_NAME
-
-    logger.info("Starting %s on port %s", PRODUCT_FULL_NAME, cfg.server.port)
+    logger.info("Starting Software Factory on port %s", cfg.server.port)
     init_db()
 
     # Seed built-in agents
@@ -564,11 +562,9 @@ def _record_incident(path: str, status_code: int, detail: str = ""):
 
 def create_app() -> FastAPI:
     """Application factory."""
-    from .branding import PRODUCT_FULL_NAME, PRODUCT_TAGLINE
-
     app = FastAPI(
-        title=PRODUCT_FULL_NAME,
-        description=f"{PRODUCT_FULL_NAME} — {PRODUCT_TAGLINE}",
+        title="Software Factory",
+        description="Multi-Agent Software Factory — 94 AI agents orchestrating the full product lifecycle with SAFe, TDD, and auto-heal.",
         version="1.1.0",
         docs_url="/docs",
         redoc_url="/redoc",
@@ -1075,18 +1071,6 @@ def create_app() -> FastAPI:
     templates.env.globals["app_commit"] = _sha
     templates.env.globals["app_version"] = _tag or _sha
 
-    from .branding import (
-        COMPANY_NAME,
-        PRODUCT_FULL_NAME,
-        PRODUCT_NAME,
-        PRODUCT_TAGLINE,
-    )
-
-    templates.env.globals["product_name"] = PRODUCT_NAME
-    templates.env.globals["product_full_name"] = PRODUCT_FULL_NAME
-    templates.env.globals["product_tagline"] = PRODUCT_TAGLINE
-    templates.env.globals["company_name"] = COMPANY_NAME
-
     # Middleware to set current language per-request
     from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -1094,10 +1078,6 @@ def create_app() -> FastAPI:
         async def dispatch(self, request, call_next):
             lang = _get_lang(request)
             _i18n_global._current_lang = lang
-            # Update JS catalog for current lang
-            templates.env.globals["i18n_catalog"] = _catalog.get(
-                lang, _catalog.get("en", {})
-            )
             request.state.lang = lang
             response = await call_next(request)
             return response

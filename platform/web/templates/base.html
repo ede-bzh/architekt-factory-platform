@@ -4,13 +4,13 @@
     <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('macaron_theme') || 'dark')</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>{{ page_title }} — {{ product_full_name }}</title>
+    <title>{{ page_title }} — Software Factory</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#6c63ff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="{{ product_name }}">
+    <meta name="apple-mobile-web-app-title" content="SF Platform">
     <link rel="stylesheet" href="/static/css/main.css?v=20260225a">
     <link rel="stylesheet" href="/static/css/components.css?v=20260225a">
     <link rel="stylesheet" href="/static/css/agents.css?v=20260225a">
@@ -21,7 +21,7 @@
     <script src="/static/js/sse.js" defer></script>
     <script>
     /* JS i18n — mirrors server-side _() */
-    window.__i18n = {{ i18n_catalog | tojson }};
+    window.__i18n = {{ i18n_catalog() | tojson }};
     function _(key) { return window.__i18n[key] || key; }
 
     /* Global error handler → auto-create TMA ticket */

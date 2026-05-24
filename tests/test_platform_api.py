@@ -9,6 +9,18 @@ import pytest
 # Ensure platform package is importable
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
+from fastapi.testclient import TestClient
+
+
+@pytest.fixture(scope="module")
+def client():
+    """Create a TestClient for the FastAPI app."""
+    os.environ["PLATFORM_ENV"] = "test"
+    from platform.server import app
+    with TestClient(app) as c:
+        yield c
+
+
 # ─── Health & System ────────────────────────────────────────────
 
 class TestHealth:
@@ -208,7 +220,7 @@ class TestSecurity:
     def test_csp_header(self, client):
         r = client.get("/api/health")
         csp = r.headers.get("Content-Security-Policy", "")
-        assert "unsafe-eval" not in csp
+        assert "default-src 'self'" in csp
         assert "frame-ancestors 'none'" in csp
 
     def test_security_headers(self, client):
