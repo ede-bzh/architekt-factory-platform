@@ -40,6 +40,7 @@ Plateforme multi-agents SAFe pour le cycle de vie logiciel. UI **EN / FR** uniqu
 - Renommage package Docker `macaron_platform` → nécessite runbook prod (RTO/RPO)
 
 ## Références
+- Audit factuel (tests + vérifications) : `docs/AUDIT_REBRAND.md`
 
 - Spécifications détaillées : `platform/SPECS.md`
 - Backlog technique : issues GitHub `ede-bzh/architekt-factory-platform`

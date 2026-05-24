@@ -450,10 +450,9 @@ async def epic_features(epic_id: str):
 @router.get("/api/set-lang/{lang}")
 async def set_language(lang: str, request: Request):
     """Switch UI language. Sets cookie and redirects back."""
-    from ....i18n import SUPPORTED_LANGS
+    from ....i18n import normalize_lang
 
-    if lang not in SUPPORTED_LANGS:
-        lang = "en"
+    lang = normalize_lang(lang)
     referer = request.headers.get("referer", "/")
     response = RedirectResponse(url=referer, status_code=303)
     response.set_cookie(
@@ -465,11 +464,12 @@ async def set_language(lang: str, request: Request):
 @router.get("/api/i18n/{lang}.json")
 async def i18n_catalog(lang: str):
     """Serve translation catalog for client-side JS."""
-    from ....i18n import _catalog, _load_catalog, normalize_lang
+    from ....i18n import SUPPORTED_LANGS, _catalog, _load_catalog
 
     if not _catalog:
         _load_catalog()
-    lang = normalize_lang(lang)
+    if lang not in SUPPORTED_LANGS:
+        lang = "en"
     return JSONResponse(_catalog.get(lang, {}))
 
 

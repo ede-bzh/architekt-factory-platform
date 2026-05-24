@@ -157,6 +157,11 @@ class TestI18n:
         assert isinstance(data, dict)
         assert len(data) > 30, f"{lang}: only {len(data)} keys"
 
+    def test_unsupported_locale_falls_back_to_en(self, client):
+        en = client.get("/api/i18n/en.json").json()
+        zh = client.get("/api/i18n/zh.json").json()
+        assert zh == en
+
 
 # ─── Integrations ──────────────────────────────────────────────
 
