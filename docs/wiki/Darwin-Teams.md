@@ -1,6 +1,6 @@
 # 🧬 Darwin Teams — Evolutionary Agent Selection
 
-Software Factory uses **evolutionary selection** to find the best agent teams and LLM models for each context — automatically, without configuration.
+Architekt Factory Platform uses **evolutionary selection** to find the best agent teams and LLM models for each context — automatically, without configuration.
 
 ## Two Levels of Evolution
 
