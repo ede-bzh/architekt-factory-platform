@@ -33,17 +33,47 @@ def import_time():
     return time.time()
 
 
+def _app_version() -> str:
+    """Platform version tag (VERSION file or git describe)."""
+    import subprocess
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    ver_file = root / "VERSION"
+    if ver_file.exists():
+        parts = ver_file.read_text().strip().split(":")
+        return parts[0] if parts else "unknown"
+    try:
+        return (
+            subprocess.check_output(
+                ["git", "describe", "--tags", "--always"],
+                stderr=subprocess.DEVNULL,
+                cwd=root,
+            )
+            .decode()
+            .strip()
+        )
+    except Exception:
+        return "unknown"
+
+
 @router.get("/api/health", responses={200: {"model": HealthResponse}})
 async def health_check():
     """Liveness/readiness probe for Docker healthcheck."""
     from ....db.migrations import get_db
 
+    ts = datetime.utcnow().isoformat() + "Z"
     try:
         db = get_db()
         db.execute("SELECT 1")
-        return JSONResponse({"status": "ok"})
+        return JSONResponse(
+            {"status": "ok", "version": _app_version(), "timestamp": ts}
+        )
     except Exception as e:
-        return JSONResponse({"status": "error", "detail": str(e)}, status_code=503)
+        return JSONResponse(
+            {"status": "error", "detail": str(e), "version": _app_version(), "timestamp": ts},
+            status_code=503,
+        )
 
 
 @router.get("/api/metrics/load")
@@ -873,9 +903,7 @@ async def monitoring_live(request: Request, hours: int = 24):
         if hasattr(request, "state")
         else False
     )
-    from ....auth.api_key import get_platform_api_key
-
-    if not is_authed and get_platform_api_key():
+    if not is_authed and os.getenv("MACARON_API_KEY"):
         # Strip container IDs, kernel, server version, git branch, Azure details
         for d in docker_info:
             d.pop("id", None)

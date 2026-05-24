@@ -640,28 +640,35 @@ def create_app() -> FastAPI:
             )
         return response
 
-    # ── Rate limiting (API endpoints, 60 req/min per IP) ───────────────
-    import time as _rl_time
-    from collections import defaultdict as _dd
+    # ── Rate limiting (API mutations, DB-backed, survives restart) ─────
+    import hashlib as _rl_hashlib
 
-    _rate_buckets: dict[str, list[float]] = _dd(list)
-    _RATE_LIMIT = int(os.environ.get("API_RATE_LIMIT", "120"))  # per minute
+    from .security.rate_limit import check_rate_limit
+
+    _RATE_LIMIT = int(os.environ.get("API_RATE_LIMIT", "120"))
     _RATE_WINDOW = 60.0
+    _RATE_METHODS = frozenset({"POST", "PUT", "PATCH", "DELETE"})
 
     @app.middleware("http")
     async def rate_limit_middleware(request, call_next):
-        if request.url.path.startswith("/api/"):
+        if (
+            request.url.path.startswith("/api/")
+            and request.method in _RATE_METHODS
+        ):
             client_ip = request.client.host if request.client else "unknown"
-            now = _rl_time.time()
-            bucket = _rate_buckets[client_ip]
-            bucket[:] = [t for t in bucket if now - t < _RATE_WINDOW]
-            if len(bucket) >= _RATE_LIMIT:
+            token = request.headers.get("Authorization", "")[:20]
+            client_key = (
+                f"{client_ip}:{_rl_hashlib.md5(token.encode()).hexdigest()[:8]}"
+                if token
+                else client_ip
+            )
+            if not check_rate_limit(client_key, _RATE_LIMIT, _RATE_WINDOW):
                 from starlette.responses import JSONResponse as _JR
 
                 return _JR(
-                    {"error": "rate_limit_exceeded", "retry_after": 60}, status_code=429
+                    {"error": "rate_limit_exceeded", "retry_after": int(_RATE_WINDOW)},
+                    status_code=429,
                 )
-            bucket.append(now)
         return await call_next(request)
 
     # ── Trace ID middleware ─────────────────────────────────────────────
@@ -754,13 +761,15 @@ def create_app() -> FastAPI:
                 "/login",
                 "/setup",
                 "/onboarding",
-                "/proof",
-                "/finops",
                 "/health",
                 "/favicon.ico",
                 "/manifest.json",
                 "/sw.js",
+                "/proof",
+                "/finops",
             )
+            or path.startswith("/proof/")
+            or path.startswith("/finops/")
         )
         if not skip and not request.cookies.get("onboarding_done"):
             from starlette.responses import RedirectResponse
