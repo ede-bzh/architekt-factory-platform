@@ -8,7 +8,7 @@
 - **Architekt** = studio / agence digitale à créer à Singapour, ambition Asie (ASEAN).
 - **Équipe** : 2 personnes (CPO + CTO).
 - **Plateforme** = cet outil interne (anciennement *Software Factory*) qui orchestre des agents IA pour livrer des projets clients.
-- **Repo** : `ede-bzh/software-factory-macaron` → renommé après Phase 0.
+- **Repo** : `ede-bzh/architekt-factory-platform` (renommé le 2026-05-24 — ancien : `software-factory-macaron`).
 - **État runtime aujourd'hui** : code sur GitHub uniquement, rien n'est déployé.
 
 ## Principes directeurs
