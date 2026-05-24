@@ -1,4 +1,4 @@
-"""Software Factory — FastAPI web server.
+"""Architekt Factory — FastAPI web server.
 
 Serves the HTMX-based UI with SSE real-time updates.
 Runs on port 8090 (separate from Factory dashboard on 8080).
@@ -90,7 +90,9 @@ async def lifespan(app: FastAPI):
     setup_logging(level=os.environ.get("LOG_LEVEL", "WARNING"))
 
     cfg = get_config()
-    logger.info("Starting Software Factory on port %s", cfg.server.port)
+    from .branding import PRODUCT_FULL_NAME
+
+    logger.info("Starting %s on port %s", PRODUCT_FULL_NAME, cfg.server.port)
     init_db()
 
     # Seed built-in agents
@@ -562,9 +564,11 @@ def _record_incident(path: str, status_code: int, detail: str = ""):
 
 def create_app() -> FastAPI:
     """Application factory."""
+    from .branding import PRODUCT_FULL_NAME, PRODUCT_TAGLINE
+
     app = FastAPI(
-        title="Software Factory",
-        description="Multi-Agent Software Factory — 94 AI agents orchestrating the full product lifecycle with SAFe, TDD, and auto-heal.",
+        title=PRODUCT_FULL_NAME,
+        description=f"{PRODUCT_FULL_NAME} — {PRODUCT_TAGLINE}",
         version="1.1.0",
         docs_url="/docs",
         redoc_url="/redoc",

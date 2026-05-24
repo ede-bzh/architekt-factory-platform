@@ -255,7 +255,7 @@
     <!-- ═══ Integrations ═══ -->
     <div class="settings-panel" id="panel-integrations">
         <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.2rem">
-            Connect external tools. Macaron replaces Jira &amp; Confluence natively — these connectors enable import/migration and optional sync with legacy systems.
+            Connect external tools. {{ product_name }} replaces Jira &amp; Confluence natively — these connectors enable import/migration and optional sync with legacy systems.
         </p>
         <div class="integ-grid">
         {% for integ in integrations %}
@@ -308,7 +308,7 @@
                     <div class="integ-field">
                         <label>Mode</label>
                         <select data-integ="{{ integ.id }}" data-key="mode">
-                            <option value="import" {% if cfg.get('mode')=='import' %}selected{% endif %}>Import only (Jira → Macaron)</option>
+                            <option value="import" {% if cfg.get('mode')=='import' %}selected{% endif %}>Import only (Jira → {{ product_name }})</option>
                             <option value="bidirectional" {% if cfg.get('mode')=='bidirectional' %}selected{% endif %}>Bidirectional sync</option>
                         </select>
                     </div>

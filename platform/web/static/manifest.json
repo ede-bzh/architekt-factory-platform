@@ -1,7 +1,7 @@
 {
-  "name": "Software Factory",
-  "short_name": "SF",
-  "description": "Multi-Agent Software Factory",
+  "name": "Architekt Factory",
+  "short_name": "AF",
+  "description": "Multi-agent platform for AI-accelerated, security-conscious software delivery",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1a2e",

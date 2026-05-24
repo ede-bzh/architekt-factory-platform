@@ -1959,7 +1959,7 @@ function buildCampusSign() {
     scene.add(signBoard);
 
     // Text
-    const signText = makeTextSprite('MACARON SOFTWARE', 0x7c3aed, 0.5);
+    const signText = makeTextSprite('{{ product_name | upper }}', 0x7c3aed, 0.5);
     signText.position.set(0, 2.3, frontZ + 0.1);
     scene.add(signText);
     const subText = makeTextSprite('{{ product_full_name }}', 0xaaaaaa, 0.25);

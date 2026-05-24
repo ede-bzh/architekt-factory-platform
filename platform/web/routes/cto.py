@@ -37,13 +37,14 @@ def _list_cto_sessions(limit: int = 50):
 
 def _create_cto_session(title: str = "") -> object:
     """Create a new CTO chat session."""
+    from ...branding import PRODUCT_FULL_NAME
     from ...sessions.store import get_session_store, SessionDef, MessageDef
 
     store = get_session_store()
     session = store.create(
         SessionDef(
             name=title or "Nouvelle conversation",
-            goal="Pilotage de la Software Factory — analyses, métriques, création de projets/missions.",
+            goal=f"Pilotage de {PRODUCT_FULL_NAME} — analyses, métriques, création de projets/missions.",
             status="active",
             config={"lead_agent": _CTO_AGENT_ID, "type": _CTO_SESSION_TYPE},
         )

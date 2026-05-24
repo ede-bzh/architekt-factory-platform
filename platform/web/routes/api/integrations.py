@@ -84,8 +84,10 @@ async def test_integration(integ_id: str):
         try:
             import urllib.request
 
+            from ....branding import HTTP_USER_AGENT
+
             req = urllib.request.Request(url, method="HEAD")
-            req.add_header("User-Agent", "Architekt-Platform/2.1")
+            req.add_header("User-Agent", HTTP_USER_AGENT)
             token = cfg.get("api_token", "")
             if token:
                 req.add_header("Authorization", f"Bearer {token}")

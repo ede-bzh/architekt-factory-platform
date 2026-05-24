@@ -87,12 +87,12 @@ async def launch_mission_workflow(request: Request, mission_id: str):
     workspace_root.mkdir(parents=True, exist_ok=True)
     subprocess.run(["git", "init"], cwd=str(workspace_root), capture_output=True)
     subprocess.run(
-        ["git", "config", "user.email", "agents@architekt.ai"],
+        ["git", "config", "user.email", GIT_AGENT_EMAIL],
         cwd=str(workspace_root),
         capture_output=True,
     )
     subprocess.run(
-        ["git", "config", "user.name", "Macaron Agents"],
+        ["git", "config", "user.name", GIT_AGENT_NAME],
         cwd=str(workspace_root),
         capture_output=True,
     )
@@ -219,12 +219,12 @@ async def api_mission_start(request: Request):
     # Init git repo + README with brief
     subprocess.run(["git", "init"], cwd=str(workspace_root), capture_output=True)
     subprocess.run(
-        ["git", "config", "user.email", "agents@architekt.ai"],
+        ["git", "config", "user.email", GIT_AGENT_EMAIL],
         cwd=str(workspace_root),
         capture_output=True,
     )
     subprocess.run(
-        ["git", "config", "user.name", "Macaron Agents"],
+        ["git", "config", "user.name", GIT_AGENT_NAME],
         cwd=str(workspace_root),
         capture_output=True,
     )

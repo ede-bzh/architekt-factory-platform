@@ -1,5 +1,5 @@
 """
-SF Native Commands — Software Factory specific CLI commands
+SF Native Commands — Architekt Factory specific CLI commands
 """
 
 import logging
@@ -64,6 +64,7 @@ def format_table(headers: list[str], rows: list[list[str]]) -> str:
 async def cmd_platform_status() -> SFCommandResponse:
     """Get platform status."""
     from ...agents.store import get_agent_store
+    from ...branding import PRODUCT_FULL_NAME
     from ...missions.store import get_mission_store
     from ...projects.manager import get_project_store
     from ...skills.library import get_skill_library
@@ -482,7 +483,9 @@ async def cmd_db_status() -> SFCommandResponse:
 
 async def cmd_help() -> SFCommandResponse:
     """Show SF CLI help."""
-    output = """Software Factory CLI Help
+    from ...branding import PRODUCT_FULL_NAME
+
+    output = f"""{PRODUCT_FULL_NAME} CLI Help
 =========================
 
 PLATFORM:
