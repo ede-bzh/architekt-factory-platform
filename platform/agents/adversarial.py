@@ -59,6 +59,25 @@ _ZERO_SKIP_PATTERNS = [
     (r"except\s*:\s*\n\s*pass\b", "except: pass"),
 ]
 
+
+# L2: Architecture / security deterministic (RBAC, validation, dangerous APIs)
+_L2_PATTERNS = [
+    (
+        r'(?:password|api_key|secret|token)\s*=\s*["\'][^"\']{8,}["\']',
+        "Hardcoded secret in source",
+    ),
+    (r'execute\s*\(\s*f["\']', "SQL f-string execute — use parameterized queries"),
+    (r"\beval\s*\(", "eval() — code injection risk"),
+    (r"\bexec\s*\(", "exec() — code injection risk"),
+    (r"verify\s*=\s*False", "TLS certificate verification disabled"),
+    (
+        r'allow_origins\s*=\s*\[\s*["\']\*["\']',
+        "CORS allow_origins wildcard",
+    ),
+    (r"skipAuthentication\s*=\s*true", "Authentication explicitly skipped"),
+    (r"disable_auth\s*=\s*True", "Auth disabled flag"),
+]
+
 # Mock/stub patterns — fake implementations
 _MOCK_PATTERNS = [
     (r"#\s*TODO\s*:?\s*implement", "TODO implement marker"),
@@ -434,6 +453,52 @@ def check_l0(
     )
 
 
+def check_l2(
+    content: str,
+    agent_role: str = "",
+    tool_calls: list = None,
+) -> GuardResult:
+    """L2: Deterministic architecture / security checks on code writes."""
+    tool_calls = tool_calls or []
+    role_lower = (agent_role or "").lower()
+    arch_roles = ("dev", "arch", "security", "backend", "frontend", "devops", "lead")
+    if not any(k in role_lower for k in arch_roles):
+        return GuardResult(passed=True, score=0, issues=[], level="L2-skipped")
+
+    has_write = any(
+        tc.get("name") in ("code_write", "code_edit") for tc in tool_calls
+    )
+    if not has_write:
+        return GuardResult(passed=True, score=0, issues=[], level="L2-skipped")
+
+    issues = []
+    score = 0
+    blobs: list[tuple[str, str]] = [(content or "", "output")]
+    for tc in tool_calls:
+        if tc.get("name") not in ("code_write", "code_edit"):
+            continue
+        fp = str(
+            tc.get("args", {}).get("path", "")
+            or tc.get("args", {}).get("file_path", "")
+        )
+        fc = str(tc.get("args", {}).get("content", ""))
+        if fc:
+            blobs.append((fc, fp or "file"))
+
+    for text, label in blobs:
+        for pattern, desc in _L2_PATTERNS:
+            if re.search(pattern, text, re.IGNORECASE | re.MULTILINE):
+                issues.append(f"L2_ARCH: {desc} ({label})")
+                score += 6
+
+    return GuardResult(
+        passed=score < 6,
+        score=score,
+        issues=issues,
+        level="L2",
+    )
+
+
 async def check_l1(
     content: str,
     task: str,
@@ -640,10 +705,13 @@ async def run_guard(
             l1.score = max(l0.score, l1.score)
             return l1
 
-    # Both passed
+    level = "L0+L2"
+    if enable_l1 and pattern_type in execution_patterns and is_dev_role:
+        level = "L0+L2+L1"
+
     return GuardResult(
         passed=True,
         score=l0.score,
-        issues=l0.issues,  # L0 warnings (below threshold) still reported
-        level="L0+L1" if enable_l1 and pattern_type in execution_patterns else "L0",
+        issues=l0.issues + l2.issues,
+        level=level,
     )

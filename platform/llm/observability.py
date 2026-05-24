@@ -157,14 +157,6 @@ class LLMTracer:
         conn.commit()
         conn.close()
 
-        if session_id or mission_id:
-            try:
-                from .budget import check_and_pause_if_over_budget
-
-                check_and_pause_if_over_budget(session_id, mission_id)
-            except Exception as exc:
-                logger.debug("LLM budget check failed: %s", exc)
-
         logger.info(
             "LLM trace %s: %s/%s %din/%dout $%.4f %dms",
             trace_id,
@@ -175,6 +167,29 @@ class LLMTracer:
             cost,
             duration_ms,
         )
+
+        try:
+            from ..audit.ai_logs import append_ai_log
+
+            append_ai_log(
+                event_type="llm_call",
+                provider=provider,
+                model=model,
+                agent_id=agent_id,
+                session_id=session_id,
+                mission_id=mission_id,
+                tokens_in=tokens_in,
+                tokens_out=tokens_out,
+                cost_usd=cost,
+                status=status,
+                payload={
+                    "trace_id": trace_id,
+                    "duration_ms": duration_ms,
+                    "error": error[:200] if error else "",
+                },
+            )
+        except Exception:
+            pass
 
         # Feed metrics collector
         try:

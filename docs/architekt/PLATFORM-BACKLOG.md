@@ -32,6 +32,20 @@ Pas de site vitrine client en phase 0.
 
 ---
 
+
+---
+
+## Wave 4 — livré (P1 observabilité & qualité)
+
+> Branche `cursor/architekt-roadmap-wave4-7576`.
+
+- [x] Adversarial **L2** déterministe (`check_l2` — secrets, eval, CORS, SQL f-string)
+- [x] Métriques Prometheus **`architekt_*`** (alias `macaron_*` + `architekt_finops_margin_pct`)
+- [x] FinOps marge studio — `PLATFORM_FINOPS_MARGIN_TARGET_PCT` (défaut 50 %), alertes `/finops`
+- [x] API `GET /api/finops/summary` + `GET /api/missions/{id}/case-study.md`
+- [x] Journal audit IA append-only (`ai_audit_logs` + hook `trace_call`)
+- [x] Tests : `test_adversarial_l2`, `test_finops_margin`, `test_prometheus_architekt`, `test_ai_audit_logs`, `test_case_study`
+
 ## Wave 3 — livré (P1 Tier A)
 
 > Branche `cursor/architekt-roadmap-wave3-7576` — FinOps mission costs + health probe.

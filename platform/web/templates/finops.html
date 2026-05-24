@@ -19,10 +19,22 @@
             <div style="font-size:1.75rem;font-weight:700">{{ total_calls }}</div>
         </div>
         <div class="metric-card" style="padding:1rem;border-radius:10px;background:var(--bg-secondary);border:1px solid var(--border)">
-            <div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase">Providers</div>
-            <div style="font-size:1.75rem;font-weight:700">{{ by_provider|length }}</div>
+            <div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase">Marge studio</div>
+            <div style="font-size:1.75rem;font-weight:700">{{ finops_global.margin_pct }}%</div>
+            <div style="font-size:0.7rem;color:var(--text-secondary)">objectif {{ finops_global.target_margin_pct }}%</div>
         </div>
     </div>
+
+    {% if finops_alerts %}
+    <div style="margin-bottom:1.5rem;padding:1rem;border-radius:10px;border:1px solid var(--accent);background:rgba(247,129,102,0.08)">
+        <h2 style="font-size:0.95rem;font-weight:600;margin-bottom:0.5rem">Alertes marge</h2>
+        <ul style="margin:0;padding-left:1.25rem;font-size:0.85rem">
+            {% for a in finops_alerts %}
+            <li>{{ a.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 
     {% if by_provider %}
     <h2 style="font-size:1rem;font-weight:600;margin-bottom:0.75rem">By provider</h2>
@@ -33,6 +45,7 @@
                 <th style="padding:0.5rem">Model</th>
                 <th style="padding:0.5rem">Calls</th>
                 <th style="padding:0.5rem">Cost (USD)</th>
+                <th style="padding:0.5rem">Marge %</th>
             </tr>
         </thead>
         <tbody>
@@ -62,15 +75,16 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in by_mission %}
+            {% for row in finops_missions %}
             <tr style="border-bottom:1px solid var(--border)">
                 <td style="padding:0.5rem">
                     <a href="/missions/{{ row.mission_id }}" style="color:var(--purple-light)">{{ row.mission_name }}</a>
                     <div style="font-size:0.75rem;color:var(--text-secondary)">{{ row.mission_id }}</div>
                 </td>
                 <td style="padding:0.5rem">{{ row.calls }}</td>
-                <td style="padding:0.5rem">{{ row.tokens }}</td>
+                <td style="padding:0.5rem">—</td>
                 <td style="padding:0.5rem">${{ "%.6f"|format(row.cost_usd) }}</td>
+                <td style="padding:0.5rem">{{ row.margin_pct }}%</td>
             </tr>
             {% endfor %}
         </tbody>

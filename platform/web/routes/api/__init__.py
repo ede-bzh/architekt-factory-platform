@@ -7,6 +7,7 @@ from fastapi import APIRouter
 from .analytics import router as analytics_router
 from .dashboard import router as dashboard_router
 from .events import router as events_router
+from .finops import router as finops_router
 from .health import router as health_router
 from .incidents import router as incidents_router
 from .integrations import router as integrations_router
@@ -20,6 +21,7 @@ router = APIRouter()
 
 # Literal path routers first, then routers with {param} paths
 router.include_router(health_router)
+router.include_router(finops_router)
 router.include_router(llm_router)
 router.include_router(memory_router)
 router.include_router(rbac_router)

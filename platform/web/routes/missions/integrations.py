@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 
 from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 
 from ...schemas import OkResponse
 
@@ -372,6 +372,17 @@ async def api_tma_incident(request: Request, project_id: str):
             }
         )
     return JSONResponse({"ok": True, "message": "Incident tracked, below threshold"})
+
+
+@router.get("/api/missions/{mission_id}/case-study.md", response_class=PlainTextResponse)
+async def mission_case_study(mission_id: str):
+    """Export markdown case study for a mission (client proof)."""
+    from ....reports.case_study import generate_case_study_markdown
+
+    return PlainTextResponse(
+        generate_case_study_markdown(mission_id),
+        media_type="text/markdown; charset=utf-8",
+    )
 
 
 @router.post("/api/projects/{project_id}/provision")
