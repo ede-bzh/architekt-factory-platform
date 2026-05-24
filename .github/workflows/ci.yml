@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "cursor/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: platform/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-asyncio httpx fastapi uvicorn pyyaml
+          pip install -r platform/requirements.txt
+
+      - name: Run unit tests (core gate)
+        env:
+          PLATFORM_LLM_PROVIDER: demo
+        run: |
+          PYTHONPATH=. pytest \
+            tests/test_demo.py \
+            tests/test_events.py \
+            tests/test_deterministic_tools.py \
+            tests/test_adaptive_intelligence.py \
+            tests/test_plugins.py \
+            tests/test_llm_cache.py \
+            -q

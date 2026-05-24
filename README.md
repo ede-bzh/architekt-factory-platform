@@ -11,9 +11,9 @@
 
 <div align="center">
 
-# Software Factory
+# Architekt Factory Platform
 
-**Multi-Agent Software Factory — Autonomous AI agents orchestrating the full product lifecycle**
+**Multi-agent platform for AI-accelerated, security-conscious software delivery** (internal studio tool for Architekt Pte. Ltd.)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)

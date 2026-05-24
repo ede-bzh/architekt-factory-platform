@@ -8,7 +8,7 @@ setup:
 run:
 	docker compose up -d --build
 	@echo ""
-	@echo "Macaron Software Factory is starting..."
+	@echo "Architekt Factory Platform is starting..."
 	@echo "   Open http://localhost:8090 in your browser"
 	@echo "   Run "make logs" to see output"
 

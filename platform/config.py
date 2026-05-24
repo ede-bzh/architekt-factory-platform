@@ -1,7 +1,7 @@
 """
-Software Factory - Configuration
-=======================================
-100% local platform. LLM providers: Anthropic, MiniMax, GLM, Azure Foundry.
+Architekt Factory Platform — Configuration
+============================================
+Local-first agent platform. LLM: MiniMax, Azure OpenAI, Azure AI Foundry, demo.
 Loads from ~/.config/factory/platform.yaml with env var overrides.
 """
 

@@ -540,7 +540,7 @@ async def notification_test():
     payload = NotificationPayload(
         event="test",
         title="Test Notification",
-        message="This is a test notification from Software Factory.",
+        message="This is a test notification from Architekt Factory.",
         severity="info",
     )
     await svc.notify(payload)

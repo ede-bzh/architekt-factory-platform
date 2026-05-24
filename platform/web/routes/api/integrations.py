@@ -85,7 +85,7 @@ async def test_integration(integ_id: str):
             import urllib.request
 
             req = urllib.request.Request(url, method="HEAD")
-            req.add_header("User-Agent", "Macaron-Platform/1.0")
+            req.add_header("User-Agent", "Architekt-Platform/2.1")
             token = cfg.get("api_token", "")
             if token:
                 req.add_header("Authorization", f"Bearer {token}")

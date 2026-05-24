@@ -1071,6 +1071,18 @@ def create_app() -> FastAPI:
     templates.env.globals["app_commit"] = _sha
     templates.env.globals["app_version"] = _tag or _sha
 
+    from .branding import (
+        COMPANY_NAME,
+        PRODUCT_FULL_NAME,
+        PRODUCT_NAME,
+        PRODUCT_TAGLINE,
+    )
+
+    templates.env.globals["product_name"] = PRODUCT_NAME
+    templates.env.globals["product_full_name"] = PRODUCT_FULL_NAME
+    templates.env.globals["product_tagline"] = PRODUCT_TAGLINE
+    templates.env.globals["company_name"] = COMPANY_NAME
+
     # Middleware to set current language per-request
     from starlette.middleware.base import BaseHTTPMiddleware
 

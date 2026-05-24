@@ -287,6 +287,32 @@ class LLMClient:
             headers[pcfg["auth_header"]] = f"{pcfg.get('auth_prefix', '')}{key}"
         return headers
 
+    def _demo_response(self, messages: list[LLMMessage]) -> LLMResponse:
+        """Mock LLM for PLATFORM_LLM_PROVIDER=demo (no API keys)."""
+        text = " ".join((m.content or "").lower() for m in messages)
+        if any(w in text for w in ("bug", "fix", "issue", "critical", "production")):
+            content = (
+                "I reviewed the issue and recommend a targeted fix with regression tests."
+            )
+        elif any(w in text for w in ("deploy", "staging", "release")):
+            content = (
+                "Deployment plan: build, run tests, deploy to staging, then validate health checks."
+            )
+        else:
+            content = (
+                "Architekt agents acknowledge your request and will proceed with the next steps."
+            )
+        tokens_in = sum(len((m.content or "").split()) for m in messages)
+        tokens_out = max(len(content.split()), 1)
+        return LLMResponse(
+            content=content,
+            model="demo",
+            provider="demo",
+            tokens_in=tokens_in,
+            tokens_out=tokens_out,
+            duration_ms=5,
+        )
+
     async def chat(
         self,
         messages: list[LLMMessage],

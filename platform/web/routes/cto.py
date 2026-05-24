@@ -1,4 +1,4 @@
-"""CTO Chat — Jarvis de la Software Factory.
+"""CTO Chat — Architekt Factory platform copilot.
 
 Onglet "CTO" dans le Portfolio : chat avec Karim Benali (strat-cto),
 agent exécutif avec accès aux outils plateforme, web, GitHub et création de ressources.

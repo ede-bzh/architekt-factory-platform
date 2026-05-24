@@ -82,7 +82,7 @@ async def cmd_platform_status() -> SFCommandResponse:
         # Count running missions
         running = sum(1 for m in missions if m.status in ["running", "in_progress"])
 
-        output = f"""Software Factory Platform Status
+        output = f"""{PRODUCT_FULL_NAME} Platform Status
 ================================
 
 ✓ Platform: Online
