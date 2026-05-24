@@ -1,41 +1,33 @@
-# 🏭 Software Factory — Wiki
+# Architekt Factory Platform — Wiki
 
-**Macaron Software Factory** est une plateforme d'orchestration d'agents IA pour les équipes de développement logiciel. Elle coordonne 156 agents spécialisés à travers 36 workflows en méthodologie SAFe.
+**Architekt Factory Platform** orchestre des agents IA spécialisés pour les équipes de livraison logicielle. Elle coordonne **160+ agents** via **41 workflows intégrés** en méthodologie SAFe.
+
+> Feuille de route : [docs/ROADMAP.md](../ROADMAP.md)
 
 ## Navigation
 
 | Section | Description |
 |---------|-------------|
-| [Architecture](Architecture) | Architecture de la plateforme, composants, flux de données |
-| [Guide de déploiement](Deployment-Guide) | 3 environnements : Azure, OVH, Local |
+| [Architecture](Architecture) | Architecture, composants, flux |
+| [Guide de déploiement](Deployment-Guide) | Local, démo OVH, prod Azure |
 | [Référence API](API-Reference) | Endpoints REST, authentification |
-| [Agents](Agents) | 156 agents répartis en 9 domaines |
-| [Workflows](Workflows) | 36 workflows intégrés |
-| [Patterns](Patterns) | 15 patterns d'orchestration |
-| [Sécurité](Security) | Auth, validation adversariale, secrets |
-| [Configuration LLM](LLM-Configuration) | Configuration multi-fournisseur LLM |
+| [Agents](Agents) | Catalogue d'agents |
+| [Workflows](Workflows) | Modèles de workflows |
+| [Patterns](Patterns) | Patterns d'orchestration |
+| [Sécurité](Security) | Auth, garde adversarial, secrets |
+| [Configuration LLM](LLM-Configuration) | Fournisseurs et routage |
+| [Darwin Teams](Darwin-Teams) | Sélection évolutive d'équipes |
 
-## Traductions
+## Langues (interface)
 
-🇬�� [English](Home) · 🇪🇸 [Español](Home‐ES) · 🇩🇪 [Deutsch](Home‐DE) · 🇮🇹 [Italiano](Home‐IT) · 🇧🇷 [Português](Home‐PT) · ��🇳 [中文](Home‐ZH) · 🇯🇵 [日本語](Home‐JA)
+🇬🇧 [English](Home) · 🇫🇷 Français
 
 ## Démarrage rapide
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
-cd software-factory
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
+cd architekt-factory-platform
 make setup
 make run
-# → http://localhost:8090
+# http://localhost:8090 — bouton "Skip (Demo)" ou PLATFORM_LLM_PROVIDER=demo
 ```
-
-## Dépôts
-
-| Dépôt | Usage | Contenu |
-|-------|-------|---------|
-| **GitHub** (macaron-software/software-factory) | Public, plateforme complète | Tout le code, agents, workflows. Assaini : 0 donnée projet, 0 info personnelle |
-| **GitLab La Poste** (gitlab.azure.innovation-laposte.io) | Squelette interne | Structure plateforme, pas de missions, pas de skills agent, intégration CI/CD |
-
-## Licence
-
-AGPL-3.0 — Voir [LICENSE](https://github.com/macaron-software/software-factory/blob/main/LICENSE)

@@ -6,29 +6,31 @@ Plateforme multi-agents SAFe pour le cycle de vie logiciel. UI **EN / FR** uniqu
 
 | Domaine | État |
 |---------|------|
-| Agents & patterns | 150+ agents, 12 patterns DB, orchestration missions |
+| Agents & patterns | 160+ agents, 12 patterns DB, 41 workflows builtin |
 | SAFe | Portfolio, WSJF, PI, sprints, backlog |
 | Qualité | Garde adversarial L0/L1, TDD workflows, auto-heal |
 | i18n UI | Anglais + français (`platform/i18n`) |
+| Identité | Rebrand UI Architekt, `ARCHITEKT_API_KEY`, thème `architekt_theme` |
 | Observabilité | Métriques DORA, traces LLM, SSE live |
 
-## Vague A — Identité & hygiène (en cours)
+## Vague A — Identité & hygiène ✅
 
-- Rebranding UI Architekt (templates, manifest, clés API `ARCHITEKT_API_KEY`)
+- Rebranding UI Architekt (templates, manifest, clés API)
 - Suppression code mort (`dashboard/platform/`, `platform/orchestrator/`, doublons sécurité)
-- Docs README EN/FR, `.env.example`, tests anti-branding Macaron dans l’UI
+- Tests anti-branding Macaron dans l’UI
 
-## Vague B — Documentation
+## Vague B — Documentation ✅ (cette branche)
 
-- `docs/ROADMAP.md` (ce fichier), resync `platform/SPECS.md` §15
-- Wiki plateforme EN/FR, captures `docs/screenshots/{en,fr}`
+- `docs/ROADMAP.md`, `platform/SPECS.md` §14.4 i18n
+- Wiki EN/FR (`docs/wiki/`), captures README `docs/screenshots/{en,fr}` uniquement dans le dépôt
+- `.env.example` aligné Architekt
 
-## Vague C — Rationalisation
+## Vague C — Rationalisation ✅ (cette branche)
 
-- Aligner chiffres agents/workflows dans docs
-- Réduire dépendances docs multilingues hors UI
+- Chiffres agents/workflows alignés dans README et wiki
+- Wiki Home pages hors EN/FR retirées
 
-## Vague D — Déploiements clients
+## Vague D — Déploiements clients ✅
 
 - Sync La Poste isolé dans `tools/laposte-sync/`
 - GitLab CI squelette sans trigger Macaron legacy

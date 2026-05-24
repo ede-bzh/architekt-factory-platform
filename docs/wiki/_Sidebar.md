@@ -1,6 +1,6 @@
-## 🏭 Software Factory
+## Architekt Factory
 
-**[Home](Home)**
+**[Home](Home)** · 🇫🇷 [Français](Home‐FR)
 
 ### Pages
 - [Architecture](Architecture)
@@ -12,12 +12,3 @@
 - [Security](Security)
 - [LLM Configuration](LLM-Configuration)
 - [Darwin Teams](Darwin-Teams)
-
-### 🌐 Languages
-- 🇫🇷 [Français](Home‐FR)
-- 🇪🇸 [Español](Home‐ES)
-- 🇩🇪 [Deutsch](Home‐DE)
-- 🇮🇹 [Italiano](Home‐IT)
-- 🇧🇷 [Português](Home‐PT)
-- 🇨🇳 [中文](Home‐ZH)
-- 🇯🇵 [日本語](Home‐JA)

@@ -26,11 +26,11 @@
 
 > **Architekt ne vend pas du code. Architekt vend une livraison digitale globalement prête, accélérée par l'IA et consciente de la sécurité** — combinant la vitesse de l'IA, la rigueur du senior engineering, la preuve via rapports qualité automatisés, et une readiness globale dès le jour 1.
 
-Cette plateforme (anciennement *Architekt*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 161 agents collaborent sous supervision humaine.
+Cette plateforme (anciennement *Architekt*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 160+ agents collaborent sous supervision humaine.
 
 ### Points clés
 
-- **161 agents spécialisés** — architectes, développeurs, testeurs, SRE, analystes sécurité, product owners
+- **160+ agents spécialisés** — architectes, développeurs, testeurs, SRE, analystes sécurité, product owners
 - **10 patterns d'orchestration** — solo, séquentiel, parallèle, hiérarchique, réseau, boucle, routeur, agrégateur, vague, human-in-the-loop
 - **Cycle de vie SAFe** — Portfolio → Epic → Feature → Story avec cadence PI
 - **Résilience LLM** — fallback multi-provider, retry avec jitter, gestion rate-limit, config modèle par env
@@ -417,7 +417,7 @@ ln -s $(pwd)/cli/sf.py ~/.local/bin/sf
 sf status                              # Santé plateforme
 sf projects list                       # Tous les projets
 sf missions list                       # Missions avec scores WSJF
-sf agents list                         # 161 agents
+sf agents list                         # 160+ agents
 sf features list <epic_id>             # Features d'un epic
 sf stories list --feature <id>         # User stories
 
@@ -483,7 +483,7 @@ python3 -m platform.mcp_platform.server
           ┌────────────┴┐   ┌────┴─────┐   ┌──┴───────────┐
           │ Moteur       │   │ Moteur   │   │   Couche     │
           │  Agents      │   │ Workflow │   │   Missions   │
-          │ 161 agents   │   │ 39 defs  │   │ Cycle SAFe   │
+          │ 160+ agents   │   │ 39 defs  │   │ Cycle SAFe   │
           │ executeur    │   │ 10 ptrns │   │ Portfolio    │
           │ boucle+retry │   │ phases   │   │ Epic/Feature │
           └──────┬───────┘   │ retry    │   │ Story/Sprint │

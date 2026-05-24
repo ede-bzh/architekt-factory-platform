@@ -1,44 +1,33 @@
-# 🏭 Software Factory — Wiki
+# Architekt Factory Platform — Wiki
 
-**Macaron Software Factory** is an AI-powered agent orchestration platform for software engineering teams. It coordinates 156 specialized agents through 36 workflows using SAFe methodology.
+**Architekt Factory Platform** orchestrates specialized AI agents for software delivery teams. It coordinates **160+ agents** through **41 built-in workflows** using SAFe methodology.
 
-> **Latest release: [v2.2.0](https://github.com/macaron-software/software-factory/releases/tag/v2.2.0)** — Multi-Model LLM Routing + Darwin LLM Thompson Sampling
+> Product roadmap: [docs/ROADMAP.md](../ROADMAP.md)
 
 ## Navigation
 
 | Section | Description |
 |---------|-------------|
 | [Architecture](Architecture) | Platform architecture, components, data flow |
-| [Deployment Guide](Deployment-Guide) | 3 environments: Azure, OVH, Local |
+| [Deployment Guide](Deployment-Guide) | Local, OVH demo, Azure prod (Docker package `macaron_platform`) |
 | [API Reference](API-Reference) | REST API endpoints, authentication |
-| [Agents](Agents) | 156 agents across 9 domains |
-| [Workflows](Workflows) | 36 built-in workflows |
-| [Patterns](Patterns) | 15 orchestration patterns |
+| [Agents](Agents) | Agent catalog and domains |
+| [Workflows](Workflows) | Built-in workflow templates |
+| [Patterns](Patterns) | Orchestration patterns |
 | [Security](Security) | Auth, adversarial validation, secrets |
-| [LLM Configuration](LLM-Configuration) | Multi-model routing, Darwin LLM A/B, providers |
-| [Darwin Teams](Darwin-Teams) | Evolutionary team selection + LLM Thompson Sampling |
+| [LLM Configuration](LLM-Configuration) | Multi-model routing, providers |
+| [Darwin Teams](Darwin-Teams) | Evolutionary team selection |
 
-## Translations
+## Languages (UI)
 
-🇫🇷 [Français](Home‐FR) · 🇪🇸 [Español](Home‐ES) · 🇩🇪 [Deutsch](Home‐DE) · 🇮🇹 [Italiano](Home‐IT) · 🇧🇷 [Português](Home‐PT) · 🇨🇳 [中文](Home‐ZH) · 🇯🇵 [日本語](Home‐JA)
+🇬🇧 English (default) · 🇫🇷 [Français](Home‐FR)
 
 ## Quick Start
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
-cd software-factory
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
+cd architekt-factory-platform
 make setup
 make run
-# → http://localhost:8090
+# http://localhost:8090 — use "Skip (Demo)" or PLATFORM_LLM_PROVIDER=demo
 ```
-
-## Repositories
-
-| Repo | Purpose | Content |
-|------|---------|---------|
-| **GitHub** (macaron-software/software-factory) | Public, full platform | All code, agents, workflows. Sanitized: 0 project data, 0 personal info |
-| **GitLab La Poste** (gitlab.azure.<gitlab-laposte>) | Internal skeleton | Platform structure, no missions, no agent skills, CI/CD integration |
-
-## License
-
-AGPL-3.0 — See [LICENSE](https://github.com/macaron-software/software-factory/blob/main/LICENSE)

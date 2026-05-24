@@ -1,6 +1,6 @@
-# Workflows (36 Built-in)
+# Workflows (41 Built-in)
 
-Each workflow defines a sequence of phases executed by specialized agents.
+Each workflow defines a sequence of phases executed by specialized agents. Builtin templates are loaded from `platform/workflows/builtins.py` and YAML under `platform/workflows/templates/`.
 
 ## Lifecycle
 | Workflow | Phases | Description |
