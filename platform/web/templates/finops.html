@@ -50,6 +50,33 @@
     <p style="color:var(--text-secondary)">No LLM traces recorded yet.</p>
     {% endif %}
 
+    {% if by_mission %}
+    <h2 style="font-size:1rem;font-weight:600;margin:2rem 0 0.75rem">By mission (top 20)</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+        <thead>
+            <tr style="border-bottom:1px solid var(--border);text-align:left;color:var(--text-secondary)">
+                <th style="padding:0.5rem">Mission</th>
+                <th style="padding:0.5rem">Calls</th>
+                <th style="padding:0.5rem">Tokens</th>
+                <th style="padding:0.5rem">Cost (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in by_mission %}
+            <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.5rem">
+                    <a href="/missions/{{ row.mission_id }}" style="color:var(--purple-light)">{{ row.mission_name }}</a>
+                    <div style="font-size:0.75rem;color:var(--text-secondary)">{{ row.mission_id }}</div>
+                </td>
+                <td style="padding:0.5rem">{{ row.calls }}</td>
+                <td style="padding:0.5rem">{{ row.tokens }}</td>
+                <td style="padding:0.5rem">${{ "%.6f"|format(row.cost_usd) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
     <p style="margin-top:2rem">
         <a href="/proof" style="color:var(--purple-light)">Back to Proof of Concepts</a>
     </p>

@@ -1787,6 +1787,41 @@ async def finops_page(request: Request):
             }
             for r in rows
         ]
+        mission_rows = db.execute("""
+            SELECT mission_id,
+                   COUNT(*) AS calls,
+                   SUM(tokens_in + tokens_out) AS tokens,
+                   COALESCE(SUM(cost_usd), 0) AS cost_usd
+            FROM llm_traces
+            WHERE mission_id != ''
+            GROUP BY mission_id
+            ORDER BY cost_usd DESC
+            LIMIT 20
+        """).fetchall()
+        mission_ids = [r["mission_id"] for r in mission_rows]
+        mission_names: dict[str, str] = {}
+        if mission_ids:
+            placeholders = ",".join("?" * len(mission_ids))
+            for r in db.execute(
+                f"SELECT id, name FROM missions WHERE id IN ({placeholders})",
+                mission_ids,
+            ).fetchall():
+                mission_names[r["id"]] = r["name"]
+            for r in db.execute(
+                f"SELECT id, brief FROM mission_runs WHERE id IN ({placeholders})",
+                mission_ids,
+            ).fetchall():
+                mission_names.setdefault(r["id"], (r["brief"] or r["id"])[:60])
+        by_mission = [
+            {
+                "mission_id": r["mission_id"],
+                "mission_name": mission_names.get(r["mission_id"], r["mission_id"]),
+                "calls": r["calls"],
+                "tokens": int(r["tokens"] or 0),
+                "cost_usd": float(r["cost_usd"] or 0),
+            }
+            for r in mission_rows
+        ]
     finally:
         db.close()
 
@@ -1798,5 +1833,6 @@ async def finops_page(request: Request):
             "total_cost_usd": round(total_cost, 6),
             "total_calls": total_calls,
             "by_provider": by_provider,
+            "by_mission": by_mission,
         },
     )

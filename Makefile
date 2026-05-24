@@ -23,6 +23,9 @@ clean:
 	@echo "Removed containers and volumes"
 
 # Development (without Docker)
+architekt:
+	python3 cli/architekt.py $(ARGS)
+
 dev:
 	PYTHONPATH=$$(pwd) python3 -m uvicorn platform.server:app --host 0.0.0.0 --port 8090 --ws none --log-level info
 

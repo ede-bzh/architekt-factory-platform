@@ -318,7 +318,22 @@ _SKILL_RULES: list[tuple[str, frozenset[str], re.Pattern[str]]] = [
     ("architekt-qa", _QA_ROLES, _QA_KW),
 ]
 
+MAX_ARCHITEKT_SKILLS = 4
 _MAX_SKILL_CHARS = 3500
+
+
+def _cap_architekt_skills(selected: list[str], role_key: str) -> list[str]:
+    """Compliance + i18n first for strategic orchestrators, then fill up to cap."""
+    if role_key in _STRATEGIC_ORCHESTRATORS:
+        mandatory = [sid for sid in _STRATEGIC_MANDATORY if sid in selected]
+        for sid in _STRATEGIC_MANDATORY:
+            if sid not in mandatory:
+                mandatory.append(sid)
+        rest = [sid for sid in selected if sid not in mandatory]
+        ordered = mandatory + rest
+    else:
+        ordered = selected
+    return ordered[:MAX_ARCHITEKT_SKILLS]
 
 
 def _skill_excerpt(skill_id: str) -> str:
@@ -354,7 +369,7 @@ def select_architekt_skill_ids(
             if sid not in selected:
                 selected.append(sid)
 
-    return selected
+    return _cap_architekt_skills(selected, role_key)
 
 
 def inject_architekt_skills(

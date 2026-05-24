@@ -8,6 +8,8 @@ from typing import Any, Optional
 
 class HealthResponse(BaseModel):
     status: str = Field(example="ok")
+    version: Optional[str] = Field(default=None, example="1.2.0")
+    timestamp: Optional[str] = Field(default=None, example="2026-05-24T12:00:00Z")
     detail: Optional[str] = None
 
 

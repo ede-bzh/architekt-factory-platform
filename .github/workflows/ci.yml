@@ -34,6 +34,9 @@ jobs:
           pip install bandit
           bandit -r platform/ -ll -q
 
+      - name: Secret scan
+        run: bash scripts/ci/secret-scan.sh
+
       - name: Dependency audit (pip-audit)
         continue-on-error: true
         run: |
@@ -69,6 +72,8 @@ jobs:
             tests/test_plugins.py \
             tests/test_llm_cache.py \
             tests/test_platform_api.py \
+            tests/test_health_api.py \
+            tests/test_rate_limit.py \
             tests/test_uruk_rtk.py \
             tests/test_workers.py \
             tests/test_b_features.py \
@@ -76,3 +81,37 @@ jobs:
             tests/test_llm_budget.py \
             tests/test_quality_pdf.py \
             -q
+
+  mutation:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: platform/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-asyncio httpx fastapi uvicorn pyyaml mutmut
+          pip install -r platform/requirements.txt
+
+      - name: Mutation test (api_key)
+        env:
+          PLATFORM_LLM_PROVIDER: demo
+          PLATFORM_ENV: test
+        run: |
+          if [ ! -f platform/auth/api_key.py ]; then
+            echo "Skip: platform/auth/api_key.py not found"
+            exit 0
+          fi
+          timeout 900 mutmut run \
+            --paths-to-mutate=platform/auth/api_key.py \
+            --max-children=2 \
+            --no-progress \
+            || echo "mutmut finished with non-zero exit (optional job)"
+

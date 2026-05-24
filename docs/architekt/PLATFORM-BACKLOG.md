@@ -32,13 +32,23 @@ Pas de site vitrine client en phase 0.
 
 ---
 
+## Wave 3 — livré (P1 Tier A)
+
+> Branche `cursor/architekt-roadmap-wave3-7576` — FinOps mission costs + health probe.
+
+- [x] FinOps `/finops` — per-mission cost table (GROUP BY `mission_id`, top 20 from `llm_traces`)
+- [x] Health check `/api/health` — `version` + `timestamp` fields (`platform/web/routes/api/health.py`)
+- [x] Tests health API : `tests/test_health_api.py` (200, status ok, version/timestamp)
+- [x] Health section : `docs/architekt/LOCAL-DEV.md` § Health check
+
+---
+
 ## Wave 2 — en cours
 
 - [ ] CI verte 100 % sur `main` (gate merge)
 - [ ] SAST + SCA + secret scan en CI (Safety, TruffleHog — Bandit déjà actif)
 - [ ] SBOM CycloneDX par release (Syft)
 - [ ] Adversarial L0 — veto test.skip / @ts-ignore / empty catch
-- [ ] Health check `/api/health` documenté + testé (`docs/architekt/LOCAL-DEV.md` § Health)
 - [ ] Faire passer **tous** les tests `tests/test_platform_api.py` (auth fixture, DB temp)
 - [ ] Rate limiting PG-backed sur mutations
 
@@ -54,7 +64,6 @@ Pas de site vitrine client en phase 0.
 - [x] `pytest.ini` + workflow `ci.yml`
 - [x] `python-dotenv` dans `platform/requirements.txt`
 - [ ] Faire passer **tous** les tests `tests/test_platform_api.py` (auth fixture, DB temp)
-- [ ] Health check `/api/health` documenté + testé
 - [x] Documenter run local : `PLATFORM_LLM_PROVIDER=demo make dev` → `docs/architekt/LOCAL-DEV.md`
 
 ### CI & quality gates (Phase 2)
@@ -96,7 +105,8 @@ Pas de site vitrine client en phase 0.
 - [ ] E2E Playwright smoke en CI (login + health — pas les 82 specs)
 - [x] Mini dashboard `/proof` (DORA, Lighthouse, a11y, SBOM)
 - [ ] Case study generator (template + métriques mission)
-- [ ] FinOps dashboard — coût LLM/mission, marge > 50 %
+- [x] FinOps dashboard POC `/finops` — coût LLM par mission (top 20)
+- [ ] FinOps dashboard — marge > 50 %
 
 ### Global delivery
 

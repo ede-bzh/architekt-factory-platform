@@ -859,6 +859,16 @@ def _migrate(conn):
 
 def _ensure_sqlite_tables(conn) -> None:
     """Create SQLite-only tables that may be missing on older DBs."""
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS rate_limit_hits (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_key TEXT NOT NULL,
+            ts REAL NOT NULL
+        )
+    """)
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_rl_key_ts ON rate_limit_hits(client_key, ts)"
+    )
     # MCP server registry
     conn.execute("""
         CREATE TABLE IF NOT EXISTS mcps (
