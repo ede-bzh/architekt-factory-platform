@@ -223,7 +223,7 @@ class SetConstraintsTool(BaseTool):
     name = "set_constraints"
     description = (
         "Set constraints for a mission: WIP limits, stack rules, AO references, "
-        "sprint duration. Stored in the mission config."
+        "sprint duration, llm_budget_usd. Stored in the mission config."
     )
     category = "compose"
 

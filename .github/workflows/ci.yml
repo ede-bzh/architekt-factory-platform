@@ -23,6 +23,17 @@ jobs:
           pip install pytest pytest-asyncio httpx fastapi uvicorn pyyaml
           pip install -r platform/requirements.txt
 
+      - name: Lint
+        run: |
+          pip install ruff
+          ruff check platform/ tests/
+
+      - name: Bandit
+        continue-on-error: true
+        run: |
+          pip install bandit
+          bandit -r platform/ -ll -q
+
       - name: Run unit tests (core gate)
         env:
           PLATFORM_LLM_PROVIDER: demo
@@ -39,4 +50,7 @@ jobs:
             tests/test_uruk_rtk.py \
             tests/test_workers.py \
             tests/test_b_features.py \
+            tests/test_api_key_alias.py \
+            tests/test_llm_budget.py \
+            tests/test_quality_pdf.py \
             -q

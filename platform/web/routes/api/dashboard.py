@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import html as html_mod
 import logging
+from io import BytesIO
 
-from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import HTMLResponse, StreamingResponse
 
 
 router = APIRouter()
@@ -242,6 +243,24 @@ async def dashboard_quality(request: Request):
         <span class="dash-stat-value" style="color:{"#dc2626" if low_count else "var(--text-secondary)"}">{low_count}</span>
     </div>"""
     return HTMLResponse(html)
+
+
+@router.get("/api/quality/{project_id}/report.pdf")
+async def api_quality_report_pdf(request: Request, project_id: str):
+    """Download latest quality snapshot as PDF."""
+    from ....metrics.quality import QualityScanner
+    from ....metrics.quality_pdf import render_quality_pdf
+
+    snapshot = QualityScanner.get_latest_snapshot(project_id)
+    if not snapshot:
+        raise HTTPException(404, "No quality snapshot found for this project")
+
+    pdf_bytes = render_quality_pdf(snapshot)
+    return StreamingResponse(
+        BytesIO(pdf_bytes),
+        media_type="application/pdf",
+        headers={"Content-Disposition": 'attachment; filename="quality-report.pdf"'},
+    )
 
 
 @router.get("/api/quality/{project_id}")

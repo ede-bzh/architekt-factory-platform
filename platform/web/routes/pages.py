@@ -1726,6 +1726,45 @@ async def ops_page(request: Request):
     )
 
 
+# ── Architekt proof dashboard (POC) ──────────────────────────────
+
+
+@router.get("/proof", response_class=HTMLResponse)
+async def proof_dashboard_page(request: Request):
+    """Architekt proof dashboard POC — health, quality, DORA snippets."""
+    return _templates(request).TemplateResponse(
+        "proof.html",
+        {"request": request, "page_title": "Proof Dashboard"},
+    )
+
+
+@router.get("/proof/partial/quality", response_class=HTMLResponse)
+async def proof_partial_quality(request: Request):
+    """HTMX partial — latest quality scores from /api/quality data."""
+    from ...metrics.quality import QualityScanner
+
+    projects = QualityScanner.get_all_projects_scores()
+    return _templates(request).TemplateResponse(
+        "_partial_proof_quality.html",
+        {"request": request, "projects": projects},
+    )
+
+
+@router.get("/proof/partial/dora", response_class=HTMLResponse)
+async def proof_partial_dora(request: Request):
+    """HTMX partial — DORA metrics snippet if available."""
+    from ...metrics.dora import get_dora_metrics
+
+    try:
+        dora = get_dora_metrics().summary("", 30)
+    except Exception:
+        dora = None
+    return _templates(request).TemplateResponse(
+        "_partial_proof_dora.html",
+        {"request": request, "dora": dora},
+    )
+
+
 @router.get("/manifest.json")
 async def manifest_json():
     """Serve PWA manifest."""

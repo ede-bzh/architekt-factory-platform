@@ -618,9 +618,14 @@ def create_app() -> FastAPI:
             )
         else:
             response.headers["X-Frame-Options"] = "DENY"
+            script_src = (
+                "'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net"
+            )
+            if not path.startswith("/api/"):
+                script_src = f"'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net"
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; "
+                f"script-src {script_src}; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
                 "font-src 'self' https://fonts.gstatic.com; "
                 "img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com; "
@@ -747,13 +752,14 @@ def create_app() -> FastAPI:
                 "/login",
                 "/setup",
                 "/onboarding",
+                "/proof",
                 "/health",
                 "/favicon.ico",
                 "/manifest.json",
                 "/sw.js",
             )
         )
-        if not skip and not request.cookies.get("onboarding_done"):
+        if not skip and not path.startswith("/proof/") and not request.cookies.get("onboarding_done"):
             from starlette.responses import RedirectResponse
 
             return RedirectResponse(url="/onboarding", status_code=302)
@@ -1037,7 +1043,7 @@ def create_app() -> FastAPI:
         return _catalog.get(_i18n_global._current_lang, _catalog.get("en", {}))
 
     templates.env.globals["_"] = _i18n_global
-    templates.env.globals["i18n_catalog"] = _i18n_catalog_global()
+    templates.env.globals["i18n_catalog"] = _i18n_catalog_global
     templates.env.globals["SUPPORTED_LANGS"] = SUPPORTED_LANGS
 
     # Version + git commit for header display

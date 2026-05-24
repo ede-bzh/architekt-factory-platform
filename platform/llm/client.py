@@ -287,6 +287,7 @@ class LLMClient:
             headers[pcfg["auth_header"]] = f"{pcfg.get('auth_prefix', '')}{key}"
         return headers
 
+
     def _demo_response(self, messages: list[LLMMessage]) -> LLMResponse:
         """Mock LLM for PLATFORM_LLM_PROVIDER=demo (no API keys)."""
         text = " ".join((m.content or "").lower() for m in messages)
@@ -344,6 +345,22 @@ class LLMClient:
                 model=cache_model,
                 provider="cache",
             )
+
+        ctx = self._trace_context
+        sid = ctx.get("session_id", "")
+        mid = ctx.get("mission_id", "")
+        if sid or mid:
+            try:
+                from .budget import LLMBudgetExceededError, is_llm_budget_blocked
+
+                if is_llm_budget_blocked(sid, mid):
+                    raise LLMBudgetExceededError(
+                        f"LLM budget exceeded for mission {mid or sid} — mission auto-paused"
+                    )
+            except LLMBudgetExceededError:
+                raise
+            except Exception as exc:
+                logger.debug("LLM budget pre-call guard error: %s", exc)
 
         if _is_azure:
             provider = "azure-openai"

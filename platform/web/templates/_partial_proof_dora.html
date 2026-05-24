@@ -1,0 +1,31 @@
+{% if dora %}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem">
+    <div>
+        <div style="font-size:0.68rem;color:var(--text-secondary);text-transform:uppercase">Overall</div>
+        <div style="font-size:1.25rem;font-weight:700">{{ dora.overall_level | default('—') }}</div>
+    </div>
+    <div>
+        <div style="font-size:0.68rem;color:var(--text-secondary);text-transform:uppercase">Deploy freq.</div>
+        <div style="font-size:1.1rem;font-weight:600">{{ dora.deployment_frequency.per_day | default('—') }}/d</div>
+        <div style="font-size:0.72rem;color:var(--text-secondary)">{{ dora.deployment_frequency.level | default('') }}</div>
+    </div>
+    <div>
+        <div style="font-size:0.68rem;color:var(--text-secondary);text-transform:uppercase">Lead time</div>
+        <div style="font-size:1.1rem;font-weight:600">{{ dora.lead_time.median_hours | default('—') }}h</div>
+        <div style="font-size:0.72rem;color:var(--text-secondary)">{{ dora.lead_time.level | default('') }}</div>
+    </div>
+    <div>
+        <div style="font-size:0.68rem;color:var(--text-secondary);text-transform:uppercase">Change fail rate</div>
+        <div style="font-size:1.1rem;font-weight:600">{{ dora.change_failure_rate.rate_pct | default('—') }}%</div>
+        <div style="font-size:0.72rem;color:var(--text-secondary)">{{ dora.change_failure_rate.level | default('') }}</div>
+    </div>
+    <div>
+        <div style="font-size:0.68rem;color:var(--text-secondary);text-transform:uppercase">MTTR</div>
+        <div style="font-size:1.1rem;font-weight:600">{{ dora.mttr.median_hours | default('—') }}h</div>
+        <div style="font-size:0.72rem;color:var(--text-secondary)">{{ dora.mttr.level | default('') }}</div>
+    </div>
+</div>
+<p style="font-size:0.72rem;color:var(--text-secondary);margin:0.5rem 0 0">Last {{ dora.period_days | default(30) }} days — all projects</p>
+{% else %}
+<p class="proof-empty">DORA metrics unavailable (no mission/sprint data yet).</p>
+{% endif %}
