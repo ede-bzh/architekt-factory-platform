@@ -398,8 +398,8 @@ async def run_conversation(
     })
 
     # Build agent name map for context
-    agent_names = {a.id: a.name for a in agents}
-    agent_roles = {a.id: a.role for a in agents}
+    {a.id: a.name for a in agents}
+    {a.id: a.role for a in agents}
 
     # Conversation loop: lead speaks first, then others respond
     conversation_msgs: list[dict] = [

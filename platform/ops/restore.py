@@ -24,7 +24,6 @@ import json
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 from pathlib import Path
 
@@ -292,7 +291,7 @@ def restore_vm_from_snapshot(snapshot_name: str, dry_run: bool = False) -> bool:
 
     print(f"  ✅ Disk created: {disk_name}")
     print(f"  ⚠ To swap: az vm update -n vm-macaron -g RG-MACARON --os-disk {disk_name}")
-    print(f"  ⚠ Then: az vm start -n vm-macaron -g RG-MACARON")
+    print("  ⚠ Then: az vm start -n vm-macaron -g RG-MACARON")
     return True
 
 

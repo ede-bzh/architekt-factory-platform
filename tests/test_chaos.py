@@ -173,7 +173,6 @@ class TestChaosAPIResilience:
 
     def test_malformed_json(self, live_session):
         """Malformed JSON body doesn't crash the server."""
-        import httpx
         r = live_session.post("/api/missions",
                               content=b"{invalid json!!!}",
                               headers={"Content-Type": "application/json"})

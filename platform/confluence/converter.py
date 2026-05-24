@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import html
 import re
-from typing import Optional
 
 
 # ── Markdown → Confluence XHTML ────────────────────────────────
@@ -149,7 +148,7 @@ def features_to_confluence(features: list[dict]) -> str:
     rows.append("<tr><th>Feature</th><th>Status</th><th>Points</th><th>Priorité</th><th>Description</th></tr>")
     for f in features:
         status = f.get("status", "backlog")
-        color = status_colors.get(status, "#6B7280")
+        status_colors.get(status, "#6B7280")
         rows.append(
             f'<tr>'
             f'<td><strong>{html.escape(f.get("name", ""))}</strong></td>'

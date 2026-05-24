@@ -17,6 +17,31 @@ import shutil
 
 logger = logging.getLogger(__name__)
 
+
+def _is_budget_paused_run(run_id: str) -> bool:
+    """Skip auto-resume when mission was paused by LLM budget enforcement."""
+    from ..db.migrations import get_db
+
+    db = get_db()
+    try:
+        row = db.execute(
+            """
+            SELECT m.config_json FROM mission_runs mr
+            JOIN missions m ON m.id = mr.session_id
+            WHERE mr.id = ?
+            """,
+            (run_id,),
+        ).fetchone()
+        if not row or not row[0]:
+            return False
+        cfg = json.loads(row[0]) if isinstance(row[0], str) else (row[0] or {})
+        return bool(cfg.get("llm_budget_paused_at"))
+    except Exception:
+        return False
+    finally:
+        db.close()
+
+
 # Mission name/type patterns that should always be running
 _CONTINUOUS_KEYWORDS = (
     "tma",

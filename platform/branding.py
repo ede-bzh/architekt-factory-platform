@@ -5,6 +5,7 @@ import os
 
 PRODUCT_NAME = "Architekt"
 PRODUCT_SHORT = "Architekt"
+PRODUCT_FULL_NAME = "Architekt Factory Platform"
 THEME_STORAGE_KEY = "architekt_theme"
 LEGACY_THEME_STORAGE_KEY = "macaron_theme"
 

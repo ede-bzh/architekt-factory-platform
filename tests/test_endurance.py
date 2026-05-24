@@ -2,7 +2,6 @@
 Endurance tests — project lifecycle, phase progression, auto-resume, LLM tracking.
 Run: pytest tests/test_endurance.py -v --live --timeout=600
 """
-import os
 import time
 
 import pytest
@@ -25,7 +24,7 @@ class TestProjectLifecycle:
 
     def test_create_canvas_project(self, live_session, canvas_project_id):
         """Project exists and is accessible."""
-        r = live_session.get(f"/api/projects")
+        r = live_session.get("/api/projects")
         r.raise_for_status()
         ids = [p["id"] for p in r.json()]
         assert canvas_project_id in ids

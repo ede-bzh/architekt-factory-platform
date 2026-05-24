@@ -104,7 +104,7 @@ class DeadCodeTool(BaseTool):
                     break
             # Also skip if referenced in its own file beyond the def itself
             if not referenced:
-                own_refs = _collect_all_names(sources[filepath])
+                _collect_all_names(sources[filepath])
                 # Name will always appear as its own def; count occurrences in AST
                 try:
                     tree = ast.parse(sources[filepath])

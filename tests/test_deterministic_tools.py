@@ -1,16 +1,12 @@
 """Tests for deterministic analysis tools (AST, lint, type-check, deps, dead code)."""
-import asyncio
-import os
-import tempfile
 
 import pytest
-import pytest_asyncio
 
 pytestmark = pytest.mark.asyncio
 
 from platform.tools.ast_tools import AstParseTool, AstImportsTool, AstExportsTool
 from platform.tools.type_check_tools import TypeCheckTool
-from platform.tools.lint_tools import LintTool, LintFixTool
+from platform.tools.lint_tools import LintTool
 from platform.tools.dep_tools import DepCheckTool, DepAuditTool
 from platform.tools.dead_code_tools import DeadCodeTool
 

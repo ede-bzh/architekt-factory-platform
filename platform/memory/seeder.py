@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 
 from .manager import get_memory_manager
-from .project_files import load_project_memory, MEMORY_FILES
+from .project_files import load_project_memory
 
 logger = logging.getLogger(__name__)
 

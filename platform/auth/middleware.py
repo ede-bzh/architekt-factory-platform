@@ -18,12 +18,11 @@ Usage in routes:
 """
 
 import hashlib
-import os
 
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
-from ..branding import get_api_key
+from .api_key import get_platform_api_key
 from .service import User, get_project_role, user_count, verify_access_token
 
 # Role hierarchy (higher index = more privileges)
@@ -47,7 +46,8 @@ def _extract_token(request: Request) -> str | None:
 
 def _check_api_key(request: Request) -> bool:
     """Check legacy API key auth (backward compatible)."""
-    if not _API_KEY:
+    api_key = get_platform_api_key()
+    if not api_key:
         return False
     auth = request.headers.get("authorization", "")
     token = (
@@ -59,7 +59,7 @@ def _check_api_key(request: Request) -> bool:
         return False
     return (
         hashlib.sha256(token.encode()).hexdigest()
-        == hashlib.sha256(_API_KEY.encode()).hexdigest()
+        == hashlib.sha256(api_key.encode()).hexdigest()
     )
 
 

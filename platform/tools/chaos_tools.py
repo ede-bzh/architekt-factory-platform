@@ -8,7 +8,6 @@ Falls back to direct subprocess if SF modules unavailable.
 from __future__ import annotations
 
 import asyncio
-import json
 import subprocess
 from pathlib import Path
 
@@ -87,7 +86,7 @@ class ChaosTestTool(BaseTool):
             lines.append(f"[CHAOS] Burst test: {fail_rate*100:.0f}% failure rate")
         else:
             lines.append(f"[CHAOS] Note: {scenario} requires infrastructure access (docker/ssh)")
-            lines.append(f"[CHAOS] Running health probe instead")
+            lines.append("[CHAOS] Running health probe instead")
 
         # Post-check
         post = await self._health_check(url)

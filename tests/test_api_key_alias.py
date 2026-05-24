@@ -1,8 +1,6 @@
 """Tests for ARCHITEKT_API_KEY / MACARON_API_KEY alias (ADR-001 niveau 2)."""
 
-import hashlib
 import importlib
-import os
 
 import pytest
 from fastapi.testclient import TestClient

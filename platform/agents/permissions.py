@@ -188,7 +188,7 @@ class PermissionGuard:
                         timestamp=time.time(),
                     )
                     self._log_denial(denial, session_id=session_id)
-                    return f"Permission denied: access to this path is restricted for this agent."
+                    return "Permission denied: access to this path is restricted for this agent."
 
         # 3. Check path is within project workspace
         if abs_project:
@@ -206,12 +206,12 @@ class PermissionGuard:
                 denial = PermissionDenial(
                     agent_id=agent_id,
                     tool_name=tool_name,
-                    reason=f"Path outside workspace boundary",
+                    reason="Path outside workspace boundary",
                     path=abs_path,
                     timestamp=time.time(),
                 )
                 self._log_denial(denial, session_id=session_id)
-                return f"Permission denied: path is outside the project workspace."
+                return "Permission denied: path is outside the project workspace."
 
         return None
 
@@ -303,7 +303,7 @@ class PermissionGuard:
                 timestamp=time.time(),
             )
             self._log_denial(denial, session_id=session_id)
-            return f"Permission denied: git operations must be within the project workspace."
+            return "Permission denied: git operations must be within the project workspace."
 
         # Also check path argument for git_diff
         if tool_name == "git_diff":
@@ -318,7 +318,7 @@ class PermissionGuard:
                         timestamp=time.time(),
                     )
                     self._log_denial(denial, session_id=session_id)
-                    return f"Permission denied: git diff path is outside the project workspace."
+                    return "Permission denied: git diff path is outside the project workspace."
 
         return None
 

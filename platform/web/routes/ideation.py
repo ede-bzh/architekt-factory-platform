@@ -654,6 +654,8 @@ async def ideation_create_epic(request: Request):
                 f"Features: {', '.join(f.get('name', '') for f in features_data)}\n"
                 f"Répertoire projet: {str(FACTORY_ROOT.parent / project_id)}"
             )
+            from ..workflows import _run_workflow_background
+
             asyncio.create_task(
                 _run_workflow_background(wf, session.id, task_desc, project_id)
             )

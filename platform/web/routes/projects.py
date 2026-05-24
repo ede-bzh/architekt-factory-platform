@@ -2177,7 +2177,6 @@ async def dbgate_get_token():
 @router.get("/api/projects/{project_id}/workspace/timeline")
 async def ws_timeline(project_id: str, filter: str = "all"):
     """Return unified timeline events: git commits + missions + deployments."""
-    import asyncio
     from ...projects.manager import get_project_store
     from ...projects import git_service
 
@@ -2255,7 +2254,7 @@ async def ws_search(
     regex: bool = False,
 ):
     """Full-text search across project files using ripgrep or grep fallback."""
-    import subprocess, re as _re
+    import subprocess
 
     from ...projects.manager import get_project_store
 

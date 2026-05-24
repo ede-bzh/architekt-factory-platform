@@ -230,7 +230,7 @@ def check_l0(
         tool_names
         & {"code_write", "code_edit", "git_commit", "deploy_azure", "docker_build"}
     )
-    has_test_tool = bool(
+    bool(
         tool_names
         & {
             "test",

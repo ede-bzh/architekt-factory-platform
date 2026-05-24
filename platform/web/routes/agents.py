@@ -728,6 +728,8 @@ async def generate_team(request: Request):
 
         wf = get_workflow_store().get(result["workflow_id"])
         if wf:
+            from ..workflows import _run_workflow_background
+
             asyncio.create_task(
                 _run_workflow_background(
                     wf,
@@ -883,9 +885,7 @@ async def agent_world_page(request: Request):
 @router.get("/api/world/live")
 async def world_live_data(project: str = ""):
     """Live world data for periodic refresh — returns missions + agent sessions."""
-    import json as _json
     from fastapi.responses import JSONResponse
-    from ...agents.store import AgentStore
     from ...missions.store import MissionRunStore
     from ...sessions.store import SessionStore
 

@@ -8,10 +8,9 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from datetime import datetime
 from typing import Any, Optional
 
-from ..models import AgentInstance, AgentRole, AgentStatus
+from ..models import AgentInstance, AgentStatus
 from .base import BaseAgent
 from .registry import AgentRegistry, get_registry
 

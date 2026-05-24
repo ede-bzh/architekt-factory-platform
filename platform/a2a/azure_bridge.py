@@ -8,11 +8,10 @@ Falls back to local-only mode if Azure is unavailable.
 from __future__ import annotations
 
 import logging
-import os
-from typing import Any, Optional
+from typing import Optional
 
 from ..config import get_config
-from ..models import A2AMessage, MessageType
+from ..models import A2AMessage
 
 logger = logging.getLogger(__name__)
 

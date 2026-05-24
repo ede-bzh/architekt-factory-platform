@@ -1,6 +1,4 @@
 """Tests for LLM response cache."""
-import os
-import tempfile
 
 import pytest
 

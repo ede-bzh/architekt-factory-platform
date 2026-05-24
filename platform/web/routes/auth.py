@@ -72,7 +72,7 @@ async def setup(request: Request):
         return JSONResponse({"error": "Email and password required"}, status_code=400)
 
     try:
-        user = service.register(email, password, name, role="admin")
+        service.register(email, password, name, role="admin")
         tokens = service.login(email, password,
                                ip=request.client.host if request.client else "",
                                ua=request.headers.get("user-agent", ""))

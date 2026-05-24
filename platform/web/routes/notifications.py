@@ -5,6 +5,8 @@ from __future__ import annotations
 import logging
 
 from fastapi import APIRouter, Request
+
+from ...branding import PRODUCT_FULL_NAME
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from ...services.notifications import get_notification_store
@@ -92,7 +94,6 @@ async def notifications_page(request: Request):
 async def test_notification_channel(request: Request):
     """Test a notification channel with a sample payload."""
     from ...services.notification_service import get_notification_service, NotificationPayload
-    import os
 
     try:
         body = await request.json()

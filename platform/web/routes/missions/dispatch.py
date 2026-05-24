@@ -168,7 +168,7 @@ async def api_missions_dispatch(request: Request):
         if req_key != api_key:
             return JSONResponse({"error": "Unauthorized"}, status_code=401)
 
-    data = await _parse_body(request)
+    await _parse_body(request)
 
     # Forward to the standard mission start endpoint logic
     # Import here to avoid circular imports

@@ -15,19 +15,12 @@ Metrics:
 - Anti-patterns: code smells
 """
 
-import asyncio
-import json
-import os
 import sys
-import tempfile
 from pathlib import Path
-from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.project_registry import get_project
-from core.task_store import TaskStore, Task
-from core.adversarial import AdversarialGate, ARCH_COMPLETENESS_CHECKS
+from core.adversarial import AdversarialGate
 
 
 # Test task definition

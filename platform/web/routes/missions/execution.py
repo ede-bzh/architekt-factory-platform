@@ -17,6 +17,9 @@ from ..helpers import _active_mission_tasks, get_mission_semaphore, _parse_body
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
+GIT_AGENT_EMAIL = "architekt-agent@local"
+GIT_AGENT_NAME = "Architekt Agent"
+
 
 @router.post("/api/missions/{mission_id}/start", responses={200: {"model": OkResponse}})
 async def start_mission(mission_id: str):
@@ -87,12 +90,12 @@ async def launch_mission_workflow(request: Request, mission_id: str):
     workspace_root.mkdir(parents=True, exist_ok=True)
     subprocess.run(["git", "init"], cwd=str(workspace_root), capture_output=True)
     subprocess.run(
-        ["git", "config", "user.email", GIT_AGENT_EMAIL],
+        ["git", "config", "user.email", "agents@macaron.ai"],
         cwd=str(workspace_root),
         capture_output=True,
     )
     subprocess.run(
-        ["git", "config", "user.name", GIT_AGENT_NAME],
+        ["git", "config", "user.name", "Macaron Agents"],
         cwd=str(workspace_root),
         capture_output=True,
     )
@@ -219,12 +222,12 @@ async def api_mission_start(request: Request):
     # Init git repo + README with brief
     subprocess.run(["git", "init"], cwd=str(workspace_root), capture_output=True)
     subprocess.run(
-        ["git", "config", "user.email", GIT_AGENT_EMAIL],
+        ["git", "config", "user.email", "agents@macaron.ai"],
         cwd=str(workspace_root),
         capture_output=True,
     )
     subprocess.run(
-        ["git", "config", "user.name", GIT_AGENT_NAME],
+        ["git", "config", "user.name", "Macaron Agents"],
         cwd=str(workspace_root),
         capture_output=True,
     )

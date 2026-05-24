@@ -16,12 +16,9 @@ from __future__ import annotations
 
 import copy
 import json
-import math
 import random
 import logging
-import asyncio
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 
 log = logging.getLogger(__name__)
 
@@ -341,7 +338,8 @@ class GAEngine:
 
     def _save_proposal(self, genome: Genome, base_wf_id: str, generation: int, run_id: str) -> None:
         """Save evolved genome as evolution proposal. Auto-approves if fitness delta > threshold."""
-        import uuid, os
+        import uuid
+        import os
         proposal_id = str(uuid.uuid4())[:8]
         try:
             from ..db.migrations import get_db

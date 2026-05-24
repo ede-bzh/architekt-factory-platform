@@ -11,6 +11,8 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+from ....sessions.runner import _push_sse
+
 
 async def _auto_retrospective(
     mission, session_id: str, phase_summaries: list, push_sse
@@ -143,7 +145,7 @@ async def _run_post_phase_hooks(
 
     # Auto-commit after EVERY phase — agents never call git_commit reliably
     try:
-        git_add = subprocess.run(
+        subprocess.run(
             ["git", "add", "-A"],
             cwd=workspace,
             capture_output=True,
@@ -910,7 +912,7 @@ asyncio.run(main())
 
         # Run real Playwright E2E test files if any exist
         try:
-            e2e_results = await _run_real_e2e_tests(
+            await _run_real_e2e_tests(
                 ws, session_id, phase_id, push_sse, mission
             )
         except Exception as e:
@@ -1307,6 +1309,9 @@ async def _run_real_e2e_tests(
             pass
 
     return results
+
+
+async def _auto_qa_screenshots(ws: Path, platform_type: str) -> list[str]:
     """Deterministic screenshot pipeline — build, run, capture. No LLM."""
     screenshots_dir = ws / "screenshots"
     screenshots_dir.mkdir(exist_ok=True)

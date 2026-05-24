@@ -1,6 +1,5 @@
 """Tests for demo mode — mock LLM responses and data seeding."""
 import os
-import pytest
 from unittest.mock import patch
 
 

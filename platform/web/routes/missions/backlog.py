@@ -143,7 +143,7 @@ async def update_story(request: Request, story_id: str):
     from ....missions.product import get_product_backlog
 
     data = await request.json()
-    backlog = get_product_backlog()
+    get_product_backlog()
     from ....db.migrations import get_db
 
     db = get_db()
