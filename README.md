@@ -26,7 +26,7 @@ Run locally with **`PLATFORM_LLM_PROVIDER=demo`** (no API keys) — see [Quick S
 
 > **Architekt does not sell code. Architekt sells globally-ready, AI-accelerated, security-conscious digital delivery** — combining the speed of AI, the rigor of senior engineering, proof via automated quality reports, and global readiness from day one.
 
-This platform (formerly *Architekt*) orchestrates specialized AI agents through structured workflows — from ideation to deployment — so the studio can ship client projects with SAFe methodology, TDD practices, and automated quality gates. Think of it as a **virtual delivery factory** where 160+ agents collaborate under human oversight.
+This platform (formerly *Software Factory*) orchestrates specialized AI agents through structured workflows — from ideation to deployment — so the studio can ship client projects with SAFe methodology, TDD practices, and automated quality gates. Think of it as a **virtual delivery factory** where 160+ agents collaborate under human oversight.
 
 ### Key Highlights
 

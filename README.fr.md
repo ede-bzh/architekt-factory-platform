@@ -12,7 +12,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-*Démo legacy (pré-rebrand) :* [architekt (demo)](https://architekt (demo)) — peut être indisponible ; préférez le **mode Demo local** dans [Démarrage rapide](#démarrage-rapide)
+Lancez en local avec **`PLATFORM_LLM_PROVIDER=demo`** (sans clé API) — voir [Démarrage rapide](#démarrage-rapide)
 
 [Fonctionnalités](#fonctionnalités) · [Démarrage rapide](#démarrage-rapide) · [Captures d'écran](#captures-décran) · [Architecture](#architecture) · [Contribuer](#contribuer)
 
@@ -26,7 +26,7 @@
 
 > **Architekt ne vend pas du code. Architekt vend une livraison digitale globalement prête, accélérée par l'IA et consciente de la sécurité** — combinant la vitesse de l'IA, la rigueur du senior engineering, la preuve via rapports qualité automatisés, et une readiness globale dès le jour 1.
 
-Cette plateforme (anciennement *Architekt*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 160+ agents collaborent sous supervision humaine.
+Cette plateforme (anciennement *Software Factory*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 160+ agents collaborent sous supervision humaine.
 
 ### Points clés
 

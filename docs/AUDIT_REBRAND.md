@@ -39,7 +39,7 @@ Ces éléments peuvent encore mentionner Macaron / Software Factory sans casser 
 - Commentaires en tête de `platform/web/static/css/*.css`, `js/*.js` (ex. `MacaronSSE`)
 - Routes backend / CLI (`cli/sf.py`, messages d’intégration Jira « Macaron »)
 - `platform/CLAUDE.md`, workflows YAML historiques, infra Docker `macaron_platform`
-- README multilingues archivés (`README.de.md`, etc.) — non liés dans README EN/FR
+- README multilingues supprimés (`README.de.md`, etc.) — seuls `README.md` + `README.fr.md` (+ `README_SECURITY_SCAN.md`)
 
 ## Compteurs catalogue (mesurés)
 
