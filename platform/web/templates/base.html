@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="{{ request.state.lang|default('en') }}" data-theme="dark">
 <head>
-    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('macaron_theme') || 'dark')</script>
+    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('architekt_theme') || localStorage.getItem('macaron_theme') || 'dark')</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>{{ page_title }} — Software Factory</title>
+    <title>{{ page_title }} — Architekt</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#6c63ff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SF Platform">
+    <meta name="apple-mobile-web-app-title" content="Architekt">
     <link rel="stylesheet" href="/static/css/main.css?v=20260225a">
     <link rel="stylesheet" href="/static/css/components.css?v=20260225a">
     <link rel="stylesheet" href="/static/css/agents.css?v=20260225a">
@@ -71,7 +71,7 @@
         <!-- Sidebar (icon-only) -->
         <nav class="sidebar">
             <div class="sidebar-header">
-                <h1 class="logo"><svg class="icon icon-logo"><use href="#icon-macaron"/></svg></h1>
+                <h1 class="logo"><svg class="icon icon-logo"><use href="#icon-architekt"/></svg></h1>
             </div>
 
             {% set p = request.state.perspective|default('admin') %}
@@ -142,6 +142,12 @@
                     <select id="langSelect" title="{{ _("tt_language") }}" style="background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border);border-radius:6px;padding:2px 4px;font-size:0.7rem;width:100%;cursor:pointer;text-align:center">
                         <option value="en" {% if request.state.lang|default('en') == 'en' %}selected{% endif %}>{{ _("en") }}</option>
                         <option value="fr" {% if request.state.lang|default('en') == 'fr' %}selected{% endif %}>{{ _("fr") }}</option>
+                        <option value="zh" {% if request.state.lang|default('en') == 'zh' %}selected{% endif %}>中文</option>
+                        <option value="es" {% if request.state.lang|default('en') == 'es' %}selected{% endif %}>{{ _("es") }}</option>
+                        <option value="ja" {% if request.state.lang|default('en') == 'ja' %}selected{% endif %}>日本</option>
+                        <option value="pt" {% if request.state.lang|default('en') == 'pt' %}selected{% endif %}>{{ _("pt") }}</option>
+                        <option value="de" {% if request.state.lang|default('en') == 'de' %}selected{% endif %}>{{ _("de") }}</option>
+                        <option value="ko" {% if request.state.lang|default('en') == 'ko' %}selected{% endif %}>한국</option>
                     </select>
                 </div>
                 <!-- Theme toggle -->
@@ -326,13 +332,13 @@
     /* Theme toggle (light/dark) — persists in localStorage */
     (function(){
       const html = document.documentElement;
-      const saved = localStorage.getItem('macaron_theme') || 'dark';
+      const saved = localStorage.getItem('architekt_theme') || localStorage.getItem('macaron_theme') || 'dark';
       html.setAttribute('data-theme', saved);
 
       document.getElementById('themeToggle')?.addEventListener('click', function(){
         const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         html.setAttribute('data-theme', next);
-        localStorage.setItem('macaron_theme', next);
+        localStorage.setItem('architekt_theme', next);
       });
     })();
     </script>

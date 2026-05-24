@@ -41,20 +41,7 @@ async def health_check():
     try:
         db = get_db()
         db.execute("SELECT 1")
-        version = "architekt-platform"
-        try:
-            from .... import __version__ as _v
-
-            version = str(_v)
-        except Exception:
-            pass
-        return JSONResponse(
-            {
-                "status": "ok",
-                "version": version,
-                "timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-            }
-        )
+        return JSONResponse({"status": "ok"})
     except Exception as e:
         return JSONResponse({"status": "error", "detail": str(e)}, status_code=503)
 
@@ -886,7 +873,9 @@ async def monitoring_live(request: Request, hours: int = 24):
         if hasattr(request, "state")
         else False
     )
-    if not is_authed and os.getenv("MACARON_API_KEY"):
+    from ....branding import get_api_key
+
+    if not is_authed and get_api_key():
         # Strip container IDs, kernel, server version, git branch, Azure details
         for d in docker_info:
             d.pop("id", None)

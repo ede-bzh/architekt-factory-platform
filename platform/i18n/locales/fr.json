@@ -249,7 +249,6 @@
   "local": "Local",
   "logs_thoughts": "Logs & Pensées",
   "lun": "Lun",
-  "macaron_world": "Macaron World",
   "mar": "Mar",
   "max_concurrent_sessions": "Sessions simultanées max",
   "max_tokens": "Tokens max",
@@ -615,5 +614,6 @@
   "workflow_optional_chains_patterns": "Workflow (optionnel, chaîne de patterns)",
   "written": "Écrit",
   "wsjf": "WSJF",
-  "you": "You"
+  "you": "You",
+  "agent_world": "Monde Architekt"
 }

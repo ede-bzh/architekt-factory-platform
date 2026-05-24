@@ -150,7 +150,7 @@
               <!-- Project Slots -->
               <div style="color:var(--text-secondary);font-size:0.78rem;text-transform:uppercase;letter-spacing:1px;font-weight:600">Deployed App Containers</div>
               <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:-0.4rem">
-                Deployed apps run as Docker containers (<code>macaron-app-*</code>). Limit active slots to avoid RAM saturation.
+                Deployed apps run as Docker containers (<code>architekt-app-*</code>). Limit active slots to avoid RAM saturation.
                 The watchdog stops the oldest containers beyond the slot limit, and stops any container older than the TTL.
               </div>
               <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.8rem">
@@ -232,7 +232,7 @@
                 <label>Node URLs (one per line)</label>
                 <textarea name="worker_nodes" rows="4"
                   style="width:100%;max-width:520px;background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border);border-radius:6px;padding:0.6rem;font-family:var(--font-mono);font-size:0.82rem;resize:vertical"
-                  placeholder="https://sf.macaron-software.com&#10;https://worker2.example.com">{{ config.orchestrator.worker_nodes | join('\n') }}</textarea>
+                  placeholder="https://platform.example.com&#10;https://worker2.example.com">{{ config.orchestrator.worker_nodes | join('\n') }}</textarea>
               </div>
 
               <div id="worker-status" style="display:none;padding:0.6rem 1rem;background:var(--bg-tertiary);border-radius:8px;font-size:0.8rem;border:1px solid var(--border)"></div>
@@ -255,7 +255,7 @@
     <!-- ═══ Integrations ═══ -->
     <div class="settings-panel" id="panel-integrations">
         <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.2rem">
-            Connect external tools. {{ product_name }} replaces Jira &amp; Confluence natively — these connectors enable import/migration and optional sync with legacy systems.
+            Connect external tools. Architekt replaces Jira &amp; Confluence natively — these connectors enable import/migration and optional sync with legacy systems.
         </p>
         <div class="integ-grid">
         {% for integ in integrations %}
@@ -308,7 +308,7 @@
                     <div class="integ-field">
                         <label>Mode</label>
                         <select data-integ="{{ integ.id }}" data-key="mode">
-                            <option value="import" {% if cfg.get('mode')=='import' %}selected{% endif %}>Import only (Jira → {{ product_name }})</option>
+                            <option value="import" {% if cfg.get('mode')=='import' %}selected{% endif %}>Import only (Jira → Architekt)</option>
                             <option value="bidirectional" {% if cfg.get('mode')=='bidirectional' %}selected{% endif %}>Bidirectional sync</option>
                         </select>
                     </div>

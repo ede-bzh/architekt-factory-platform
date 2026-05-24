@@ -46,4 +46,7 @@ logs/
 platform/tests/e2e/playwright-report/
 platform/tests/e2e/test-results/
 Thumbs.db
+node_modules/
+.coverage
+.playwright-mcp/
 platform/VERSION

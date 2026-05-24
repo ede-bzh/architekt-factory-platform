@@ -11,7 +11,7 @@ WIKI_PAGES = [
         "content": """\
 # Getting Started
 
-Welcome to the **Macaron Software Factory** — a multi-agent collaborative platform for software engineering.
+Welcome to the **Macaron Architekt** — a multi-agent collaborative platform for software engineering.
 
 ## Quick Start
 

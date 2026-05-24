@@ -80,7 +80,7 @@
 <div class="world-wrap">
     <!-- Loading screen -->
     <div class="world-loading" id="world-loading">
-        <h3>{{ _("macaron_world") }}</h3>
+        <h3>{{ _("agent_world") }}</h3>
         <p>{{ _("building_office") }}</p>
         <div class="wl-bar"><div class="wl-fill" id="world-load-bar"></div></div>
     </div>
@@ -143,14 +143,14 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 
 // ═══════════════════════════════════════════════════════════════
-// MACARON WORLD — 3D Sims-like Agent Visualization
+// ARCHITEKT WORLD — 3D Sims-like Agent Visualization
 // ═══════════════════════════════════════════════════════════════
 
 const AGENT_DATA = {{ agents_json|safe }};
 const LIVE_DATA = {{ live_json|safe }};
 
 // ── Day/Night Mode — synced with site theme ──
-let isDayMode = (localStorage.getItem('macaron_theme') || 'dark') === 'light';
+let isDayMode = (localStorage.getItem('architekt_theme') || 'dark') === 'light';
 const THEMES = {
     night: { bg: 0x151020, fog: 0x151020, ambient: 0x6040a0, ambientI: 1.0, dirColor: 0xffeedd, dirI: 1.2,
              fillColor: 0xaabbff, fillI: 0.5, hemiSky: 0x9080d0, hemiGnd: 0x302540, hemiI: 0.6,
@@ -1758,7 +1758,7 @@ function toggleDayNight() {
     isDayMode = !isDayMode;
     // Sync with site theme
     const theme = isDayMode ? 'light' : 'dark';
-    localStorage.setItem('macaron_theme', theme);
+    localStorage.setItem('architekt_theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
     document.getElementById('btn-daynight').innerHTML = isDayMode ? '<svg class="icon icon-sm"><use href="#icon-sun"/></svg>' : '<svg class="icon icon-sm"><use href="#icon-moon"/></svg>';
     applyDayNight(isDayMode, true);

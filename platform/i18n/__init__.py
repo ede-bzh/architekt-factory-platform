@@ -1,4 +1,4 @@
-"""i18n — Platform UI internationalization (English and French only).
+"""i18n — Lightweight internationalization for the Architekt platform.
 
 Usage in Jinja2 templates:  {{ _('key') }}  or  {{ _('key', name='World') }}
 Usage in Python:            from platform.i18n import t; t('key', lang='en')
@@ -19,16 +19,18 @@ SUPPORTED_LANGS = ("en", "fr")
 _catalog: dict[str, dict[str, str]] = {}
 
 
-def normalize_lang(code: str | None) -> str:
-    """Map a locale code to en/fr; unsupported codes fall back to English."""
-    if not code:
+def normalize_lang(raw: str | None) -> str:
+    """Map a language code to a supported locale (en or fr)."""
+    if not raw:
         return DEFAULT_LANG
-    base = code.strip().lower().split("-")[0].split("_")[0]
-    return base if base in SUPPORTED_LANGS else DEFAULT_LANG
+    code = str(raw).strip().lower().split("-")[0]
+    if code in SUPPORTED_LANGS:
+        return code
+    return DEFAULT_LANG
 
 
 def _load_catalog() -> None:
-    """Load EN/FR locale JSON files into memory."""
+    """Load locale JSON files into memory."""
     global _catalog
     _catalog = {}
     for lang in SUPPORTED_LANGS:
@@ -61,19 +63,19 @@ def t(key: str, lang: str = DEFAULT_LANG, **kwargs: Any) -> str:
 
 
 def get_lang(request) -> str:
-    """Detect language: sf_lang/lang cookie > Accept-Language > default en."""
-    for key in ("sf_lang", "lang"):
-        cookie_lang = request.cookies.get(key)
+    """Detect language from cookies, then Accept-Language, then default."""
+    for cookie_name in ("sf_lang", "lang"):
+        cookie_lang = request.cookies.get(cookie_name)
         if cookie_lang:
-            base = cookie_lang.strip().lower().split("-")[0].split("_")[0]
-            if base in SUPPORTED_LANGS:
-                return base
+            code = str(cookie_lang).strip().lower().split("-")[0]
+            if code in SUPPORTED_LANGS:
+                return code
+
     accept = request.headers.get("accept-language", "")
     for part in accept.split(","):
-        code = part.strip().split(";")[0].strip()
-        base = code.lower().split("-")[0].split("_")[0]
-        if base in SUPPORTED_LANGS:
-            return base
+        code = part.strip().split(";")[0].strip()[:2].lower()
+        if code in SUPPORTED_LANGS:
+            return code
     return DEFAULT_LANG
 
 

@@ -23,13 +23,11 @@ import os
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
+from ..branding import get_api_key
 from .service import User, get_project_role, user_count, verify_access_token
 
 # Role hierarchy (higher index = more privileges)
 ROLE_HIERARCHY = {"viewer": 0, "developer": 1, "project_manager": 2, "admin": 3}
-
-# Legacy API key support
-_API_KEY = os.environ.get("MACARON_API_KEY", "")
 
 
 def _extract_token(request: Request) -> str | None:
@@ -209,8 +207,6 @@ PUBLIC_PATHS = {
     "/js-error",
     "/api/analytics",
     "/api/teams",
-    "/proof",
-    "/finops",
 }
 
 

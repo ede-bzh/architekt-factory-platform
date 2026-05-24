@@ -1,14 +1,7 @@
 <p align="center">
   <a href="README.md">English</a> |
-  <a href="README.fr.md">Français</a> |
-  <a href="README.zh-CN.md">中文</a> |
-  <a href="README.es.md">Español</a> |
-  <a href="README.ja.md">日本語</a> |
-  <a href="README.pt.md">Português</a> |
-  <a href="README.de.md">Deutsch</a> |
-  <a href="README.ko.md">한국어</a>
+  <a href="README.fr.md">Français</a>
 </p>
-
 <div align="center">
 
 # Architekt Factory Platform
@@ -19,7 +12,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-*Démo legacy (pré-rebrand) :* [sf.macaron-software.com](https://sf.macaron-software.com) — peut être indisponible ; préférez le **mode Demo local** dans [Démarrage rapide](#démarrage-rapide)
+*Démo legacy (pré-rebrand) :* [architekt (demo)](https://architekt (demo)) — peut être indisponible ; préférez le **mode Demo local** dans [Démarrage rapide](#démarrage-rapide)
 
 [Fonctionnalités](#fonctionnalités) · [Démarrage rapide](#démarrage-rapide) · [Captures d'écran](#captures-décran) · [Architecture](#architecture) · [Contribuer](#contribuer)
 
@@ -33,7 +26,7 @@
 
 > **Architekt ne vend pas du code. Architekt vend une livraison digitale globalement prête, accélérée par l'IA et consciente de la sécurité** — combinant la vitesse de l'IA, la rigueur du senior engineering, la preuve via rapports qualité automatisés, et une readiness globale dès le jour 1.
 
-Cette plateforme (anciennement *Software Factory*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 161 agents collaborent sous supervision humaine.
+Cette plateforme (anciennement *Architekt*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 161 agents collaborent sous supervision humaine.
 
 ### Points clés
 
@@ -1018,6 +1011,6 @@ Ce projet est sous licence AGPL v3 - voir le fichier [LICENSE](LICENSE) pour dé
 
 ## Support
 
-- Démo legacy (pré-rebrand) : https://sf.macaron-software.com
+- Démo legacy (pré-rebrand) : https://architekt (demo)
 - Issues : https://github.com/ede-bzh/architekt-factory-platform/issues
 - Discussions : https://github.com/ede-bzh/architekt-factory-platform/discussions
