@@ -1,6 +1,6 @@
-# ADR-006 : Licence du code plateforme Architekt
+# ADR-006 : Licence du code plateforme Architekt (révisé)
 
-- **Statut** : À trancher Phase 0
+- **Statut** : Proposé (révisé 2026-05-24 suite revue exécutive)
 - **Date** : 2026-05-24
 - **Décideurs** : CTO, CPO, conseil juridique (à consulter)
 
@@ -16,16 +16,22 @@ Bloquant pour :
 - Open-sourcer ou pas la plateforme
 - Marque Architekt (image / juridique)
 
-## Décision (à confirmer)
+## Décision (révisée)
 
-**Recommandation** : modèle **open-core** :
+**Recommandation v2** : **propriétaire interne** tant que Phase 7 (SaaS) n'est pas validée.
 
 | Composant | Licence | Raison |
 |-----------|---------|--------|
-| Plateforme noyau (`platform/`, `cli/`, `dashboard/`) | **AGPL-3.0** | Empêche concurrent de revendre en SaaS sans contribuer |
-| Skills, workflows, kits | **MIT** ou **Apache-2.0** | Permet adoption large par clients |
-| Code généré pour clients (workspaces) | **propriété client** | Cession totale dans contrat |
+| Plateforme noyau (`platform/`, `cli/`, `dashboard/`) | **Propriétaire interne** | Évite ambiguïté AGPL pour clients enterprise ; ne ferme aucune option future |
+| Skills / workflows individuels (publiables) | **MIT** ou **Apache-2.0** | Permet partage sélectif ; pas un risque concurrentiel |
+| Code généré pour clients (workspaces projet) | **propriété client** | Cession totale dans clause MSA (cf. ADR-013) |
 | Marque "Architekt" | **trademark** déposé SG | Protection commerciale |
+
+**Pourquoi changement vs v1 (open-core)** :
+- AGPL fait peur aux clients enterprise B2B APAC (perception "viral copyleft")
+- Le modèle commercial n'est pas clarifié (studio d'abord, SaaS plus tard)
+- Rien ne bloque un passage à AGPL/MIT plus tard si productisation SaaS décidée
+- Propriétaire interne = option par défaut **réversible**, pas une décision lourde
 
 ## Alternatives
 
@@ -33,25 +39,24 @@ Bloquant pour :
 |--------|----------|--------------|
 | **Tout MIT** | Adoption max, simple | Concurrent peut forker et revendre |
 | **Tout AGPL-3.0** | Protection forte | Bloque adoption interne client (peur du copyleft) |
-| **Open-core (recommandé)** | Équilibre | Complexité juridique |
+| **Open-core** | Équilibre | Complexité juridique, peur AGPL persiste |
 | **Source-available (BSL)** | Comme MongoDB | Pas "open source" officiellement |
-| **Propriétaire fermé** | Contrôle total | Pas de communauté, plus dur de recruter |
+| **Propriétaire fermé interne (recommandé)** | Contrôle total, neutre vs clients | Pas de communauté open source |
 
 ## Action
 
-1. CTO + avocat SG : valider modèle open-core (1 semaine)
-2. Mettre à jour `LICENSE` racine
-3. Aligner `pyproject.toml` `license = "AGPL-3.0-or-later"`
-4. Aligner badge README sur licence réelle
-5. Ajouter `NOTICE` pour dépendances tierces
-6. Contrat client type : clause cession code généré
+1. **CTO + avocat SG** : valider modèle propriétaire interne (1 semaine)
+2. Mettre à jour `LICENSE` racine → "All rights reserved" + permissive sur composants spécifiques
+3. Aligner `pyproject.toml` `license = "Proprietary"` ou similaire
+4. Aligner badge README
+5. Ajouter `NOTICE` pour dépendances tierces (cf. ADR-013)
+6. Contrat client type : clause cession code généré (cf. ADR-013)
 
 ## Risques
 
-- AGPL-3.0 peut faire fuir certains clients enterprise (peur copyleft)
-  → Mitigation : licence commerciale alternative payante pour ceux-là
-- Modèle open-core nécessite frontière claire core vs entreprise
-  → Définir dans `docs/LICENSE-MAP.md`
+- Perception "fermé" peut freiner contributions externes (faible, on n'a pas de communauté à ce stade)
+- Mitigation : composants `skills/` et `workflows/` publiables sous MIT à la demande
+- Si revente envisagée : passer en AGPL au moment de Phase 7
 
 ## Conséquences si non décidé
 
