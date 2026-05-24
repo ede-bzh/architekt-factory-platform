@@ -8,7 +8,7 @@ setup:
 run:
 	docker compose up -d --build
 	@echo ""
-	@echo "Architekt Factory Platform is starting..."
+	@echo "Macaron Software Factory is starting..."
 	@echo "   Open http://localhost:8090 in your browser"
 	@echo "   Run "make logs" to see output"
 
@@ -24,10 +24,10 @@ clean:
 
 # Development (without Docker)
 dev:
-	PYTHONPATH=$$(pwd) python3 -m uvicorn platform.server:app --host 0.0.0.0 --port 8090 --ws none --log-level info
+	PYTHONPATH=$$(pwd) PLATFORM_LLM_PROVIDER=demo python3 -m uvicorn platform.server:app --host 0.0.0.0 --port 8090 --ws none --log-level info
 
 test:
-	PYTHONPATH=$$(pwd) python3 -m pytest tests/test_cache.py tests/test_auto_heal.py tests/test_vectors.py tests/test_i18n.py tests/test_demo.py -v
+	PYTHONPATH=$$(pwd) PLATFORM_LLM_PROVIDER=demo python3 -m pytest -q
 
 # Git Hooks + Quality Tools
 install-hooks:

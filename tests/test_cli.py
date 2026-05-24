@@ -18,6 +18,16 @@ def sf(*args, json_out=False):
     return r.returncode, r.stdout, r.stderr
 
 
+@pytest.fixture(scope="module", autouse=True)
+def _ensure_user_stories_table():
+    """ProductBacklog creates user_stories; offline CLI expects the table."""
+    if not os.path.exists(DB):
+        pytest.skip(f"DB not found: {DB}")
+    from platform.missions.product import get_product_backlog
+
+    get_product_backlog()
+
+
 class TestStatus:
     def test_status(self):
         rc, out, _ = sf("status")

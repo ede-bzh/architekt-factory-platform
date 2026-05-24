@@ -26,6 +26,7 @@ jobs:
       - name: Run unit tests (core gate)
         env:
           PLATFORM_LLM_PROVIDER: demo
+          PLATFORM_ENV: test
         run: |
           PYTHONPATH=. pytest \
             tests/test_demo.py \
@@ -34,4 +35,8 @@ jobs:
             tests/test_adaptive_intelligence.py \
             tests/test_plugins.py \
             tests/test_llm_cache.py \
+            tests/test_platform_api.py \
+            tests/test_uruk_rtk.py \
+            tests/test_workers.py \
+            tests/test_b_features.py \
             -q
