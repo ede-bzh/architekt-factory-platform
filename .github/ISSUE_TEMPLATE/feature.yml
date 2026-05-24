@@ -1,0 +1,50 @@
+name: Feature
+description: Nouvelle fonctionnalité Architekt
+title: "[P?] <area> — "
+labels: ["type:feature"]
+body:
+  - type: input
+    id: phase
+    attributes:
+      label: Phase
+      placeholder: "0-Rebrand / 1-Catalog / 2-Practices / 3-Pilot / 4-OnDemand"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorité
+      options:
+        - Must
+        - Should
+        - Could
+    validations:
+      required: true
+
+  - type: textarea
+    id: story
+    attributes:
+      label: User story
+      placeholder: "En tant que <rôle>, je veux <besoin> afin de <bénéfice>"
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critères d'acceptation
+      value: |
+        - [ ] Critère 1
+        - [ ] Critère 2
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes techniques
+
+  - type: input
+    id: parent
+    attributes:
+      label: Epic parent
+      placeholder: "#<numero issue epic>"

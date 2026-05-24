@@ -1,0 +1,51 @@
+name: Décision / ADR
+description: Décision à prendre (architecture, business, juridique) → potentiel ADR
+title: "[DECISION] "
+labels: ["type:question", "status:needs-decision"]
+body:
+  - type: input
+    id: phase
+    attributes:
+      label: Phase concernée
+      placeholder: "0-Rebrand / 1-Catalog / 2-Practices / 3-Pilot / 4-OnDemand"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte
+      description: Pourquoi cette décision se pose ?
+    validations:
+      required: true
+
+  - type: textarea
+    id: options
+    attributes:
+      label: Options envisagées
+      value: |
+        - **Option A** : ...
+        - **Option B** : ...
+        - **Option C** : ...
+
+  - type: textarea
+    id: criteria
+    attributes:
+      label: Critères de choix
+      description: Coût, vitesse, risque, lock-in, etc.
+
+  - type: input
+    id: deadline
+    attributes:
+      label: Deadline décision
+      placeholder: "AAAA-MM-JJ"
+
+  - type: input
+    id: deciders
+    attributes:
+      label: Décideurs
+      placeholder: "CPO, CTO, avocat, ..."
+
+  - type: input
+    id: future-adr
+    attributes:
+      label: ADR cible
+      placeholder: "docs/adr/00X-<slug>.md (à créer si décision prise)"

@@ -1,0 +1,309 @@
+# Architekt GitHub labels (v3 — global scope)
+# Used by scripts/github/setup-project.sh
+
+# ── Phase labels (8 phases) ──
+- name: phase:0-foundation
+  color: "5319e7"
+  description: "Phase 0 — Foundation & Rebrand"
+- name: phase:1-offers
+  color: "5319e7"
+  description: "Phase 1 — Offer & Stack Catalogue"
+- name: phase:2-doctrine
+  color: "5319e7"
+  description: "Phase 2 — Delivery Doctrine"
+- name: phase:3-pilot
+  color: "5319e7"
+  description: "Phase 3 — Public Pilot"
+- name: phase:4-clients
+  color: "5319e7"
+  description: "Phase 4 — First Paid Clients APAC"
+- name: phase:5-idp
+  color: "5319e7"
+  description: "Phase 5 — IDP + MENA/EMEA expansion"
+- name: phase:6-portal
+  color: "5319e7"
+  description: "Phase 6 — Client Portal (conditionnel 5 clients)"
+- name: phase:7-saas
+  color: "5319e7"
+  description: "Phase 7 — SaaS Option (conditionnel 10+ clients)"
+
+# ── Region labels (4 regions) ──
+- name: region:apac
+  color: "0366d6"
+  description: "APAC (Singapore, ASEAN, JP, KR, AU)"
+- name: region:mena
+  color: "0366d6"
+  description: "MENA (UAE, KSA, Qatar, Morocco, Egypt)"
+- name: region:emea
+  color: "0366d6"
+  description: "EMEA (France, Germany, UK, Nordics, Benelux)"
+- name: region:usa
+  color: "0366d6"
+  description: "USA"
+- name: region:global
+  color: "0366d6"
+  description: "Multi-région / global"
+
+# ── Area labels ──
+- name: area:rebrand
+  color: "fbca04"
+- name: area:brand
+  color: "fbca04"
+- name: area:legal
+  color: "fbca04"
+- name: area:docs
+  color: "fbca04"
+- name: area:ui
+  color: "fbca04"
+- name: area:platform
+  color: "fbca04"
+- name: area:agents
+  color: "fbca04"
+- name: area:catalog
+  color: "fbca04"
+- name: area:offers
+  color: "fbca04"
+- name: area:ci
+  color: "fbca04"
+- name: area:security
+  color: "fbca04"
+- name: area:compliance
+  color: "fbca04"
+- name: area:i18n
+  color: "fbca04"
+- name: area:a11y
+  color: "fbca04"
+- name: area:finops
+  color: "fbca04"
+- name: area:deploy
+  color: "fbca04"
+- name: area:website
+  color: "fbca04"
+- name: area:gtm
+  color: "fbca04"
+- name: area:idp
+  color: "fbca04"
+- name: area:portal
+  color: "fbca04"
+- name: area:saas
+  color: "fbca04"
+
+# ── Security level labels (4 levels) ──
+- name: sec:L0
+  color: "c2e0c6"
+  description: "Security Level 0 — public static"
+- name: sec:L1
+  color: "fbca04"
+  description: "Security Level 1 — standard business app"
+- name: sec:L2
+  color: "d93f0b"
+  description: "Security Level 2 — sensitive business data"
+- name: sec:L3
+  color: "b60205"
+  description: "Security Level 3 — regulated / enterprise"
+
+# ── Project type labels (10 types A-J) ──
+- name: project:marketing
+  color: "1d76db"
+  description: "A. Corporate / marketing platform"
+- name: project:mvp
+  color: "1d76db"
+  description: "B. Product MVP"
+- name: project:internal-tool
+  color: "1d76db"
+  description: "C. Internal business tool"
+- name: project:ai-workflow
+  color: "1d76db"
+  description: "D. AI workflow automation"
+- name: project:ecommerce
+  color: "1d76db"
+  description: "E. E-commerce / headless commerce"
+- name: project:cms
+  color: "1d76db"
+  description: "F. CMS / content platform"
+- name: project:client-portal
+  color: "1d76db"
+  description: "G. Client portal"
+- name: project:dashboard
+  color: "1d76db"
+  description: "H. Data / analytics dashboard"
+- name: project:modernization
+  color: "1d76db"
+  description: "I. Modernization project"
+- name: project:audit
+  color: "1d76db"
+  description: "J. Security / quality audit"
+
+# ── Client type labels (9 types) ──
+- name: client:scale-up
+  color: "8b00ff"
+  description: "1. Scale-up B2B"
+- name: client:sme
+  color: "8b00ff"
+  description: "2. SME / mid-market"
+- name: client:prof-services
+  color: "8b00ff"
+  description: "3. Professional services"
+- name: client:hospitality
+  color: "8b00ff"
+  description: "4. Hospitality / luxury / tourism"
+- name: client:industrial
+  color: "8b00ff"
+  description: "5. Industrial / logistics / manufacturing"
+- name: client:education
+  color: "8b00ff"
+  description: "6. Education / training"
+- name: client:wellness
+  color: "8b00ff"
+  description: "7. Healthcare-adjacent / wellness (non-régulé)"
+- name: client:ecommerce
+  color: "8b00ff"
+  description: "8. E-commerce / retail"
+- name: client:gov-adjacent
+  color: "8b00ff"
+  description: "9. Government-adjacent (conditionnel)"
+
+# ── Kit labels (Tier A core) ──
+- name: kit:astro
+  color: "0e8a16"
+- name: kit:nextjs
+  color: "0e8a16"
+- name: kit:fastapi
+  color: "0e8a16"
+- name: kit:postgresql
+  color: "0e8a16"
+- name: kit:tailwind-shadcn
+  color: "0e8a16"
+- name: kit:cloudflare-pages
+  color: "0e8a16"
+- name: kit:github-actions
+  color: "0e8a16"
+
+# ── Kit labels (Tier B opportunistic) ──
+- name: kit:wordpress
+  color: "5cb85c"
+- name: kit:shopify
+  color: "5cb85c"
+- name: kit:payload
+  color: "5cb85c"
+- name: kit:nestjs
+  color: "5cb85c"
+- name: kit:nuxt
+  color: "5cb85c"
+- name: kit:azure
+  color: "5cb85c"
+- name: kit:aws
+  color: "5cb85c"
+
+# ── Kit labels (Tier C contract-only) ──
+- name: kit:spring-modulith
+  color: "7fffd4"
+- name: kit:swiftui
+  color: "7fffd4"
+- name: kit:android-compose
+  color: "7fffd4"
+
+# ── Offer labels (9 offres) ──
+- name: offer:launch
+  color: "1d76db"
+- name: offer:mvp
+  color: "1d76db"
+- name: offer:portal
+  color: "1d76db"
+- name: offer:internal-tool
+  color: "1d76db"
+- name: offer:ai-workflow
+  color: "1d76db"
+- name: offer:commerce
+  color: "1d76db"
+- name: offer:modernize
+  color: "1d76db"
+- name: offer:audit
+  color: "1d76db"
+- name: offer:run
+  color: "1d76db"
+
+# ── Type labels ──
+- name: type:adr
+  color: "bfd4f2"
+- name: type:epic
+  color: "3e4b9e"
+- name: type:feature
+  color: "a2eeef"
+- name: type:chore
+  color: "ededed"
+- name: type:bug
+  color: "d73a4a"
+- name: type:question
+  color: "d876e3"
+- name: type:research
+  color: "d876e3"
+- name: type:skill
+  color: "c5def5"
+- name: type:client-project
+  color: "ff8c00"
+  description: "Active client project"
+
+# ── Role labels (c-level + delivery) ──
+- name: role:cpo
+  color: "c2e0c6"
+- name: role:cto
+  color: "c2e0c6"
+- name: role:cfo
+  color: "c2e0c6"
+- name: role:caio
+  color: "c2e0c6"
+- name: role:ciso
+  color: "c2e0c6"
+- name: role:designer
+  color: "c2e0c6"
+- name: role:architect
+  color: "c2e0c6"
+- name: role:sre
+  color: "c2e0c6"
+- name: role:cs
+  color: "c2e0c6"
+- name: role:pmm
+  color: "c2e0c6"
+- name: role:gtm
+  color: "c2e0c6"
+- name: role:legal
+  color: "c2e0c6"
+
+# ── Priority labels ──
+- name: priority:must
+  color: "b60205"
+- name: priority:should
+  color: "d93f0b"
+- name: priority:could
+  color: "fbca04"
+
+# ── Status labels ──
+- name: status:blocked
+  color: "000000"
+- name: status:needs-decision
+  color: "d876e3"
+- name: status:in-review
+  color: "fbca04"
+- name: status:trigger-pending
+  color: "999999"
+
+# ── Risk labels ──
+- name: risk:legal
+  color: "b60205"
+- name: risk:prod
+  color: "b60205"
+- name: risk:margin
+  color: "b60205"
+- name: risk:llm-cost
+  color: "b60205"
+- name: risk:pipeline
+  color: "b60205"
+- name: risk:burnout
+  color: "b60205"
+- name: risk:compliance
+  color: "b60205"
+- name: risk:data-residency
+  color: "b60205"
+- name: risk:regulated
+  color: "b60205"
