@@ -9,6 +9,7 @@ from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from ..branding import get_api_key
+from .rate_limit import RateLimitMiddleware
 from .sanitize import sanitize_user_input, sanitize_agent_output, sanitize_command
 from .prompt_guard import PromptInjectionGuard, get_prompt_guard
 
@@ -77,4 +78,5 @@ __all__ = [
     "PromptInjectionGuard",
     "get_prompt_guard",
     "AuthMiddleware",
+    "RateLimitMiddleware",
 ]
