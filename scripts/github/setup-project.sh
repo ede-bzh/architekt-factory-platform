@@ -611,7 +611,127 @@ Trigger : dépassement >20% sur 1 mission → audit ; sur 3 → cut-off durci." 
 "type:question,risk:llm-cost,role:cto,priority:must,status:trigger-pending" \
 ""
 
-  ok "Issues Architekt créées (v2)."
+  # ╔══════════════════════════════════════════════════════════════════════════╗
+  # ║  Global ADRs (029-045) — issues batch                                     ║
+  # ╚══════════════════════════════════════════════════════════════════════════╝
+
+  create_issue "[ADR-029] Project type taxonomy (10 types)" \
+"Voir docs/adr/029-project-type-taxonomy.md.
+10 types officiels (A-J) dans docs/PROJECTS.md." \
+"type:adr,phase:1-offers,area:catalog,role:cpo,priority:must" \
+"Phase 1 — Offer & Catalog"
+
+  create_issue "[ADR-030] Client type taxonomy (9 types)" \
+"Voir docs/adr/030-client-type-taxonomy.md.
+9 typologies dans docs/CLIENTS.md + anti-clients explicites." \
+"type:adr,phase:1-offers,area:gtm,role:cpo,role:gtm,priority:must" \
+"Phase 1 — Offer & Catalog"
+
+  create_issue "[ADR-031] Security levels by project type" \
+"Voir docs/adr/031-security-levels-by-project-type.md.
+L0/L1/L2/L3 mapping par type projet." \
+"type:adr,phase:2-doctrine,area:security,role:ciso,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-032] Regional compliance matrix" \
+"Voir docs/adr/032-regional-compliance-matrix.md.
+PDPA SG, UAE/Saudi PDPL, GDPR, CCPA + 4 templates DPA." \
+"type:adr,phase:2-doctrine,area:compliance,role:ciso,role:legal,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-033] International product baseline" \
+"Voir docs/adr/033-international-product-baseline.md.
+Intake section 6 obligatoire (locale, RTL, timezone, currency...)." \
+"type:adr,phase:2-doctrine,area:i18n,role:cto,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-034] i18n and RTL implementation standard" \
+"Voir docs/adr/034-i18n-rtl-implementation-standard.md.
+Standards techniques par stack + RTL checklist." \
+"type:adr,phase:2-doctrine,area:i18n,role:designer,role:cto,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-035] Data residency decision model" \
+"Voir docs/adr/035-data-residency-decision-model.md.
+Hébergement par région utilisateur final + anti-patterns." \
+"type:adr,phase:2-doctrine,area:compliance,area:deploy,role:cto,role:ciso,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-036] AI workflow human approval model" \
+"Voir docs/adr/036-ai-workflow-human-approval-model.md.
+Classes A0-A5 pour workflows IA client + HITL A4-A5." \
+"type:adr,phase:2-doctrine,area:agents,role:cto,role:caio,role:ciso,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-037] Architecture patterns catalogue" \
+"Voir docs/adr/037-architecture-patterns-catalogue.md.
+6 patterns officiels." \
+"type:adr,phase:1-offers,role:architect,role:cto,priority:must" \
+"Phase 1 — Offer & Catalog"
+
+  create_issue "[ADR-038] Stack decision matrix" \
+"Voir docs/adr/038-stack-decision-matrix.md.
+1 type projet = 1 stack par defaut." \
+"type:adr,phase:1-offers,area:catalog,role:cto,priority:must" \
+"Phase 1 — Offer & Catalog"
+
+  create_issue "[ADR-039] Accept/reject project criteria" \
+"Voir docs/adr/039-accept-reject-project-criteria.md.
+12 refus + 8 acceptance, intake checklist." \
+"type:adr,phase:1-offers,area:offers,role:cpo,priority:must" \
+"Phase 1 — Offer & Catalog"
+
+  create_issue "[ADR-040] Enterprise readiness path — ISO27001/SOC2" \
+"Voir docs/adr/040-enterprise-readiness-iso27001-soc2.md.
+Direction de maturite, pas certification promise." \
+"type:adr,phase:2-doctrine,area:security,role:ciso,role:cto,priority:should" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-041] Regulated industry entry criteria" \
+"Voir docs/adr/041-regulated-industry-entry.md.
+Refus systematique healthcare/finance/gov regule jusqu'a maturite." \
+"type:adr,phase:1-offers,risk:regulated,risk:legal,role:cpo,role:legal,priority:must" \
+"Phase 1 — Offer & Catalog"
+
+  create_issue "[ADR-042] Vendor / subprocessor management" \
+"Voir docs/adr/042-vendor-subprocessor-management.md.
+Liste maintenue + evaluation initiale + revue annuelle." \
+"type:adr,phase:2-doctrine,area:compliance,area:security,role:ciso,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-043] Incident response baseline" \
+"Voir docs/adr/043-incident-response-baseline.md.
+P1-P4, SLA, 6 etapes, breach notification 72h." \
+"type:adr,phase:2-doctrine,area:security,role:sre,role:ciso,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-044] Backup and restore standard" \
+"Voir docs/adr/044-backup-restore-standard.md.
+3-2-1 + test restore obligatoire." \
+"type:adr,phase:2-doctrine,area:security,area:deploy,role:sre,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[ADR-045] Client security questionnaire readiness" \
+"Voir docs/adr/045-client-security-questionnaire-readiness.md.
+Pack 10 docs CAIQ/SIG/ISO mapping pour repondre en <1j." \
+"type:adr,phase:3-pilot,area:security,role:ciso,role:cto,priority:should" \
+"Phase 3 — Public Pilot"
+
+  # ╔══════════════════════════════════════════════════════════════════════════╗
+  # ║  Skills nouveaux (compliance + i18n)                                      ║
+  # ╚══════════════════════════════════════════════════════════════════════════╝
+
+  create_issue "[P2] skill architekt-compliance — implementation" \
+"A partir de docs/skills-spec/architekt-compliance.spec.md, creer skills/architekt-compliance.md." \
+"type:skill,phase:2-doctrine,area:agents,area:compliance,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  create_issue "[P2] skill architekt-i18n — implementation" \
+"A partir de docs/skills-spec/architekt-i18n.spec.md, creer skills/architekt-i18n.md." \
+"type:skill,phase:2-doctrine,area:agents,area:i18n,priority:must" \
+"Phase 2 — Delivery Doctrine"
+
+  ok "Issues Architekt créées (v3 — global)."
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
