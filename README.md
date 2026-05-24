@@ -1,14 +1,7 @@
 <p align="center">
   <a href="README.md">English</a> |
-  <a href="README.fr.md">Français</a> |
-  <a href="README.zh-CN.md">中文</a> |
-  <a href="README.es.md">Español</a> |
-  <a href="README.ja.md">日本語</a> |
-  <a href="README.pt.md">Português</a> |
-  <a href="README.de.md">Deutsch</a> |
-  <a href="README.ko.md">한국어</a>
+  <a href="README.fr.md">Français</a>
 </p>
-
 <div align="center">
 
 # Architekt Factory Platform
@@ -19,7 +12,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-*Legacy demo (pre-rebrand):* [sf.macaron-software.com](https://sf.macaron-software.com) — may be unavailable; use **local Demo mode** in [Quick Start](#quick-start)
+Run locally with **`PLATFORM_LLM_PROVIDER=demo`** (no API keys) — see [Quick Start](#quick-start)
 
 [Features](#features) · [Quick Start](#quick-start) · [Screenshots](#screenshots) · [Architecture](#architecture) · [Contributing](#contributing)
 
@@ -33,11 +26,11 @@
 
 > **Architekt does not sell code. Architekt sells globally-ready, AI-accelerated, security-conscious digital delivery** — combining the speed of AI, the rigor of senior engineering, proof via automated quality reports, and global readiness from day one.
 
-This platform (formerly *Software Factory*) orchestrates specialized AI agents through structured workflows — from ideation to deployment — so the studio can ship client projects with SAFe methodology, TDD practices, and automated quality gates. Think of it as a **virtual delivery factory** where 161 agents collaborate under human oversight.
+This platform (formerly *Software Factory*) orchestrates specialized AI agents through structured workflows — from ideation to deployment — so the studio can ship client projects with SAFe methodology, TDD practices, and automated quality gates. Think of it as a **virtual delivery factory** where 160+ agents collaborate under human oversight.
 
 ### Key Highlights
 
-- **161 specialized agents** — architects, developers, testers, SREs, security analysts, product owners
+- **160+ specialized agents** — architects, developers, testers, SREs, security analysts, product owners
 - **10 orchestration patterns** — solo, sequential, parallel, hierarchical, network, loop, router, aggregator, wave, human-in-the-loop
 - **SAFe-aligned lifecycle** — Portfolio → Epic → Feature → Story with PI cadence
 - **Auto-heal** — autonomous incident detection, triage, and self-repair
@@ -232,7 +225,7 @@ All four are created with the project. TMA, Security, and Self-Healing start as 
 
 ## Features
 
-### 161 Specialized AI Agents
+### 160+ Specialized AI Agents
 
 Agents are organized in teams mirroring real software organizations:
 
@@ -496,7 +489,7 @@ python3 -m platform.mcp_platform.server
                        │          │            │
           ┌────────────┴┐   ┌────┴─────┐   ┌──┴───────────┐
           │ Agent Engine │   │ Workflow │   │   Mission    │
-          │ 161 agents   │   │  Engine  │   │    Layer     │
+          │ 160+ agents  │   │  Engine  │   │    Layer     │
           │ executor     │   │ 39 defs  │   │ SAFe cycle   │
           │ loop+retry   │   │ 10 ptrns │   │ Portfolio    │
           └──────┬───────┘   │ phases   │   │ Epic/Feature │
@@ -1050,6 +1043,6 @@ This project is licensed under the AGPL v3 License - see the [LICENSE](LICENSE) 
 
 ## Support
 
-- Legacy demo (pre-rebrand): https://sf.macaron-software.com
+- Legacy demo (pre-rebrand): https://architekt (demo)
 - Issues: https://github.com/ede-bzh/architekt-factory-platform/issues
 - Discussions: https://github.com/ede-bzh/architekt-factory-platform/discussions

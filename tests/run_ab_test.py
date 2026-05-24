@@ -10,22 +10,18 @@ Captures generated code and compares.
 """
 
 import asyncio
-import json
-import os
 import sys
 import sqlite3
 import time
 from pathlib import Path
-from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.task_store import TaskStore, TaskStatus
+from core.task_store import TaskStore
 from core.wiggum_tdd import WiggumWorker
 from core.adversarial import AdversarialGate
 from core.fractal import FractalDecomposer
 from core.project_registry import get_project
-from tests.ab_fractal_test import analyze_code, print_comparison
 
 
 class DisabledDecomposer:

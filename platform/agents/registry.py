@@ -13,7 +13,7 @@ from typing import Optional
 
 import yaml
 
-from ..config import SKILLS_DIR, LEGACY_SKILLS_DIR
+from ..config import SKILLS_DIR
 from ..models import (
     AgentRole, AgentLLMConfig, AgentPermissions,
     AgentCommunication, AgentTrigger,

@@ -1293,19 +1293,6 @@ RULES:
         summary_parts.append(f"\n**Summary:** {llm_resp.content[:500]}")
 
     return "\n".join(summary_parts)
-    """Push a mission control SSE event via the A2A bus SSE listeners."""
-    from ..a2a.bus import get_bus
-
-    data["session_id"] = session_id
-    bus = get_bus()
-    dead = []
-    for q in bus._sse_listeners:
-        try:
-            q.put_nowait(data)
-        except asyncio.QueueFull:
-            dead.append(q)
-    for q in dead:
-        bus._sse_listeners.remove(q)
 
 
 # ── MCP Tool Handlers ─────────────────────────────────────────

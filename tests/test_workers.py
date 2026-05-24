@@ -121,7 +121,7 @@ class TestStats:
     def test_stats_with_jobs(self, queue):
         queue.enqueue("a")
         queue.enqueue("b")
-        jid = queue.enqueue("c")
+        queue.enqueue("c")
         queue.claim("w1")
         s = queue.stats()
         assert s["total"] == 3

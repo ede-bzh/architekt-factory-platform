@@ -16,10 +16,8 @@ Can run as:
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import os
-import uuid
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Optional

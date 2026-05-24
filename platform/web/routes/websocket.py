@@ -9,11 +9,9 @@ Integrates with the EventStore and MessageBus for event sourcing.
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
 import time
-from typing import Any
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 

@@ -31,7 +31,7 @@ def mission_revenue_usd(mission_id: str) -> float:
         row = db.execute(
             "SELECT config_json FROM missions WHERE id = ?", (mission_id,)
         ).fetchone()
-        if raw_cfg:
+        if row:
             import json
 
             cfg = json.loads(row["config_json"]) if isinstance(row["config_json"], str) else {}
@@ -100,7 +100,7 @@ def global_summary() -> dict[str, Any]:
 def missions_summary(limit: int = 20) -> list[dict[str, Any]]:
     """Per-mission cost + margin; flag missions below margin target."""
     db = get_db()
-    target = _margin_target_pct()
+    _margin_target_pct()
     try:
         rows = db.execute(
             """

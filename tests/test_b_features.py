@@ -1,7 +1,4 @@
 """Tests for WebSocket, Multi-tenant, and DAG modules."""
-import pytest
-import json
-import sqlite3
 
 
 # ─── Multi-tenant tests ──────────────────────────────────────────────

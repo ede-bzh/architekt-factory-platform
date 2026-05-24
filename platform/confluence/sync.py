@@ -12,7 +12,6 @@ from typing import Optional
 
 from ..db.migrations import get_db
 from ..missions.store import get_mission_run_store
-from ..sessions.store import get_session_store
 from .client import ConfluenceClient, get_confluence_client, HOMEPAGE_ID
 from . import converter
 
@@ -211,7 +210,6 @@ class ConfluenceSyncEngine:
     def _build_screenshots_section(self, mission) -> str:
         """Find screenshots in workspace and reference them."""
         from pathlib import Path
-        from ..config import FACTORY_ROOT
 
         db = get_db()
         try:
@@ -290,7 +288,7 @@ class ConfluenceSyncEngine:
             result = []
             for msg in messages:
                 m = dict(msg)
-                content = m.get("content", "")
+                m.get("content", "")
                 sender = (m.get("from_agent", "") or "").lower()
                 # Filter by tab relevance
                 if tab_keyword == "qa" and any(k in sender for k in ["qa", "test", "quality"]):

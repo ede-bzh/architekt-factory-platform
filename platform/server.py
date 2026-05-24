@@ -618,16 +618,9 @@ def create_app() -> FastAPI:
             )
         else:
             response.headers["X-Frame-Options"] = "DENY"
-            script_src = (
-                "'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net"
-            )
-            if not path.startswith("/api/"):
-                script_src = (
-                    "'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net"
-                )
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
-                f"script-src {script_src}; "
+                "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
                 "font-src 'self' https://fonts.gstatic.com; "
                 "img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com; "
@@ -640,35 +633,28 @@ def create_app() -> FastAPI:
             )
         return response
 
-    # ── Rate limiting (API mutations, DB-backed, survives restart) ─────
-    import hashlib as _rl_hashlib
+    # ── Rate limiting (API endpoints, 60 req/min per IP) ───────────────
+    import time as _rl_time
+    from collections import defaultdict as _dd
 
-    from .security.rate_limit import check_rate_limit
-
-    _RATE_LIMIT = int(os.environ.get("API_RATE_LIMIT", "120"))
+    _rate_buckets: dict[str, list[float]] = _dd(list)
+    _RATE_LIMIT = int(os.environ.get("API_RATE_LIMIT", "120"))  # per minute
     _RATE_WINDOW = 60.0
-    _RATE_METHODS = frozenset({"POST", "PUT", "PATCH", "DELETE"})
 
     @app.middleware("http")
     async def rate_limit_middleware(request, call_next):
-        if (
-            request.url.path.startswith("/api/")
-            and request.method in _RATE_METHODS
-        ):
+        if request.url.path.startswith("/api/"):
             client_ip = request.client.host if request.client else "unknown"
-            token = request.headers.get("Authorization", "")[:20]
-            client_key = (
-                f"{client_ip}:{_rl_hashlib.md5(token.encode()).hexdigest()[:8]}"
-                if token
-                else client_ip
-            )
-            if not check_rate_limit(client_key, _RATE_LIMIT, _RATE_WINDOW):
+            now = _rl_time.time()
+            bucket = _rate_buckets[client_ip]
+            bucket[:] = [t for t in bucket if now - t < _RATE_WINDOW]
+            if len(bucket) >= _RATE_LIMIT:
                 from starlette.responses import JSONResponse as _JR
 
                 return _JR(
-                    {"error": "rate_limit_exceeded", "retry_after": int(_RATE_WINDOW)},
-                    status_code=429,
+                    {"error": "rate_limit_exceeded", "retry_after": 60}, status_code=429
                 )
+            bucket.append(now)
         return await call_next(request)
 
     # ── Trace ID middleware ─────────────────────────────────────────────
@@ -765,11 +751,7 @@ def create_app() -> FastAPI:
                 "/favicon.ico",
                 "/manifest.json",
                 "/sw.js",
-                "/proof",
-                "/finops",
             )
-            or path.startswith("/proof/")
-            or path.startswith("/finops/")
         )
         if not skip and not request.cookies.get("onboarding_done"):
             from starlette.responses import RedirectResponse
@@ -777,53 +759,16 @@ def create_app() -> FastAPI:
             return RedirectResponse(url="/onboarding", status_code=302)
         return await call_next(request)
 
-    # ── Locale detection middleware ─────────────────────────────────────
-    SUPPORTED_LOCALES = {"en", "fr", "es", "it", "de", "pt", "ja", "zh"}
+    # ── Locale detection middleware (EN/FR only) ────────────────────────
+    from .i18n import get_lang as _resolve_lang, normalize_lang as _normalize_lang
 
     @app.middleware("http")
     async def locale_middleware(request, call_next):
-        """Detect and set user locale from Accept-Language header or cookie."""
-        import re as _locale_re
-
-        # Priority: 1) Cookie 2) Accept-Language header 3) Default to 'en'
-        locale = None
-
-        # Check cookie first
-        cookie_lang = request.cookies.get("sf_lang")
-        if cookie_lang and cookie_lang in SUPPORTED_LOCALES:
-            locale = cookie_lang
-
-        # Parse Accept-Language header if no cookie
-        if not locale:
-            accept_lang = request.headers.get("Accept-Language", "")
-            # Parse: "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7"
-            langs = []
-            for part in accept_lang.split(","):
-                match = _locale_re.match(
-                    r"([a-z]{2})(?:-[A-Z]{2})?(?:;q=([\d.]+))?", part.strip()
-                )
-                if match:
-                    lang_code = match.group(1)
-                    quality = float(match.group(2) or "1.0")
-                    langs.append((quality, lang_code))
-
-            # Sort by quality score (descending)
-            langs.sort(reverse=True)
-
-            # Find first supported locale
-            for _, lang_code in langs:
-                if lang_code in SUPPORTED_LOCALES:
-                    locale = lang_code
-                    break
-
-        # Fallback to English
-        if not locale:
-            locale = "en"
-
-        # Set in request state for templates
+        """Detect and set user locale from cookie or Accept-Language (en/fr)."""
+        cookie_lang = request.cookies.get("sf_lang") or request.cookies.get("lang")
+        locale = _resolve_lang(request)
         request.state.lang = locale
 
-        # Inject current user into request state for templates
         if not hasattr(request.state, "user"):
             try:
                 from .auth.middleware import get_current_user as _get_user
@@ -834,12 +779,12 @@ def create_app() -> FastAPI:
 
         response = await call_next(request)
 
-        # Set cookie if not present or different
-        if not cookie_lang or cookie_lang != locale:
+        normalized_cookie = _normalize_lang(cookie_lang) if cookie_lang else None
+        if not cookie_lang or normalized_cookie != locale:
             response.set_cookie(
                 key="sf_lang",
                 value=locale,
-                max_age=31536000,  # 1 year
+                max_age=31536000,
                 httponly=True,
                 samesite="lax",
             )

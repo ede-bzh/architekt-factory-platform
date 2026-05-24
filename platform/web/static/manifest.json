@@ -1,10 +1,16 @@
 {
-  "name": "Architekt Factory",
-  "short_name": "AF",
-  "description": "Multi-agent platform for AI-accelerated, security-conscious software delivery",
+  "name": "Architekt",
+  "short_name": "Architekt",
+  "description": "Multi-Agent Platform \u2014 Architekt",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1a2e",
   "theme_color": "#7c3aed",
-  "icons": [{"src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png"}]
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
 }

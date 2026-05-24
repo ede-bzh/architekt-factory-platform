@@ -1,5 +1,4 @@
 """Tests for the plugin SDK."""
-import pytest
 from pathlib import Path
 
 from platform.plugins import (

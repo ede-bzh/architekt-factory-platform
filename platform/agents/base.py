@@ -10,14 +10,12 @@ from __future__ import annotations
 import asyncio
 import json
 import time
-import uuid
-from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Optional
 
 from ..models import (
     AgentInstance, AgentRole, AgentStatus, A2AMessage, MessageType,
-    ToolResult, NegotiationState,
+    ToolResult,
 )
 
 
@@ -103,7 +101,7 @@ class BaseAgent:
                 continue
             except asyncio.CancelledError:
                 break
-            except Exception as e:
+            except Exception:
                 self.instance.status = AgentStatus.ERROR
                 self.instance.error_count += 1
                 # Log error but continue running

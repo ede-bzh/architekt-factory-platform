@@ -5,6 +5,7 @@ Pas de site vitrine client en phase 0.
 
 > **Alignement tiers** : P0 = Tier **S** · P1 = Tier **A** · P2 = Tier **B** · P3 = Tier **C**
 > Catalogue complet : `docs/ROADMAP.md` § Catalogue features plateforme.
+> **Wave en cours** : voir § Wave 5 — reste P1 avant Phase 3 pilot.
 
 ## Légende priorités
 
@@ -17,54 +18,81 @@ Pas de site vitrine client en phase 0.
 
 ---
 
-## Wave 2 — livré (P0 Tier S)
+## Wave 0 — livré (Phase 0 rebrand)
 
-> Branche `cursor/architekt-roadmap-wave2-7576` — merge features + delivery P0.
+> PR #2 — `cursor/architekt-roadmap-7576`.
 
-- [x] Quality gate CI : ruff + bandit sur `platform/` (`.github/workflows/ci.yml`)
-- [x] **`quality-report.pdf` POC** — export PDF mission (`platform/metrics/quality_pdf.py`, reportlab)
+- [x] Rebrand UI Architekt (`platform/branding.py`, templates Jinja)
+- [x] Provider LLM `demo` restauré
+- [x] Workflow CI initial + `pytest.ini`
+- [x] Alias `ARCHITEKT_API_KEY` / `MACARON_API_KEY` (`platform/auth/api_key.py`)
+- [x] Skills doctrine Lot 5–6 (compliance + i18n specs)
+
+---
+
+## Wave 1 — livré (P0 gates & preuve)
+
+> PR #4 — CI gates, proof, quality PDF, LLM budget pause.
+
+- [x] Quality gate CI : ruff + bandit sur `platform/`
+- [x] **`quality-report.pdf` POC** (`platform/metrics/quality_pdf.py`)
 - [x] Auto-pause budget LLM à 100 % (`platform/llm/budget.py`, ADR-011)
-- [x] Mini dashboard `/proof` — health, quality, DORA (`platform/web/templates/proof.html`)
-- [x] Auth fail-closed `ARCHITEKT_API_KEY` + alias `MACARON_API_KEY` 6 mois (`platform/auth/api_key.py`)
-- [x] Tests gate : `test_api_key_alias`, `test_llm_budget`, `test_quality_pdf`, `test_platform_api` en CI
-- [x] Run local documenté : `docs/architekt/LOCAL-DEV.md` (`PLATFORM_LLM_PROVIDER=demo make dev`)
-- [x] Skills Architekt compliance + i18n (`platform/skills/architekt/`)
+- [x] Mini dashboard `/proof` — health, quality, DORA
+- [x] Run local documenté : `docs/architekt/LOCAL-DEV.md`
 
 ---
 
+## Wave 2 — livré (skills, CI sécu, E2E smoke)
+
+> PR #5 — `cursor/architekt-roadmap-wave2-7576`.
+
+- [x] **14 skills Architekt** indexés (`platform/skills/architekt/`, `architekt_skills.py`)
+- [x] Adversarial **L0** — veto test.skip / @ts-ignore / empty catch (`check_l0`, `tests/test_adversarial_l0.py`)
+- [x] SAST + SCA + secret scan CI — bandit, pip-audit, detect-secrets (`scripts/ci/secret-scan.sh`)
+- [x] SBOM CycloneDX par build CI (`cyclonedx-py` → artifact `sbom-platform.json`)
+- [x] Tests `tests/test_platform_api.py` en gate CI
+- [x] Workflow **E2E smoke** Playwright (`.github/workflows/e2e-smoke.yml` — login + health)
+- [x] Tests gate : `test_api_key_alias`, `test_llm_budget`, `test_quality_pdf`
 
 ---
 
-## Wave 4 — livré (P1 observabilité & qualité)
+## Wave 3 — livré (rate limit, health, CLI)
 
-> Branche `cursor/architekt-roadmap-wave4-7576`.
+> PR #6 — `cursor/architekt-roadmap-wave3-7576`.
 
-- [x] Adversarial **L2** déterministe (`check_l2` — secrets, eval, CORS, SQL f-string)
+- [x] Rate limiting PG/SQLite-backed sur mutations API (`platform/security/rate_limit.py`, `tests/test_rate_limit.py`)
+- [x] Health check `/api/health` — `version` + `timestamp` (`tests/test_health_api.py`)
+- [x] FinOps `/finops` — coût LLM par mission (top 20)
+- [x] CLI **`architekt`** alias de `sf` (`cli/architekt.py`)
+
+---
+
+## Wave 4 — livré (observabilité & qualité)
+
+> PR #7 — `cursor/architekt-roadmap-wave4-7576`.
+
+- [x] Adversarial **L2 déterministe** (`check_l2` — secrets, eval, CORS, SQL f-string ; tests `test_adversarial_l2`)
 - [x] Métriques Prometheus **`architekt_*`** (alias `macaron_*` + `architekt_finops_margin_pct`)
 - [x] FinOps marge studio — `PLATFORM_FINOPS_MARGIN_TARGET_PCT` (défaut 50 %), alertes `/finops`
 - [x] API `GET /api/finops/summary` + `GET /api/missions/{id}/case-study.md`
 - [x] Journal audit IA append-only (`ai_audit_logs` + hook `trace_call`)
-- [x] Tests : `test_adversarial_l2`, `test_finops_margin`, `test_prometheus_architekt`, `test_ai_audit_logs`, `test_case_study`
-
-## Wave 3 — livré (P1 Tier A)
-
-> Branche `cursor/architekt-roadmap-wave3-7576` — FinOps mission costs + health probe.
-
-- [x] FinOps `/finops` — per-mission cost table (GROUP BY `mission_id`, top 20 from `llm_traces`)
-- [x] Health check `/api/health` — `version` + `timestamp` fields (`platform/web/routes/api/health.py`)
-- [x] Tests health API : `tests/test_health_api.py` (200, status ok, version/timestamp)
-- [x] Health section : `docs/architekt/LOCAL-DEV.md` § Health check
+- [x] Tests : `test_finops_margin`, `test_prometheus_architekt`, `test_ai_audit_logs`, `test_case_study`
 
 ---
 
-## Wave 2 — en cours
+## Wave 5 — livré (audit & durcissement)
 
-- [ ] CI verte 100 % sur `main` (gate merge)
-- [ ] SAST + SCA + secret scan en CI (Safety, TruffleHog — Bandit déjà actif)
-- [ ] SBOM CycloneDX par release (Syft)
-- [ ] Adversarial L0 — veto test.skip / @ts-ignore / empty catch
-- [ ] Faire passer **tous** les tests `tests/test_platform_api.py` (auth fixture, DB temp)
-- [ ] Rate limiting PG-backed sur mutations
+> Reste P1 avant pilot Phase 3 — voir aussi `docs/ROADMAP.md` § Phases 0–2.
+
+- [ ] **CI verte 100 %** sur `main` (gate merge — confirmer dernier run vert post-PR #7)
+- [ ] **`run_guard` → L2** : appeler `check_l2` dans le pipeline (fonction livrée wave 4, câblage `run_guard` incomplet)
+- [ ] **HITL gates** deploy + décisions IA sensibles (workflow + UI)
+- [ ] **`MAX_ARCHITEKT_SKILLS`** — relever le plafond d'injection (4 → 14 skills selon rôle)
+- [ ] **i18n EN/FR/ZH** baseline plateforme (catalogue + routes, pas seulement skills)
+- [ ] **4 DPA templates** par région (SG, UAE, EU, US)
+- [ ] **Dashboard `dashboard/`** rebrand Architekt + health unifié avec `/api/health`
+- [ ] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4)
+- [ ] **Mutation testing** seuil 50 % sur modules critiques (job CI mutmut optionnel seulement)
 
 ---
 
@@ -77,23 +105,23 @@ Pas de site vitrine client en phase 0.
 - [x] Provider LLM `demo` restauré (`_demo_response`)
 - [x] `pytest.ini` + workflow `ci.yml`
 - [x] `python-dotenv` dans `platform/requirements.txt`
-- [ ] Faire passer **tous** les tests `tests/test_platform_api.py` (auth fixture, DB temp)
+- [x] Tests `tests/test_platform_api.py` en CI
 - [x] Documenter run local : `PLATFORM_LLM_PROVIDER=demo make dev` → `docs/architekt/LOCAL-DEV.md`
 
 ### CI & quality gates (Phase 2)
 
-- [ ] CI verte 100 % sur `main` (gate merge)
+- [ ] CI verte 100 % sur `main` (gate merge) → **Wave 5**
 - [x] Quality gate CI : ruff + bandit sur `platform/`
-- [ ] SAST + SCA + secret scan en CI (Bandit, Safety, TruffleHog)
-- [ ] SBOM CycloneDX par release (Syft)
-- [ ] Adversarial L0 — veto test.skip / @ts-ignore / empty catch
+- [x] SAST + SCA + secret scan en CI (bandit, pip-audit, detect-secrets)
+- [x] SBOM CycloneDX par release CI (cyclonedx-py)
+- [x] Adversarial L0 — veto test.skip / @ts-ignore / empty catch
 - [x] **`quality-report.pdf` POC** — export PDF mission (DORA, tests, SBOM)
 - [x] Auto-pause budget LLM à 100 % (ADR-011)
 
 ### Auth & sécurité baseline
 
 - [x] Auth fail-closed (`ARCHITEKT_API_KEY`) — alias `MACARON_API_KEY` 6 mois
-- [ ] Rate limiting PG-backed sur mutations
+- [x] Rate limiting PG-backed sur mutations
 
 ---
 
@@ -102,31 +130,32 @@ Pas de site vitrine client en phase 0.
 ### Rebrand niveau 2 (ADR-001)
 
 - [x] `MACARON_API_KEY` → `ARCHITEKT_API_KEY` (alias 6 mois)
-- [ ] CLI `sf` → `architekt` (alias `sf`)
+- [x] CLI `sf` → `architekt` (alias `sf`)
 - [ ] README multilingues + wiki embarqué
-- [ ] Métriques Prometheus : préfixe `architekt_*` (garder `macaron_*` en alias)
+- [x] Métriques Prometheus : préfixe `architekt_*` (garder `macaron_*` en alias)
 
 ### Skills & agents Architekt
 
-- [ ] Skills specs Architekt dans `skills/` (14 skills — injections agents)
-- [ ] Adversarial L1 (LLM semantic) + L2 (architecture)
-- [ ] HITL gates deploy + décisions IA sensibles
-- [ ] AI audit logs append-only
+- [x] Skills specs Architekt dans `platform/skills/architekt/` (14 skills — injections agents)
+- [ ] Adversarial L1 (LLM semantic) en production stable
+- [ ] Adversarial L2 LLM (architecture) + câblage `run_guard` → **Wave 5**
+- [ ] HITL gates deploy + décisions IA sensibles → **Wave 5**
+- [x] AI audit logs append-only
 
 ### Qualité & preuve client
 
-- [ ] Mutation testing (ADR-003) — mutmut sur modules critiques (seuil 50 %)
-- [ ] E2E Playwright smoke en CI (login + health — pas les 82 specs)
+- [ ] Mutation testing (ADR-003) — mutmut sur modules critiques (seuil 50 %) → **Wave 5**
+- [x] E2E Playwright smoke en CI (login + health — pas les 82 specs)
 - [x] Mini dashboard `/proof` (DORA, Lighthouse, a11y, SBOM)
-- [ ] Case study generator (template + métriques mission)
+- [x] Case study generator (template + métriques mission)
 - [x] FinOps dashboard POC `/finops` — coût LLM par mission (top 20)
-- [ ] FinOps dashboard — marge > 50 %
+- [x] FinOps dashboard — marge > 50 % (alertes + `architekt_finops_margin_pct`)
 
 ### Global delivery
 
-- [ ] i18n EN/FR/ZH baseline plateforme
-- [ ] 4 DPA templates par région (SG, UAE, EU, US)
-- [ ] Dashboard `dashboard/` rebrand + health unifié
+- [ ] i18n EN/FR/ZH baseline plateforme → **Wave 5**
+- [ ] 4 DPA templates par région (SG, UAE, EU, US) → **Wave 5**
+- [ ] Dashboard `dashboard/` rebrand + health unifié → **Wave 5**
 
 ---
 

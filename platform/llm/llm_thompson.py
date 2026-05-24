@@ -15,9 +15,7 @@ Table: llm_provider_scores (provider, accepted, rejected, total_calls, avg_quali
 from __future__ import annotations
 
 import logging
-import math
 import random
-import time
 
 log = logging.getLogger(__name__)
 

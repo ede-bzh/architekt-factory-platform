@@ -8,8 +8,8 @@ import os
 from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from ..auth.api_key import get_platform_api_key
-
+from ..branding import get_api_key
+from .rate_limit import RateLimitMiddleware
 from .sanitize import sanitize_user_input, sanitize_agent_output, sanitize_command
 from .prompt_guard import PromptInjectionGuard, get_prompt_guard
 
@@ -19,7 +19,8 @@ logger = logging.getLogger(__name__)
 class AuthMiddleware(BaseHTTPMiddleware):
     """API key authentication for sensitive endpoints.
 
-    Set ARCHITEKT_API_KEY (or legacy MACARON_API_KEY) to enable. If not set, auth is disabled (dev mode).
+    Set ARCHITEKT_API_KEY (or legacy MACARON_API_KEY) to enable.
+    If not set, auth is disabled (dev mode).
     Only protects API mutation endpoints and sensitive data — pages, static,
     health, docs, and SSE are always public.
     """
@@ -35,10 +36,12 @@ class AuthMiddleware(BaseHTTPMiddleware):
     )
 
     async def dispatch(self, request: Request, call_next):
-        api_key = get_platform_api_key()
+        api_key = get_api_key()
         if not api_key:
             if os.getenv("ENVIRONMENT", "dev") != "dev":
-                logger.warning("AUTH DISABLED — set ARCHITEKT_API_KEY (or MACARON_API_KEY) for production")
+                logger.warning(
+                    "AUTH DISABLED — set ARCHITEKT_API_KEY for production"
+                )
             return await call_next(request)
 
         path = request.url.path
@@ -49,7 +52,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if not path.startswith("/api/"):
             return await call_next(request)
 
-        # Skip API key check if JWT auth already authenticated user
         if hasattr(request.state, "user") and request.state.user is not None:
             request.state.authenticated = True
             return await call_next(request)
@@ -76,4 +78,5 @@ __all__ = [
     "PromptInjectionGuard",
     "get_prompt_guard",
     "AuthMiddleware",
+    "RateLimitMiddleware",
 ]

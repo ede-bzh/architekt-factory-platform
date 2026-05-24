@@ -5,11 +5,7 @@ checking status, and requesting human validation.
 """
 from __future__ import annotations
 
-import asyncio
-import json
 import logging
-from datetime import datetime
-from typing import Optional
 
 from ..models import AgentInstance
 from .registry import BaseTool

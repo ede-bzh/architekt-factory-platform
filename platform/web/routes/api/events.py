@@ -5,7 +5,6 @@ from __future__ import annotations
 import logging
 
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

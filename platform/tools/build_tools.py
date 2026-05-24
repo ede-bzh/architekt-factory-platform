@@ -9,7 +9,7 @@ from __future__ import annotations
 import subprocess
 from ..models import AgentInstance
 from .registry import BaseTool
-from .sandbox import get_sandbox, SANDBOX_ENABLED
+from .sandbox import get_sandbox
 
 
 class BuildTool(BaseTool):

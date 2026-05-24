@@ -14,7 +14,6 @@ import logging
 import os
 import random
 import sqlite3
-import subprocess
 import time
 import uuid
 from dataclasses import dataclass

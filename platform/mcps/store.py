@@ -287,7 +287,7 @@ BUILTIN_MCPS = [
     MCPServer(
         id="mcp-solaris",
         name="Solaris Design System",
-        description="Design System La Poste (Solaris) — Figma components, variants, WCAG patterns, design tokens, validation reports.",
+        description="Solaris Design System — Figma components, variants, WCAG patterns, design tokens, validation reports.",
         command="python3",
         args=["-m", "macaron_platform.mcp_solaris"],
         tools=[

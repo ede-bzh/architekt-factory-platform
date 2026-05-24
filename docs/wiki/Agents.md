@@ -1,6 +1,6 @@
-# Agents (156)
+# Agents (160+)
 
-The Software Factory orchestrates 156 specialized AI agents across 9 domains. Each agent is defined via YAML in `skills/definitions/`.
+Architekt Factory Platform orchestrates **160+** specialized AI agents across multiple domains. Core definitions live in `platform/skills/definitions/*.yaml` and are seeded into the `agents` table at startup.
 
 ## Domains
 

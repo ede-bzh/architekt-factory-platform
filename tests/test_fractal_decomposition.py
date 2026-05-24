@@ -11,7 +11,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.fractal import FractalDecomposer
-from core.project_registry import get_project
 
 
 def test_fractal_decomposition():

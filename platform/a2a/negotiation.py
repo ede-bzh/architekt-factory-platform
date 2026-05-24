@@ -6,9 +6,7 @@ Supports proposal → counter-proposal → vote → accept/reject cycle.
 
 from __future__ import annotations
 
-import asyncio
 import logging
-from datetime import datetime
 from typing import Any, Optional
 
 from ..models import (

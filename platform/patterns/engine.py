@@ -1087,7 +1087,6 @@ This is BLOCKING: developers cannot start without your design tokens."""
                 # Track rejection in agent scores + update quality_score
                 try:
                     from ..db.migrations import get_db
-                    import time as _time
 
                     db = get_db()
                     db.execute(

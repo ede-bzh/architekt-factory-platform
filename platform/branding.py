@@ -1,15 +1,15 @@
-"""Architekt product branding — single source for visible names (ADR-001 niveau 1)."""
+"""Product branding and environment helpers for Architekt platform."""
+from __future__ import annotations
+
+import os
 
 PRODUCT_NAME = "Architekt"
-PRODUCT_FULL_NAME = "Architekt Factory"
-PRODUCT_TAGLINE = (
-    "Multi-agent platform for AI-accelerated, security-conscious software delivery"
-)
-COMPANY_NAME = "Architekt Pte. Ltd."
+PRODUCT_SHORT = "Architekt"
+PRODUCT_FULL_NAME = "Architekt Factory Platform"
+THEME_STORAGE_KEY = "architekt_theme"
+LEGACY_THEME_STORAGE_KEY = "macaron_theme"
 
-GIT_AGENT_NAME = "Architekt Agents"
-GIT_AGENT_EMAIL = "agents@architekt.ai"
-HTTP_USER_AGENT = "Architekt-Platform/2.1"
 
-# Legacy names kept for migration / search-replace tracking (niveau 2–3 later).
-LEGACY_NAMES = ("Software Factory", "Macaron Software Factory", "Macaron")
+def get_api_key() -> str:
+    """Platform API key: ARCHITEKT_API_KEY with MACARON_API_KEY fallback."""
+    return os.getenv("ARCHITEKT_API_KEY") or os.getenv("MACARON_API_KEY") or ""

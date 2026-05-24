@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Wrapper to run backup.py without 'platform' package import conflict."""
-import os, sys
+import os
+import sys
 from pathlib import Path
 
 # Resolve paths

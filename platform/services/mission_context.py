@@ -189,7 +189,7 @@ class MissionContextBuilder:
         global_graph = (wf.config or {}).get("graph", {})
         all_nodes = global_graph.get("nodes", [])
         all_edges = global_graph.get("edges", [])
-        nid_to_agent = {n["id"]: n.get("agent_id", "") for n in all_nodes}
+        {n["id"]: n.get("agent_id", "") for n in all_nodes}
         agent_defs = {a.id: a for a in agents}
 
         for wp in wf.phases:
@@ -372,7 +372,7 @@ class MissionContextBuilder:
                 _c = (m.content or "").strip()
                 if not _c or _c.startswith(("<FunctionCall", "<tool_code", "[TOOL_CALL]{")):
                     continue
-                ag = agent_map.get(m.from_agent)
+                agent_map.get(m.from_agent)
                 meta = {}
                 if hasattr(m, "metadata") and m.metadata:
                     meta = m.metadata if isinstance(m.metadata, dict) else {}

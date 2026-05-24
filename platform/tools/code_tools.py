@@ -92,7 +92,8 @@ class CodeEditTool(BaseTool):
             if old not in content:
                 # Fuzzy fallback: normalize whitespace (trailing spaces, CRLF, indent drift)
                 import re as _re
-                _norm = lambda s: _re.sub(r'[ \t]+\n', '\n', s.replace('\r\n', '\n'))
+                def _norm(s):
+                    return _re.sub(r'[ \t]+\n', '\n', s.replace('\r\n', '\n'))
                 old_n, content_n = _norm(old), _norm(content)
                 if old_n in content_n:
                     # Apply on normalized content

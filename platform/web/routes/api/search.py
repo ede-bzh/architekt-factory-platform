@@ -450,10 +450,9 @@ async def epic_features(epic_id: str):
 @router.get("/api/set-lang/{lang}")
 async def set_language(lang: str, request: Request):
     """Switch UI language. Sets cookie and redirects back."""
-    from ....i18n import SUPPORTED_LANGS
+    from ....i18n import normalize_lang
 
-    if lang not in SUPPORTED_LANGS:
-        lang = "en"
+    lang = normalize_lang(lang)
     referer = request.headers.get("referer", "/")
     response = RedirectResponse(url=referer, status_code=303)
     response.set_cookie(
@@ -540,7 +539,7 @@ async def notification_test():
     payload = NotificationPayload(
         event="test",
         title="Test Notification",
-        message=f"This is a test notification from {PRODUCT_FULL_NAME}.",
+        message="This is a test notification from Software Factory.",
         severity="info",
     )
     await svc.notify(payload)

@@ -157,7 +157,7 @@ class TestRLPolicy:
 
     def test_record_experience_increments(self):
         policy = self._make_policy()
-        before_stats = policy.stats()
+        policy.stats()
         policy.record_experience(
             mission_id="m1",
             state_dict=self._state(),

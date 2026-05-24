@@ -7,10 +7,9 @@ Defines the structured communication protocol between agents.
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import Optional
 
 from ..models import (
-    A2AMessage, MessageType, AgentRole, AgentCommunication,
+    A2AMessage, MessageType, AgentRole,
 )
 
 

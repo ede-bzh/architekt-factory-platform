@@ -16,10 +16,17 @@ import re
 import time
 from dataclasses import dataclass
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from ..models import A2AMessage, AgentInstance, AgentStatus, MessageType
 
 logger = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    from ..a2a.bus import MessageBus
+    from .executor import AgentExecutor, ExecutionContext
+    from .store import AgentDef
+
 
 # ---------------------------------------------------------------------------
 # Action dataclass

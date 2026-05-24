@@ -13,15 +13,14 @@ from __future__ import annotations
 import logging
 import os
 import sys
-from typing import Optional
 
 import httpx
 
 log = logging.getLogger(__name__)
 
-GITLAB_URL = os.getenv("GITLAB_LAPOSTE_URL", "https://gitlab.azure.innovation-laposte.io")
-GITLAB_TOKEN = os.getenv("GITLAB_LAPOSTE_TOKEN", "")
-GITLAB_PROJECT = os.getenv("GITLAB_LAPOSTE_PROJECT", "udd-ia-native/software-factory")
+GITLAB_URL = os.getenv("GITLAB_WIKI_URL", "https://gitlab.com")
+GITLAB_TOKEN = os.getenv("GITLAB_WIKI_TOKEN", "")
+GITLAB_PROJECT = os.getenv("GITLAB_WIKI_PROJECT", "ede-bzh/architekt-factory-platform")
 
 # URL-encode the project path for API calls
 GITLAB_PROJECT_ID = GITLAB_PROJECT.replace("/", "%2F")
@@ -61,9 +60,9 @@ def build_home_page(pages: list[dict]) -> str:
         by_cat[cat].append(p)
 
     lines = [
-        "# Plateforme Agents — Documentation",
+        "# Architekt Factory Platform — Documentation",
         "",
-        "> Documentation de la **Plateforme Agents La Poste** — architecture multi-agents pour l'ingénierie logicielle.",
+        "> Documentation **Architekt Factory Platform** — architecture multi-agents pour l'ingénierie logicielle.",
         "",
         "## Table des matières",
         "",
@@ -80,7 +79,7 @@ def build_home_page(pages: list[dict]) -> str:
     lines += [
         "---",
         "",
-        "*Synchronisé automatiquement depuis la [Software Factory](https://sf.macaron-software.com)*",
+        "*Synchronisé automatiquement depuis [Architekt Factory Platform](https://github.com/ede-bzh/architekt-factory-platform)*",
     ]
     return "\n".join(lines)
 
@@ -145,7 +144,7 @@ if __name__ == "__main__":
     force = "--force" in sys.argv
 
     if not GITLAB_TOKEN:
-        print("ERROR: GITLAB_LAPOSTE_TOKEN not set")
+        print("ERROR: GITLAB_WIKI_TOKEN not set")
         sys.exit(1)
 
     print(f"Syncing SF wiki → {GITLAB_URL}/{GITLAB_PROJECT} wiki {'(DRY RUN)' if dry else ''}")

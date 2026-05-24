@@ -6,6 +6,7 @@ PAT auth, CRUD pages, attachment upload.
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 from typing import Optional
 
@@ -15,8 +16,8 @@ log = logging.getLogger(__name__)
 
 _PAT_PATH = Path.home() / ".config" / "factory" / "confluence.key"
 
-# Confluence Server base
-CONFLUENCE_BASE = "https://wiki.net.extra.laposte.fr/confluence"
+# Confluence Server base (set CONFLUENCE_BASE_URL when integrating)
+CONFLUENCE_BASE = os.getenv("CONFLUENCE_BASE_URL", "")
 SPACE_KEY = "IAN"
 HOMEPAGE_ID = "1330822346"  # Accueil IA NATIVE
 

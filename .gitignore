@@ -47,3 +47,6 @@ platform/tests/e2e/playwright-report/
 platform/tests/e2e/test-results/
 Thumbs.db
 platform/VERSION
+workspace/
+platform/src/
+src/

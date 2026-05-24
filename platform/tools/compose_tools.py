@@ -8,8 +8,6 @@ from __future__ import annotations
 import json
 import logging
 import uuid
-from datetime import datetime
-from typing import Optional
 
 from ..models import AgentInstance
 from .registry import BaseTool

@@ -48,3 +48,16 @@ include = ["core*", "mcp_lrm*", "cli*", "analyzers*"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["F", "E4", "E7", "E9"]
+ignore = ["E402", "E741", "F401"]
+
+[tool.ruff.lint.per-file-ignores]
+"platform/patterns/engine.py" = ["E402", "F401"]
+"tests/test_deterministic_tools.py" = ["E402"]
+

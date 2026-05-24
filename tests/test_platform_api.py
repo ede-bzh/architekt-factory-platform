@@ -149,13 +149,18 @@ class TestPagesLoad:
 # ─── i18n ───────────────────────────────────────────────────────
 
 class TestI18n:
-    @pytest.mark.parametrize("lang", ["en", "fr", "zh", "es", "ja", "pt", "de", "ko"])
+    @pytest.mark.parametrize("lang", ["en", "fr"])
     def test_locale_json(self, client, lang):
         r = client.get(f"/api/i18n/{lang}.json")
         assert r.status_code == 200
         data = r.json()
         assert isinstance(data, dict)
         assert len(data) > 30, f"{lang}: only {len(data)} keys"
+
+    def test_unsupported_locale_falls_back_to_en(self, client):
+        en = client.get("/api/i18n/en.json").json()
+        zh = client.get("/api/i18n/zh.json").json()
+        assert zh == en
 
 
 # ─── Integrations ──────────────────────────────────────────────
@@ -246,13 +251,3 @@ class TestMemory:
     def test_memory_search(self, client):
         r = client.get("/api/memory/search", params={"q": "architecture"})
         assert r.status_code == 200
-
-
-# ─── FinOps POC ─────────────────────────────────────────────────
-
-class TestFinOps:
-    def test_finops_page(self, client):
-        r = client.get("/finops")
-        assert r.status_code == 200
-        assert "text/html" in r.headers["content-type"]
-        assert "FinOps" in r.text

@@ -18,18 +18,15 @@ Usage in routes:
 """
 
 import hashlib
-import os
 
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
+from .api_key import get_platform_api_key
 from .service import User, get_project_role, user_count, verify_access_token
 
 # Role hierarchy (higher index = more privileges)
 ROLE_HIERARCHY = {"viewer": 0, "developer": 1, "project_manager": 2, "admin": 3}
-
-# Legacy API key support
-_API_KEY = os.environ.get("MACARON_API_KEY", "")
 
 
 def _extract_token(request: Request) -> str | None:
@@ -49,7 +46,8 @@ def _extract_token(request: Request) -> str | None:
 
 def _check_api_key(request: Request) -> bool:
     """Check legacy API key auth (backward compatible)."""
-    if not _API_KEY:
+    api_key = get_platform_api_key()
+    if not api_key:
         return False
     auth = request.headers.get("authorization", "")
     token = (
@@ -61,7 +59,7 @@ def _check_api_key(request: Request) -> bool:
         return False
     return (
         hashlib.sha256(token.encode()).hexdigest()
-        == hashlib.sha256(_API_KEY.encode()).hexdigest()
+        == hashlib.sha256(api_key.encode()).hexdigest()
     )
 
 
@@ -209,8 +207,6 @@ PUBLIC_PATHS = {
     "/js-error",
     "/api/analytics",
     "/api/teams",
-    "/proof",
-    "/finops",
 }
 
 

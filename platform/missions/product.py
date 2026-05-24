@@ -1,10 +1,9 @@
 """Product Backlog — Epic → Feature → User Story hierarchy."""
 from __future__ import annotations
 
-import json
 import logging
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 
 from ..db.migrations import get_db

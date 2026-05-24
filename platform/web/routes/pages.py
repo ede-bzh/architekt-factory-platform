@@ -1328,7 +1328,7 @@ async def product_line_page(request: Request):
         milestones = []
         if proj_missions:
             completed = sum(1 for e in epics_data if e["status"] == "completed")
-            running = sum(1 for e in epics_data if e["status"] == "running")
+            sum(1 for e in epics_data if e["status"] == "running")
             total_ep = len(epics_data)
 
             milestones.append(
@@ -1572,7 +1572,7 @@ async def product_page(request: Request):
 
 
 @router.get("/ops", response_class=HTMLResponse)
-async def ops_page(request: Request):
+async def ops_dashboard_page(request: Request):
     """Ops observability dashboard — system health, logs, TMA, RL/GA status."""
     from ...db.migrations import get_db
 

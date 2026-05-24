@@ -1,14 +1,7 @@
 <p align="center">
   <a href="README.md">English</a> |
-  <a href="README.fr.md">Français</a> |
-  <a href="README.zh-CN.md">中文</a> |
-  <a href="README.es.md">Español</a> |
-  <a href="README.ja.md">日本語</a> |
-  <a href="README.pt.md">Português</a> |
-  <a href="README.de.md">Deutsch</a> |
-  <a href="README.ko.md">한국어</a>
+  <a href="README.fr.md">Français</a>
 </p>
-
 <div align="center">
 
 # Architekt Factory Platform
@@ -19,7 +12,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-*Démo legacy (pré-rebrand) :* [sf.macaron-software.com](https://sf.macaron-software.com) — peut être indisponible ; préférez le **mode Demo local** dans [Démarrage rapide](#démarrage-rapide)
+Lancez en local avec **`PLATFORM_LLM_PROVIDER=demo`** (sans clé API) — voir [Démarrage rapide](#démarrage-rapide)
 
 [Fonctionnalités](#fonctionnalités) · [Démarrage rapide](#démarrage-rapide) · [Captures d'écran](#captures-décran) · [Architecture](#architecture) · [Contribuer](#contribuer)
 
@@ -33,11 +26,11 @@
 
 > **Architekt ne vend pas du code. Architekt vend une livraison digitale globalement prête, accélérée par l'IA et consciente de la sécurité** — combinant la vitesse de l'IA, la rigueur du senior engineering, la preuve via rapports qualité automatisés, et une readiness globale dès le jour 1.
 
-Cette plateforme (anciennement *Software Factory*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 161 agents collaborent sous supervision humaine.
+Cette plateforme (anciennement *Software Factory*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 160+ agents collaborent sous supervision humaine.
 
 ### Points clés
 
-- **161 agents spécialisés** — architectes, développeurs, testeurs, SRE, analystes sécurité, product owners
+- **160+ agents spécialisés** — architectes, développeurs, testeurs, SRE, analystes sécurité, product owners
 - **10 patterns d'orchestration** — solo, séquentiel, parallèle, hiérarchique, réseau, boucle, routeur, agrégateur, vague, human-in-the-loop
 - **Cycle de vie SAFe** — Portfolio → Epic → Feature → Story avec cadence PI
 - **Résilience LLM** — fallback multi-provider, retry avec jitter, gestion rate-limit, config modèle par env
@@ -424,7 +417,7 @@ ln -s $(pwd)/cli/sf.py ~/.local/bin/sf
 sf status                              # Santé plateforme
 sf projects list                       # Tous les projets
 sf missions list                       # Missions avec scores WSJF
-sf agents list                         # 161 agents
+sf agents list                         # 160+ agents
 sf features list <epic_id>             # Features d'un epic
 sf stories list --feature <id>         # User stories
 
@@ -490,7 +483,7 @@ python3 -m platform.mcp_platform.server
           ┌────────────┴┐   ┌────┴─────┐   ┌──┴───────────┐
           │ Moteur       │   │ Moteur   │   │   Couche     │
           │  Agents      │   │ Workflow │   │   Missions   │
-          │ 161 agents   │   │ 39 defs  │   │ Cycle SAFe   │
+          │ 160+ agents   │   │ 39 defs  │   │ Cycle SAFe   │
           │ executeur    │   │ 10 ptrns │   │ Portfolio    │
           │ boucle+retry │   │ phases   │   │ Epic/Feature │
           └──────┬───────┘   │ retry    │   │ Story/Sprint │
@@ -1018,6 +1011,6 @@ Ce projet est sous licence AGPL v3 - voir le fichier [LICENSE](LICENSE) pour dé
 
 ## Support
 
-- Démo legacy (pré-rebrand) : https://sf.macaron-software.com
+- Démo legacy (pré-rebrand) : https://architekt (demo)
 - Issues : https://github.com/ede-bzh/architekt-factory-platform/issues
 - Discussions : https://github.com/ede-bzh/architekt-factory-platform/discussions

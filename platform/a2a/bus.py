@@ -10,10 +10,9 @@ import asyncio
 import json
 import logging
 import sqlite3
-from datetime import datetime
-from typing import Any, Callable, Optional
+from typing import Callable
 
-from ..models import A2AMessage, MessageType
+from ..models import A2AMessage
 
 logger = logging.getLogger(__name__)
 

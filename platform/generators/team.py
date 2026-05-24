@@ -11,7 +11,6 @@ import yaml
 
 from ..agents.store import get_agent_store, AgentDef
 from ..llm.client import get_llm_client, LLMMessage
-from ..patterns.store import PatternDef
 from ..sessions.store import get_session_store, SessionDef, MessageDef
 from ..workflows.store import get_workflow_store, WorkflowDef, WorkflowPhase
 

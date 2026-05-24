@@ -36,27 +36,34 @@ def import_time():
 @router.get("/api/health", responses={200: {"model": HealthResponse}})
 async def health_check():
     """Liveness/readiness probe for Docker healthcheck."""
+    import os
+    from datetime import datetime, timezone
+
     from ....db.migrations import get_db
 
+    version = os.getenv("PLATFORM_VERSION", "2.2.0")
+    timestamp = (
+        datetime.now(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
     try:
         db = get_db()
         db.execute("SELECT 1")
-        version = "architekt-platform"
-        try:
-            from .... import __version__ as _v
-
-            version = str(_v)
-        except Exception:
-            pass
         return JSONResponse(
-            {
-                "status": "ok",
-                "version": version,
-                "timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-            }
+            {"status": "ok", "version": version, "timestamp": timestamp}
         )
     except Exception as e:
-        return JSONResponse({"status": "error", "detail": str(e)}, status_code=503)
+        return JSONResponse(
+            {
+                "status": "error",
+                "version": version,
+                "timestamp": timestamp,
+                "detail": str(e),
+            },
+            status_code=503,
+        )
 
 
 @router.get("/api/metrics/load")

@@ -6,9 +6,7 @@ Uses SQLite FTS5 for semantic search over memory entries.
 
 from __future__ import annotations
 
-import json
 import sqlite3
-from datetime import datetime
 from typing import Optional
 
 from ..models import A2AMessage

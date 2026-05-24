@@ -27,7 +27,7 @@
 │  │                                                              │
 │  │  ┌──────────────┐  ┌───────────────┐  ┌────────────────┐   │
 │  │  │  Missions    │  │  Workflows    │  │  Memory        │   │
-│  │  │  (SAFe)      │  │  (36 builtin) │  │  (4-layer)     │   │
+│  │  │  (SAFe)      │  │  (41 builtin) │  │  (4-layer)     │   │
 │  │  └──────────────┘  └───────────────┘  └────────────────┘   │
 │  └──────────────────────────────────────────────────────────────│
 │                                                                 │
@@ -53,7 +53,7 @@
 
 ## Agent Architecture
 
-156 agents organized in 9 domains:
+160+ agents organized in multiple domains:
 
 | Domain | Count | Key Agents |
 |--------|-------|------------|

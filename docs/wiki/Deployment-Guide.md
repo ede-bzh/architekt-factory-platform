@@ -74,8 +74,8 @@ python3 -m pytest tests/ -v
 ## Docker Quick Start
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
-cd software-factory
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
+cd architekt-factory-platform
 make setup    # install deps, init DB
 make run      # start Docker containers
 # → http://localhost:8090

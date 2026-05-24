@@ -234,7 +234,7 @@ class NotificationService:
             logger.warning("pywebpush not installed — browser push skipped")
             return
 
-        icon = {"info": "ℹ️", "warning": "⚠️", "critical": "🚨"}.get(payload.severity, "📋")
+        {"info": "ℹ️", "warning": "⚠️", "critical": "🚨"}.get(payload.severity, "📋")
         data = json.dumps({
             "title": payload.title,
             "body": payload.message,

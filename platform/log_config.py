@@ -6,7 +6,6 @@ import logging
 import os
 import re
 import time
-import uuid
 from contextvars import ContextVar
 
 # Context vars for request tracing

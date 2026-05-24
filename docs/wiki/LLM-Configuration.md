@@ -2,7 +2,7 @@
 
 ## Multi-Model Routing (v2.2.0+)
 
-Software Factory automatically routes agents to the **right model** based on their role:
+Architekt Factory Platform automatically routes agents to the **right model** based on their role:
 
 | Category | Heavy Model | Light Model | Agent Tags |
 |----------|-------------|-------------|------------|
