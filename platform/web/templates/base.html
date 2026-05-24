@@ -142,12 +142,6 @@
                     <select id="langSelect" title="{{ _("tt_language") }}" style="background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border);border-radius:6px;padding:2px 4px;font-size:0.7rem;width:100%;cursor:pointer;text-align:center">
                         <option value="en" {% if request.state.lang|default('en') == 'en' %}selected{% endif %}>{{ _("en") }}</option>
                         <option value="fr" {% if request.state.lang|default('en') == 'fr' %}selected{% endif %}>{{ _("fr") }}</option>
-                        <option value="zh" {% if request.state.lang|default('en') == 'zh' %}selected{% endif %}>中文</option>
-                        <option value="es" {% if request.state.lang|default('en') == 'es' %}selected{% endif %}>{{ _("es") }}</option>
-                        <option value="ja" {% if request.state.lang|default('en') == 'ja' %}selected{% endif %}>日本</option>
-                        <option value="pt" {% if request.state.lang|default('en') == 'pt' %}selected{% endif %}>{{ _("pt") }}</option>
-                        <option value="de" {% if request.state.lang|default('en') == 'de' %}selected{% endif %}>{{ _("de") }}</option>
-                        <option value="ko" {% if request.state.lang|default('en') == 'ko' %}selected{% endif %}>한국</option>
                     </select>
                 </div>
                 <!-- Theme toggle -->

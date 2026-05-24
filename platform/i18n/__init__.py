@@ -1,4 +1,4 @@
-"""i18n — Lightweight internationalization for the Macaron platform.
+"""i18n — Platform UI internationalization (English and French only).
 
 Usage in Jinja2 templates:  {{ _('key') }}  or  {{ _('key', name='World') }}
 Usage in Python:            from platform.i18n import t; t('key', lang='en')
@@ -14,14 +14,21 @@ log = logging.getLogger(__name__)
 
 LOCALES_DIR = Path(__file__).parent / "locales"
 DEFAULT_LANG = "en"
-SUPPORTED_LANGS = ("en", "fr", "zh", "es", "ja", "pt", "de", "ko")
+SUPPORTED_LANGS = ("en", "fr")
 
-# In-memory catalog: {"en": {"key": "value"}, "fr": {"key": "valeur"}}
 _catalog: dict[str, dict[str, str]] = {}
 
 
+def normalize_lang(code: str | None) -> str:
+    """Map a locale code to en/fr; unsupported codes fall back to English."""
+    if not code:
+        return DEFAULT_LANG
+    base = code.strip().lower().split("-")[0].split("_")[0]
+    return base if base in SUPPORTED_LANGS else DEFAULT_LANG
+
+
 def _load_catalog() -> None:
-    """Load all locale JSON files into memory."""
+    """Load EN/FR locale JSON files into memory."""
     global _catalog
     _catalog = {}
     for lang in SUPPORTED_LANGS:
@@ -39,6 +46,7 @@ def t(key: str, lang: str = DEFAULT_LANG, **kwargs: Any) -> str:
     """Translate a key. Falls back to English, then to the key itself."""
     if not _catalog:
         _load_catalog()
+    lang = normalize_lang(lang)
     text = _catalog.get(lang, {}).get(key)
     if text is None and lang != DEFAULT_LANG:
         text = _catalog.get(DEFAULT_LANG, {}).get(key)
@@ -53,17 +61,19 @@ def t(key: str, lang: str = DEFAULT_LANG, **kwargs: Any) -> str:
 
 
 def get_lang(request) -> str:
-    """Detect language from request: cookie > Accept-Language > default."""
-    # 1. Cookie
-    cookie_lang = request.cookies.get("lang")
-    if cookie_lang in SUPPORTED_LANGS:
-        return cookie_lang
-    # 2. Accept-Language header
+    """Detect language: sf_lang/lang cookie > Accept-Language > default en."""
+    for key in ("sf_lang", "lang"):
+        cookie_lang = request.cookies.get(key)
+        if cookie_lang:
+            base = cookie_lang.strip().lower().split("-")[0].split("_")[0]
+            if base in SUPPORTED_LANGS:
+                return base
     accept = request.headers.get("accept-language", "")
     for part in accept.split(","):
-        code = part.strip().split(";")[0].strip()[:2].lower()
-        if code in SUPPORTED_LANGS:
-            return code
+        code = part.strip().split(";")[0].strip()
+        base = code.lower().split("-")[0].split("_")[0]
+        if base in SUPPORTED_LANGS:
+            return base
     return DEFAULT_LANG
 
 
@@ -72,5 +82,4 @@ def reload_catalog() -> None:
     _load_catalog()
 
 
-# Pre-load on import
 _load_catalog()

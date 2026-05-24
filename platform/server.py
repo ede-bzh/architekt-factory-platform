@@ -571,11 +571,10 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    # ── Security: Auth + rate limit middleware ─────────────────────────────
-    from .security import AuthMiddleware, RateLimitMiddleware
+    # ── Security: Auth middleware (API key) ────────────────────────────────
+    from .security import AuthMiddleware
 
     app.add_middleware(AuthMiddleware)
-    app.add_middleware(RateLimitMiddleware)
 
     # ── Security: CORS ──────────────────────────────────────────────────────
     from starlette.middleware.cors import CORSMiddleware
@@ -619,16 +618,9 @@ def create_app() -> FastAPI:
             )
         else:
             response.headers["X-Frame-Options"] = "DENY"
-            script_src = (
-                "'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net"
-            )
-            if not path.startswith("/api/"):
-                script_src = (
-                    "'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net"
-                )
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
-                f"script-src {script_src}; "
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
                 "font-src 'self' https://fonts.gstatic.com; "
                 "img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com; "
@@ -640,6 +632,30 @@ def create_app() -> FastAPI:
                 "max-age=31536000; includeSubDomains"
             )
         return response
+
+    # ── Rate limiting (API endpoints, 60 req/min per IP) ───────────────
+    import time as _rl_time
+    from collections import defaultdict as _dd
+
+    _rate_buckets: dict[str, list[float]] = _dd(list)
+    _RATE_LIMIT = int(os.environ.get("API_RATE_LIMIT", "120"))  # per minute
+    _RATE_WINDOW = 60.0
+
+    @app.middleware("http")
+    async def rate_limit_middleware(request, call_next):
+        if request.url.path.startswith("/api/"):
+            client_ip = request.client.host if request.client else "unknown"
+            now = _rl_time.time()
+            bucket = _rate_buckets[client_ip]
+            bucket[:] = [t for t in bucket if now - t < _RATE_WINDOW]
+            if len(bucket) >= _RATE_LIMIT:
+                from starlette.responses import JSONResponse as _JR
+
+                return _JR(
+                    {"error": "rate_limit_exceeded", "retry_after": 60}, status_code=429
+                )
+            bucket.append(now)
+        return await call_next(request)
 
     # ── Trace ID middleware ─────────────────────────────────────────────
     @app.middleware("http")
@@ -735,11 +751,7 @@ def create_app() -> FastAPI:
                 "/favicon.ico",
                 "/manifest.json",
                 "/sw.js",
-                "/proof",
-                "/finops",
             )
-            or path.startswith("/proof/")
-            or path.startswith("/finops/")
         )
         if not skip and not request.cookies.get("onboarding_done"):
             from starlette.responses import RedirectResponse
@@ -747,7 +759,7 @@ def create_app() -> FastAPI:
             return RedirectResponse(url="/onboarding", status_code=302)
         return await call_next(request)
 
-    # ── Locale detection middleware ─────────────────────────────────────
+    # ── Locale detection middleware (UI: EN/FR only) ────────────────────
     SUPPORTED_LOCALES = {"en", "fr", "es", "it", "de", "pt", "ja", "zh"}
 
     @app.middleware("http")
