@@ -571,10 +571,11 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    # ── Security: Auth middleware (API key) ────────────────────────────────
-    from .security import AuthMiddleware
+    # ── Security: Auth + rate limit middleware ─────────────────────────────
+    from .security import AuthMiddleware, RateLimitMiddleware
 
     app.add_middleware(AuthMiddleware)
+    app.add_middleware(RateLimitMiddleware)
 
     # ── Security: CORS ──────────────────────────────────────────────────────
     from starlette.middleware.cors import CORSMiddleware
@@ -639,37 +640,6 @@ def create_app() -> FastAPI:
                 "max-age=31536000; includeSubDomains"
             )
         return response
-
-    # ── Rate limiting (API mutations, DB-backed, survives restart) ─────
-    import hashlib as _rl_hashlib
-
-    from .security.rate_limit import check_rate_limit
-
-    _RATE_LIMIT = int(os.environ.get("API_RATE_LIMIT", "120"))
-    _RATE_WINDOW = 60.0
-    _RATE_METHODS = frozenset({"POST", "PUT", "PATCH", "DELETE"})
-
-    @app.middleware("http")
-    async def rate_limit_middleware(request, call_next):
-        if (
-            request.url.path.startswith("/api/")
-            and request.method in _RATE_METHODS
-        ):
-            client_ip = request.client.host if request.client else "unknown"
-            token = request.headers.get("Authorization", "")[:20]
-            client_key = (
-                f"{client_ip}:{_rl_hashlib.md5(token.encode()).hexdigest()[:8]}"
-                if token
-                else client_ip
-            )
-            if not check_rate_limit(client_key, _RATE_LIMIT, _RATE_WINDOW):
-                from starlette.responses import JSONResponse as _JR
-
-                return _JR(
-                    {"error": "rate_limit_exceeded", "retry_after": int(_RATE_WINDOW)},
-                    status_code=429,
-                )
-        return await call_next(request)
 
     # ── Trace ID middleware ─────────────────────────────────────────────
     @app.middleware("http")
