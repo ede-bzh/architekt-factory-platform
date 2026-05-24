@@ -11,15 +11,15 @@
 
 <div align="center">
 
-# Software Factory
+# Architekt Factory Platform
 
-**Usine Logicielle Multi-Agents — Agents IA autonomes orchestrant le cycle de vie complet des produits**
+**Plateforme multi-agents pour une livraison logicielle accélérée par l'IA et consciente de la sécurité** (outil interne du studio Architekt Pte. Ltd.)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-**[Demo live : sf.macaron-software.com](https://sf.macaron-software.com)** — cliquez "Skip (Demo)" pour explorer
+*Démo legacy (pré-rebrand) :* [sf.macaron-software.com](https://sf.macaron-software.com) — peut être indisponible ; préférez le **mode Demo local** dans [Démarrage rapide](#démarrage-rapide)
 
 [Fonctionnalités](#fonctionnalités) · [Démarrage rapide](#démarrage-rapide) · [Captures d'écran](#captures-décran) · [Architecture](#architecture) · [Contribuer](#contribuer)
 
@@ -29,9 +29,11 @@
 
 ## C'est quoi ?
 
-Software Factory est une **plateforme multi-agents autonome** qui orchestre l'intégralité du cycle de développement logiciel — de l'idéation au déploiement — en utilisant des agents IA spécialisés travaillant ensemble.
+**Architekt Factory Platform** est le **moteur d'orchestration multi-agents interne** d'**Architekt** — studio de produits digitaux natif IA pour scale-ups et PME APAC.
 
-Imaginez une **usine logicielle virtuelle** où 161 agents IA collaborent à travers des workflows structurés, suivant la méthodologie SAFe, les pratiques TDD et des portes de qualité automatisées.
+> **Architekt ne vend pas du code. Architekt vend une livraison digitale globalement prête, accélérée par l'IA et consciente de la sécurité** — combinant la vitesse de l'IA, la rigueur du senior engineering, la preuve via rapports qualité automatisés, et une readiness globale dès le jour 1.
+
+Cette plateforme (anciennement *Software Factory*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 161 agents collaborent sous supervision humaine.
 
 ### Points clés
 
@@ -116,8 +118,8 @@ Imaginez une **usine logicielle virtuelle** où 161 agents IA collaborent à tra
 L'image inclut : **Node.js 20**, **Playwright + Chromium**, **bandit**, **semgrep**, **ripgrep**.
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
-cd software-factory
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
+cd architekt-factory-platform
 make setup   # copie .env.example → .env (éditez pour ajouter votre clé LLM)
 make run     # construit et lance la plateforme
 ```
@@ -128,8 +130,8 @@ Choisissez votre rôle SAFe ou cliquez sur **« Skip (Demo) »** pour explorer d
 ### Option 2 : Installation locale
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
-cd software-factory
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
+cd architekt-factory-platform
 cp .env.example .env                # créer votre config (éditer pour ajouter la clé LLM — voir Étape 3)
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r platform/requirements.txt
@@ -597,8 +599,8 @@ Mission Creee
                      ┌───────┴────────┐
                      │                │
           ┌──────────▼─────┐  ┌───────▼────────┐
-          │ VM Azure (Prod)│  │ VPS OVH (Demo) │
-          │ sf.macaron-software.com   │  │ demo.macaron-software.com  │
+          │ VM Azure (legacy)│  │ VPS OVH (legacy)│
+          │ sf.macaron-* (pré-rebrand)│  │ demo.macaron-* (pré-rebrand)│
           │                │  │                │
           │ Nginx :443     │  │ Nginx :443     │
           │   │            │  │   │            │
@@ -619,8 +621,8 @@ Mission Creee
                              │
                     ┌────────▼────────┐
                     │ GitHub          │
-                    │ macaron-software│
-                    │ /software-factory│
+                    │ ede-bzh         │
+                    │ /architekt-factory-platform│
                     └─────────────────┘
 ```
 
@@ -985,7 +987,7 @@ docker-compose up -d
 ### Kubernetes (Helm)
 
 ```bash
-helm install software-factory ./deploy/helm/
+helm install architekt-factory ./deploy/helm/
 ```
 
 ### Variables d'Environnement
@@ -1016,6 +1018,6 @@ Ce projet est sous licence AGPL v3 - voir le fichier [LICENSE](LICENSE) pour dé
 
 ## Support
 
-- Demo live : https://sf.macaron-software.com
-- Issues : https://github.com/macaron-software/software-factory/issues
-- Discussions : https://github.com/macaron-software/software-factory/discussions
+- Démo legacy (pré-rebrand) : https://sf.macaron-software.com
+- Issues : https://github.com/ede-bzh/architekt-factory-platform/issues
+- Discussions : https://github.com/ede-bzh/architekt-factory-platform/discussions

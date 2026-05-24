@@ -11,15 +11,15 @@
 
 <div align="center">
 
-# Software Factory
+# Architekt Factory Platform
 
-**多智能体软件工厂 — 自主 AI 智能体编排完整产品生命周期**
+**面向 AI 加速、安全优先的软件交付的多智能体平台**（Architekt Pte. Ltd. 工作室内部工具）
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-**[在线演示: sf.macaron-software.com](https://sf.macaron-software.com)** — 点击 "Skip (Demo)" 即可探索
+*旧版演示（重品牌前）：* [sf.macaron-software.com](https://sf.macaron-software.com) — 可能不可用；请使用[快速开始](#快速开始)中的**本地 Demo 模式**
 
 [功能特性](#功能特性) · [快速开始](#快速开始) · [截图预览](#截图预览) · [架构设计](#架构设计) · [参与贡献](#参与贡献)
 
@@ -29,9 +29,11 @@
 
 ## 这是什么？
 
-Software Factory 是一个**自主多智能体平台**，它编排整个软件开发生命周期 — 从构思到部署 — 使用专业化 AI 智能体协同工作。
+**Architekt Factory Platform** 是 **Architekt** 的**内部多智能体编排引擎** — 面向 APAC 成长型企业和中小企业的 AI 原生数字产品工作室。
 
-可以将其视为一个**虚拟软件工厂**，其中 161 个 AI 智能体通过结构化工作流进行协作，遵循 SAFe 方法论、TDD 实践和自动化质量门控。
+> **Architekt 不卖代码。Architekt 销售全球就绪、AI 加速、安全优先的数字交付** — 结合 AI 的速度、资深工程的严谨性、自动化质量报告的证明，以及从第一天起的全球 readiness。
+
+该平台（前身为 *Software Factory*）通过结构化工作流编排专业 AI 智能体 — 从构思到部署 — 使工作室能够以 SAFe 方法论、TDD 实践和自动化质量门控交付客户项目。
 
 ### 核心亮点
 
@@ -989,6 +991,6 @@ SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 
 ## 支持
 
-- 在线演示: https://sf.macaron-software.com
+- 旧版演示（重品牌前）: https://sf.macaron-software.com
 - 问题反馈: https://github.com/macaron-software/software-factory/issues
 - 讨论区: https://github.com/macaron-software/software-factory/discussions

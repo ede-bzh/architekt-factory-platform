@@ -25,11 +25,11 @@ Tout le repo + la documentation + le cadre légal portent la marque **Architekt*
 
 ### Niveau 1 — Visible (P0-N1, doit être fait en Phase 0)
 
-- [ ] `README.md` (EN) + variantes (FR, DE, ES, JA, KO, PT, ZH) → marque Architekt + nouveau positionnement
+- [x] `README.md` (EN) + variantes (FR, DE, ES, JA, KO, PT, ZH) → marque Architekt + nouveau positionnement
 - [ ] `README.laposte.md` : laisser tel quel (sync interne La Poste)
 - [ ] `CODE_OF_CONDUCT.md`, `SECURITY.md`, `CONTRIBUTING.md` → Architekt
 - [ ] `.env.example` → commentaires Architekt
-- [ ] `Makefile` : messages echo → Architekt
+- [x] `Makefile` : messages echo → Architekt
 - [ ] UI : titres pages, logo placeholder
   - [ ] `platform/web/templates/base.html`
   - [ ] `platform/web/templates/login.html`
@@ -40,7 +40,7 @@ Tout le repo + la documentation + le cadre légal portent la marque **Architekt*
 
 - [ ] `MACARON_API_KEY` → `ARCHITEKT_API_KEY` (+ alias rétro-compatible 6 mois)
 - [ ] CLI : binaire `architekt` (alias `sf` gardé)
-- [ ] `pyproject.toml` : `name = "architekt-factory-platform"`
+- [x] `pyproject.toml` : `name = "architekt-factory-platform"`
 
 ### Niveau 3 — Runtime / packaging (PAS Phase 0, reporté Phase 3+)
 
