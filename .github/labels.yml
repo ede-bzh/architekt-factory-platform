@@ -1,27 +1,42 @@
-# Architekt GitHub labels
-# Used by scripts/github/setup-project.sh (gh label create)
+# Architekt GitHub labels (v2 — aligned with 7-phase roadmap)
+# Used by scripts/github/setup-project.sh
 
-# ── Phase labels (workflow scheduling) ──
-- name: phase:0-rebrand
+# ── Phase labels (7-phase roadmap) ──
+- name: phase:0-foundation
   color: "5319e7"
-  description: "Phase 0 — Rebrand Architekt"
-- name: phase:1-catalog
+  description: "Phase 0 — Foundation & Rebrand"
+- name: phase:1-offers
   color: "5319e7"
-  description: "Phase 1 — Catalogue technos & ADR"
-- name: phase:2-practices
+  description: "Phase 1 — Offer & Stack Catalogue"
+- name: phase:2-doctrine
   color: "5319e7"
-  description: "Phase 2 — Doctrine bonnes pratiques"
+  description: "Phase 2 — Delivery Doctrine"
 - name: phase:3-pilot
   color: "5319e7"
-  description: "Phase 3 — Pilote site Architekt"
-- name: phase:4-on-demand
+  description: "Phase 3 — Public Pilot"
+- name: phase:4-clients
   color: "5319e7"
-  description: "Phase 4 — Équipement à la demande"
+  description: "Phase 4 — First Paid Clients"
+- name: phase:5-idp
+  color: "5319e7"
+  description: "Phase 5 — Internal Developer Platform"
+- name: phase:6-portal
+  color: "5319e7"
+  description: "Phase 6 — Client Portal"
+- name: phase:7-saas
+  color: "5319e7"
+  description: "Phase 7 — SaaS Option"
 
-# ── Area labels (where the work happens) ──
+# ── Area labels ──
 - name: area:rebrand
   color: "fbca04"
   description: "Rebranding (docs, UI, identifiants)"
+- name: area:brand
+  color: "fbca04"
+  description: "Brand system (logo, palette, tone, templates)"
+- name: area:legal
+  color: "fbca04"
+  description: "Legal pack (NDA, MSA, SOW, DPA, IP, AI clauses)"
 - name: area:docs
   color: "fbca04"
   description: "Documentation"
@@ -37,53 +52,113 @@
 - name: area:catalog
   color: "fbca04"
   description: "Catalogue technos / kits stack"
+- name: area:offers
+  color: "fbca04"
+  description: "Catalogue d'offres packagées"
 - name: area:ci
   color: "fbca04"
   description: "Intégration continue / qualité"
+- name: area:security
+  color: "fbca04"
+  description: "Sécurité / RBAC / secrets / SBOM"
+- name: area:finops
+  color: "fbca04"
+  description: "Coûts LLM / infra / heures / marges"
 - name: area:deploy
   color: "fbca04"
   description: "Déploiement / hébergement"
-- name: area:security
-  color: "fbca04"
-  description: "Sécurité / RBAC / secrets"
 - name: area:website
   color: "fbca04"
   description: "Site Architekt (pilote)"
+- name: area:gtm
+  color: "fbca04"
+  description: "Go-to-market / sales / marketing / IMDA"
+- name: area:idp
+  color: "fbca04"
+  description: "Internal Developer Platform (Phase 5)"
+- name: area:portal
+  color: "fbca04"
+  description: "Client Portal (Phase 6)"
+- name: area:saas
+  color: "fbca04"
+  description: "SaaS productisation (Phase 7)"
 
-# ── Kit labels (one per supported stack) ──
+# ── Kit labels (Tier A core) ──
 - name: kit:astro
   color: "0e8a16"
-  description: "Kit Astro"
+  description: "Kit Astro (Tier A)"
 - name: kit:nextjs
   color: "0e8a16"
-  description: "Kit Next.js"
-- name: kit:nuxt
-  color: "0e8a16"
-  description: "Kit Nuxt / Vue"
-- name: kit:wordpress
-  color: "0e8a16"
-  description: "Kit WordPress"
-- name: kit:shopify
-  color: "0e8a16"
-  description: "Kit Shopify"
+  description: "Kit Next.js (Tier A)"
 - name: kit:fastapi
   color: "0e8a16"
-  description: "Kit FastAPI"
-- name: kit:nestjs
+  description: "Kit FastAPI (Tier A)"
+- name: kit:postgresql
   color: "0e8a16"
-  description: "Kit NestJS"
-- name: kit:spring
+  description: "Kit PostgreSQL (Tier A)"
+- name: kit:tailwind-shadcn
   color: "0e8a16"
-  description: "Kit Spring Modulith"
-- name: kit:swiftui
+  description: "Kit Tailwind + shadcn/ui (Tier A)"
+- name: kit:cloudflare-pages
   color: "0e8a16"
-  description: "Kit SwiftUI"
-- name: kit:android
+  description: "Kit Cloudflare Pages (Tier A)"
+- name: kit:github-actions
   color: "0e8a16"
-  description: "Kit Android / Compose"
+  description: "Kit GitHub Actions CI (Tier A)"
+
+# ── Kit labels (Tier B opportunistic) ──
+- name: kit:wordpress
+  color: "5cb85c"
+  description: "Kit WordPress (Tier B)"
+- name: kit:shopify
+  color: "5cb85c"
+  description: "Kit Shopify (Tier B)"
 - name: kit:payload
-  color: "0e8a16"
-  description: "Kit Payload CMS"
+  color: "5cb85c"
+  description: "Kit Payload CMS (Tier B)"
+- name: kit:nestjs
+  color: "5cb85c"
+  description: "Kit NestJS (Tier B)"
+- name: kit:nuxt
+  color: "5cb85c"
+  description: "Kit Nuxt / Vue (Tier B)"
+- name: kit:azure
+  color: "5cb85c"
+  description: "Kit Azure (Tier B)"
+- name: kit:aws
+  color: "5cb85c"
+  description: "Kit AWS (Tier B)"
+
+# ── Kit labels (Tier C contract-only) ──
+- name: kit:spring-modulith
+  color: "7fffd4"
+  description: "Kit Spring Modulith (Tier C)"
+- name: kit:swiftui
+  color: "7fffd4"
+  description: "Kit SwiftUI (Tier C)"
+- name: kit:android-compose
+  color: "7fffd4"
+  description: "Kit Kotlin/Compose (Tier C)"
+
+# ── Offer labels ──
+- name: offer:launch
+  color: "1d76db"
+  description: "Architekt Launch (site)"
+- name: offer:mvp
+  color: "1d76db"
+  description: "Architekt MVP (app web)"
+- name: offer:internal-tool
+  color: "1d76db"
+  description: "Architekt Internal Tool"
+- name: offer:ai-workflow
+  color: "1d76db"
+  description: "Architekt AI Workflow"
+- name: offer:audit
+  color: "1d76db"
+  description: "Architekt Audit (wedge)"
+- name: offer:run
+  color: "1d76db"
+  description: "Architekt Run (TMA / retainer)"
 
 # ── Type labels ──
 - name: type:adr
@@ -107,32 +182,47 @@
 - name: type:research
   color: "d876e3"
   description: "Recherche / benchmark"
+- name: type:skill
+  color: "c5def5"
+  description: "Skill agent (architekt-*.md)"
 
-# ── Role labels (qui porte le sujet) ──
+# ── Role labels (c-level + delivery) ──
 - name: role:cpo
   color: "c2e0c6"
   description: "Chief Product Officer"
 - name: role:cto
   color: "c2e0c6"
   description: "Chief Technology Officer"
+- name: role:cfo
+  color: "c2e0c6"
+  description: "Chief Financial Officer (FinOps)"
+- name: role:caio
+  color: "c2e0c6"
+  description: "Chief AI Officer"
+- name: role:ciso
+  color: "c2e0c6"
+  description: "CISO / Cybersecurity"
 - name: role:designer
   color: "c2e0c6"
-  description: "Product Designer"
+  description: "Product / UX / UI Designer"
 - name: role:architect
   color: "c2e0c6"
   description: "Solution / Enterprise Architect"
 - name: role:sre
   color: "c2e0c6"
   description: "Site Reliability Engineer"
-- name: role:security
-  color: "c2e0c6"
-  description: "CISO / Security"
 - name: role:cs
   color: "c2e0c6"
   description: "Customer Success"
+- name: role:pmm
+  color: "c2e0c6"
+  description: "Product Marketing Manager"
 - name: role:gtm
   color: "c2e0c6"
-  description: "Go-to-market / marketing"
+  description: "Go-to-market / sales"
+- name: role:legal
+  color: "c2e0c6"
+  description: "Conseil juridique / DPO"
 
 # ── Priority labels ──
 - name: priority:must
@@ -145,7 +235,7 @@
   color: "fbca04"
   description: "Optionnel / nice to have"
 
-# ── Status labels (Kanban) ──
+# ── Status labels ──
 - name: status:blocked
   color: "000000"
   description: "Bloqué — dépendance non résolue"
@@ -155,11 +245,26 @@
 - name: status:in-review
   color: "fbca04"
   description: "En review"
+- name: status:trigger-pending
+  color: "999999"
+  description: "Conditionnel — attend déclencheur (3/5/10 clients...)"
 
-# ── Risk ──
+# ── Risk labels ──
 - name: risk:legal
   color: "b60205"
-  description: "Risque juridique (licence, contrat)"
+  description: "Risque juridique (licence, contrat, IP, RGPD/PDPA)"
 - name: risk:prod
   color: "b60205"
   description: "Risque casser une prod existante"
+- name: risk:margin
+  color: "b60205"
+  description: "Risque marge (projet non rentable)"
+- name: risk:llm-cost
+  color: "b60205"
+  description: "Risque coût LLM (FinOps)"
+- name: risk:pipeline
+  color: "b60205"
+  description: "Risque pipeline commercial vide"
+- name: risk:burnout
+  color: "b60205"
+  description: "Risque surcharge fondateurs"
