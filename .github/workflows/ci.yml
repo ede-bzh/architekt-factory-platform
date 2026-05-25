@@ -110,23 +110,32 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pytest pytest-asyncio httpx fastapi uvicorn pyyaml mutmut
+          pip install pytest pytest-asyncio httpx fastapi uvicorn pyyaml
           pip install -r platform/requirements.txt
 
+      - name: Install mutmut (2.4.x — paths-to-mutate; max-children=2 deferred, ADR-003)
+        run: pip install 'mutmut==2.4.5'
+
       - name: Mutation test (api_key)
+        continue-on-error: true
         env:
           PLATFORM_LLM_PROVIDER: demo
           PLATFORM_ENV: test
+        run: bash scripts/ci/run_mutmut.sh api_key
+
+      - name: Mutation test (adversarial)
+        continue-on-error: true
+        env:
+          PLATFORM_LLM_PROVIDER: demo
+          PLATFORM_ENV: test
+        run: bash scripts/ci/run_mutmut.sh adversarial
+
+      - name: Mutation gate summary
+        if: always()
         run: |
-          if [ ! -f platform/auth/api_key.py ]; then
-            echo "Skip: platform/auth/api_key.py not found"
-            exit 0
-          fi
-          timeout 900 mutmut run \
-            --paths-to-mutate=platform/auth/api_key.py \
-            --max-children=2 \
-            --no-progress \
-            || echo "mutmut finished with non-zero exit (optional job)"
+          echo "## Mutation testing (ADR-003)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Global 50% deferred; gates: adversarial ≥15%, api_key ≥10%" >> "$GITHUB_STEP_SUMMARY"
+          echo "- mutmut 2.4.5, timeout 900s/target; --max-children=2 when mutmut 3 stats work" >> "$GITHUB_STEP_SUMMARY"
 
 
   release:

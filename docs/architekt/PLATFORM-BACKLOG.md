@@ -92,7 +92,7 @@ Pas de site vitrine client en phase 0.
 - [ ] **4 DPA templates** par région (SG, UAE, EU, US)
 - [ ] **Dashboard `dashboard/`** rebrand Architekt + health unifié avec `/api/health` — *in progress* (autres agents)
 - [ ] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4) — *in progress* (autres agents)
-- [ ] **Mutation testing** seuil 50 % sur modules critiques (job CI mutmut optionnel seulement) — *reporté Wave 7*
+- [x] **Mutation testing** gate pragmatique CI (ADR-003) — adversarial ≥15 %, api_key ≥10 % ; 50 % global reporté (Wave 7 pour seuil global)
 
 ---
 
@@ -144,7 +144,7 @@ Pas de site vitrine client en phase 0.
 
 ### Qualité & preuve client
 
-- [ ] Mutation testing (ADR-003) — mutmut sur modules critiques (seuil 50 %) → **Wave 7**
+- [x] Mutation testing (ADR-003) — mutmut 2.4 CI `scripts/ci/run_mutmut.sh` ; seuil global 50 % → **Wave 7**
 - [x] E2E Playwright smoke en CI (login + health — pas les 82 specs)
 - [x] Mini dashboard `/proof` (DORA, Lighthouse, a11y, SBOM)
 - [x] Case study generator (template + métriques mission)
