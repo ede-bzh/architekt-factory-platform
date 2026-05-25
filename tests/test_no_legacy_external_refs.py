@@ -28,6 +28,15 @@ SCAN_SUFFIXES = {
 
 SKIP_DIRS = {"_FINARY", ".git", "__pycache__", "node_modules", ".venv", "venv"}
 
+# Meta-docs that describe the migration may quote forbidden tokens intentionally.
+ALLOWLIST_REL = frozenset({
+    "docs/architekt/REBRAND-DOC-AUDIT.md",
+    "docs/architekt/PLATFORM-BACKLOG.md",
+    "docs/AUDIT_REBRAND.md",
+    "docs/ROADMAP.md",
+    "tests/test_doc_no_macaron_user_facing.py",
+})
+
 
 def _tracked_files() -> list[Path]:
     out = subprocess.run(
@@ -46,6 +55,9 @@ def test_no_laposte_references_in_tracked_files():
         if path.resolve() == _SELF:
             continue
         if any(part in SKIP_DIRS for part in path.parts):
+            continue
+        rel = path.relative_to(ROOT).as_posix()
+        if rel in ALLOWLIST_REL:
             continue
         if path.suffix.lower() not in SCAN_SUFFIXES and path.name not in {
             ".env.example",

@@ -247,21 +247,21 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 
 ### P0 — Utilisateur (wiki + README)
 
-- [ ] Wiki `Home.md` / `Home‐FR` — branding **Architekt Factory**, release **v2.3.0**, repo `ede-bzh/architekt-factory-platform`, retirer tableau GitLab La Poste
-- [ ] README EN + FR — URLs demo/issues/clone studio ; compteurs alignés (163 / 41 / 104)
-- [ ] `API-Reference.md` — documenter `ARCHITEKT_API_KEY` (+ alias `MACARON_API_KEY` 6 mois, ADR-001)
-- [ ] `Security.md` — auth Architekt, HITL, L0–L2, CSP (lien doc CSP post-#13)
-- [ ] `Deployment-Guide.md` — colonnes « demo Architekt » vs « prod legacy macaron_* »
-- [ ] Compléter **`Patterns.md`** (cas d'usage, lien missions / adversarial)
-- [ ] Archiver ou supprimer wiki **Home‐ES/DE/IT/PT/JA/ZH** (hors scope i18n EN/FR officiel)
+- [x] Wiki `Home.md` / `Home‐FR` — branding **Architekt Factory**, release **v2.3.0**, repo `ede-bzh/architekt-factory-platform`, retirer tableau GitLab La Poste
+- [x] README EN + FR — URLs demo/issues/clone studio ; compteurs alignés (163 / 41 / 104)
+- [x] `API-Reference.md` — documenter `ARCHITEKT_API_KEY` (+ alias `MACARON_API_KEY` 6 mois, ADR-001)
+- [x] `Security.md` — auth Architekt, HITL, L0–L2, CSP (lien doc CSP post-#13)
+- [x] `Deployment-Guide.md` — colonnes « demo Architekt » vs « prod legacy macaron_* »
+- [x] Compléter **`Patterns.md`** (cas d'usage, lien missions / adversarial)
+- [x] Archiver ou supprimer wiki **Home‐ES/DE/IT/PT/JA/ZH** (hors scope i18n EN/FR officiel)
 - [ ] Pages FR manquantes référencées (`Security‐FR`, `Patterns‐FR`, etc.) — créer ou retirer les liens morts
 
 ### P1 — Développeur & gates
 
-- [ ] Réécrire `CLAUDE.md` racine pour le dépôt **Architekt** (retirer `_LAPOSTE`, `sync-to-laposte`, chemins `~/_MACARON-SOFTWARE`)
-- [ ] Aligner `platform/CLAUDE.md` + `docs/AUDIT_REBRAND.md` avec cet audit
-- [ ] Test gate doc : interdire `macaron-software` / « Macaron Software Factory » dans `docs/wiki/Home*.md` + README EN/FR (exceptions Deployment encart legacy)
-- [ ] Index doc `docs/architekt/README.md` — liens phases, backlog, release, audit
+- [x] Réécrire `CLAUDE.md` racine pour le dépôt **Architekt** (retirer `_LAPOSTE`, `sync-to-laposte`, chemins `~/_MACARON-SOFTWARE`)
+- [x] Aligner `platform/CLAUDE.md` + `docs/AUDIT_REBRAND.md` avec cet audit
+- [x] Test gate doc : interdire `macaron-software` / « Macaron Software Factory » dans `docs/wiki/Home*.md` + README EN/FR (exceptions Deployment encart legacy)
+- [x] Index doc `docs/architekt/README.md` — liens phases, backlog, release, audit
 
 ### P2 — Infra (lié vague E ROADMAP, pas bloquant Wave 8 doc)
 

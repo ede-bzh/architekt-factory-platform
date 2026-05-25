@@ -52,14 +52,13 @@ Plateforme multi-agents SAFe pour le cycle de vie logiciel. UI **EN / FR** uniqu
 
 - Doc ops (Darwin, DPA, HITL), mutation testing, dashboard legacy :8080, CSP
 
-## Vague 8 — Documentation complète & rebrand doc (backlog)
+## Vague 8 — Documentation complète & rebrand doc (en cours)
 
-> **Cadrage** — audit : `docs/architekt/REBRAND-DOC-AUDIT.md`  
-> Tâches : `docs/architekt/PLATFORM-BACKLOG.md` § Wave 8.
+> Audit : `docs/architekt/REBRAND-DOC-AUDIT.md` · exécution : `cursor/rebrand-doc-wave8-exec-7576`
 
-- Wiki EN/FR, README, API/Security/Patterns — fin Macaron / La Poste côté utilisateur
-- Complétion sections wiki minimales ; archivage Home hors EN/FR
-- `CLAUDE.md` studio + gates tests doc
+- [x] Wiki Home EN/FR, README EN/FR, API/Security/Patterns/Deployment
+- [x] Gate `tests/test_doc_no_macaron_user_facing.py` ; `CLAUDE.md` racine ; `docs/architekt/README.md`
+- [ ] Pages FR wiki dédiées · vague E infra (`macaron_platform`)
 
 ## Références
 
