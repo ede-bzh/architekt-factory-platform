@@ -5,7 +5,7 @@ Pas de site vitrine client en phase 0.
 
 > **Alignement tiers** : P0 = Tier **S** · P1 = Tier **A** · P2 = Tier **B** · P3 = Tier **C**
 > Catalogue complet : `docs/ROADMAP.md` § Catalogue features plateforme.
-> **Wave en cours** : voir § Wave 5 — reste P1 avant Phase 3 pilot.
+> **Wave en cours** : voir § Wave 6 — reste P1 avant Phase 3 pilot (`docs/ROADMAP.md` § Phases 0–2).
 
 ## Légende priorités
 
@@ -82,17 +82,23 @@ Pas de site vitrine client en phase 0.
 
 ## Wave 5 — livré (audit & durcissement)
 
-> Reste P1 avant pilot Phase 3 — voir aussi `docs/ROADMAP.md` § Phases 0–2.
+> PR #11 — `cursor/architekt-enrichment-pr-a-7576` (merge `main`).
 
-- [ ] **CI verte 100 %** sur `main` (gate merge — confirmer dernier run vert post-PR #7)
-- [ ] **`run_guard` → L2** : appeler `check_l2` dans le pipeline (fonction livrée wave 4, câblage `run_guard` incomplet)
-- [ ] **HITL gates** deploy + décisions IA sensibles (workflow + UI)
-- [ ] **`MAX_ARCHITEKT_SKILLS`** — relever le plafond d'injection (4 → 14 skills selon rôle)
-- [ ] **i18n EN/FR/ZH** baseline plateforme (catalogue + routes, pas seulement skills)
+- [x] **CI verte 100 %** sur `main` (gate merge — vert post-PR #11)
+- [x] **`run_guard` → L2** — pipeline L0→L2→L1 (`platform/agents/adversarial.py`)
+- [x] **HITL deploy API** — `POST /api/missions/{id}/hitl/deploy` (`platform/web/routes/missions/hitl.py`)
+- [x] **`MAX_ARCHITEKT_SKILLS`** — plafond par rôle (`platform/agents/skill_limits.py`, défaut 14)
+- [x] **i18n EN/FR** baseline plateforme (ZH **hors scope** — reporté Phase 4+)
+- [x] **Dashboard legacy** — `dashboard/README.md` ; monitoring `/monitoring` refactor (`platform/metrics/live.py`)
+- [x] **CI bandit + pip-audit bloquants** (`.github/workflows/ci.yml`, `bandit.yaml`)
+
+**Reste P1 (non bloquant pilot Phase 3) :**
+
 - [ ] **4 DPA templates** par région (SG, UAE, EU, US)
-- [ ] **Dashboard `dashboard/`** rebrand Architekt + health unifié avec `/api/health`
+- [ ] **i18n ZH** — explicitement reporté (EN/FR seulement en prod)
+- [ ] **Dashboard `dashboard/` rebrand complet** — UI legacy port 8080 (README seulement livré)
 - [ ] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4)
-- [ ] **Mutation testing** seuil 50 % sur modules critiques (job CI mutmut optionnel seulement)
+- [ ] **Mutation testing** seuil 50 % sur modules critiques (job CI mutmut optionnel)
 
 ---
 
@@ -110,7 +116,7 @@ Pas de site vitrine client en phase 0.
 
 ### CI & quality gates (Phase 2)
 
-- [ ] CI verte 100 % sur `main` (gate merge) → **Wave 5**
+- [x] CI verte 100 % sur `main` (gate merge) — **Wave 5 / PR #11**
 - [x] Quality gate CI : ruff + bandit sur `platform/`
 - [x] SAST + SCA + secret scan en CI (bandit, pip-audit, detect-secrets)
 - [x] SBOM CycloneDX par release CI (cyclonedx-py)
@@ -154,7 +160,8 @@ Pas de site vitrine client en phase 0.
 ### Global delivery
 
 - [x] i18n UI **EN/FR** uniquement (ZH hors scope)
-- [ ] 4 DPA templates par région (SG, UAE, EU, US) → **Wave 5**
+- [ ] 4 DPA templates par région (SG, UAE, EU, US)
+- [ ] Dashboard rebrand complet (UI legacy port 8080)
 - [x] Dashboard legacy documenté ; monitoring `/monitoring` + `/proof`
 
 ---
@@ -218,11 +225,17 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 | Projets L3 régulés (HIPAA, banque) | Refus | ADR-041, R24 |
 
 
-## Wave 6 — fondations (doc + CI + releases) — en cours
+## Wave 6 — livré (doc + CI + releases + adaptive intelligence)
+
+> PR #11 — `cursor/architekt-enrichment-pr-a-7576` (merge `main`).
 
 - [x] CI verte post-PR #10 (pytest, ruff, secret-scan, tests rebrand)
-- [x] `platform/VERSION` semver + `/api/health` version/timestamp
-- [x] CI bandit + pip-audit **bloquants**
-- [x] Deploy demo/azure après CI `workflow_run`
+- [x] `platform/VERSION` semver (2.3.0) + `/api/health` version/timestamp
+- [x] CI bandit + pip-audit **bloquants** (`bandit.yaml`, High-only gate)
+- [x] Deploy demo/azure **après CI** (`workflow_run` → `conclusion == success`)
 - [x] `CHANGELOG.md` + `docs/architekt/RELEASE.md`
-- [x] Compteurs : ~163 agents, 41 workflows, 104 skills YAML
+- [x] Compteurs doc : ~163 agents, 41 workflows, 104 skills YAML (`platform/SPECS.md`)
+- [x] Monitoring live refactor — `platform/metrics/live.py` (cache 20s, param `sections`)
+- [x] **GA scheduler LIVE** — `evolution_scheduler.py` nightly 02:00 UTC (`server.py` lifespan)
+- [x] **RL hook** — `platform/agents/rl_hooks.py` + `patterns/engine.py` (`apply_rl_pattern_override`)
+- [x] Release job CI sur tags `v*` (SBOM artifact)

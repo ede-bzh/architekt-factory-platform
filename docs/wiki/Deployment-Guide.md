@@ -1,5 +1,27 @@
 # Deployment Guide
 
+## CI/CD deploy gates
+
+Production and demo deploys run **only after a successful CI workflow** on `main`:
+
+| Workflow | Trigger | Gate |
+|----------|---------|------|
+| `CI` | push/PR to `main`, tags `v*` | ruff, bandit (High), pip-audit, secret-scan, pytest |
+| `Deploy → OVH Demo` | `workflow_run` after CI | `conclusion == success` |
+| `Deploy → Azure Prod` | `workflow_run` after CI or manual dispatch | CI green (unless `workflow_dispatch`) |
+
+Release tags `v*` also trigger the CI SBOM artifact job. See `docs/architekt/RELEASE.md`.
+
+## Azure module name (`macaron_platform`)
+
+On Azure VM Docker, the Python package is imported as **`macaron_platform`**, not `platform`:
+
+- Container code path: `/app/macaron_platform/`
+- Dockerfile copies `platform/` → `macaron_platform/` at build time
+- Local dev uses `platform` directly (`python3 -m uvicorn platform.server:app`)
+
+Rebrand context (API keys, metrics prefix): see backlog § P1 Rebrand niveau 2 (ADR-001) in `docs/architekt/PLATFORM-BACKLOG.md`.
+
 ## 3 Environments
 
 ### 1. Azure Production (<AZURE_VM_IP>)
@@ -74,8 +96,8 @@ python3 -m pytest tests/ -v
 ## Docker Quick Start
 
 ```bash
-git clone https://github.com/ede-bzh/architekt-factory-platform.git
-cd architekt-factory-platform
+git clone https://github.com/macaron-software/software-factory.git
+cd software-factory
 make setup    # install deps, init DB
 make run      # start Docker containers
 # → http://localhost:8090
