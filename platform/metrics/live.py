@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import datetime
 
 from fastapi import Request
@@ -38,10 +39,13 @@ async def build_monitoring_live_payload(
 
     hours = max(1, min(hours, 8760))
 
-    section_set = _parse_sections(sections)
-    cache_key = f"{hours}:{sections or 'all'}"
+    global _cache, _docker_cache, _git_cache
 
-    # ── TTL cache (5s) ──
+    section_set = _parse_sections(sections)
+    sec_key = ",".join(sorted(section_set)) if section_set else "all"
+    cache_key = f"{hours}:{sec_key}"
+
+    # ── TTL cache ──
     cache = _cache
     now = _time.monotonic()
     if cache and cache.get("key") == cache_key and now - cache.get("ts", 0) < MONITORING_CACHE_TTL:
@@ -839,5 +843,5 @@ async def build_monitoring_live_payload(
     }
 
     # Store in cache
-    _cache = {"data": result, "hours": hours, "ts": _time.monotonic()}
+    _cache = {"data": result, "key": cache_key, "ts": _time.monotonic()}
     return result

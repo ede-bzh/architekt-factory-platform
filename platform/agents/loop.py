@@ -11,6 +11,13 @@ Each agent runs as an independent asyncio.Task:
 from __future__ import annotations
 
 import asyncio
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..a2a.bus import MessageBus
+    from .executor import AgentExecutor, ExecutionContext
+    from .store import AgentDef
+
 import logging
 import re
 import time

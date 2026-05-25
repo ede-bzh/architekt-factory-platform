@@ -37,10 +37,12 @@ if os.environ.get("OTEL_ENABLED"):
         from opentelemetry.sdk.trace import TracerProvider
         from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
+        from .version import get_platform_version
+
         _otel_resource = Resource.create(
             {
                 "service.name": os.environ.get("OTEL_SERVICE_NAME", "macaron-platform"),
-                "service.version": _read_platform_version_for_otel(),
+                "service.version": get_platform_version(),
                 "deployment.environment": os.environ.get("PLATFORM_ENV", "production"),
             }
         )
