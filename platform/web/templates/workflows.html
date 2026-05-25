@@ -5,6 +5,7 @@
     <button class="tab active" hx-get="/workflows/list" hx-target="#tab-content" hx-swap="innerHTML" hx-trigger="click, load" onclick="switchTab(this)">{{ _("templates") }}</button>
     <button class="tab" hx-get="/patterns/list" hx-target="#tab-content" hx-swap="innerHTML" onclick="switchTab(this)">{{ _("patterns") }}</button>
     <button class="tab" hx-get="/workflows/evolution" hx-target="#tab-content" hx-swap="innerHTML" onclick="switchTab(this)">🧬 Évolution</button>
+    <a href="/proof" style="margin-left:auto;font-size:.75rem;color:var(--accent,#6c63ff);align-self:center">GA proof →</a>
 </div>
 <div id="tab-content"></div>
 <script>

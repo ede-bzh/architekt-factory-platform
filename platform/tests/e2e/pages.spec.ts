@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { collectErrors, assertNoErrors, safeGoto } from "./helpers";
+import {collectErrors, assertNoErrors, safeGoto, gateE2E} from "./helpers";
 
+test.beforeEach(gateE2E);
 /**
  * Pages E2E — detailed checks for key pages with real selectors.
  */

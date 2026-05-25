@@ -1,4 +1,4 @@
-"""Human-in-the-loop gates for sensitive mission steps (deploy, etc.)."""
+"""Human-in-the-loop (HITL) mission checkpoint endpoints."""
 
 from __future__ import annotations
 
@@ -6,70 +6,66 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
 from ..helpers import _parse_body
-from ....models import PhaseStatus
 
 router = APIRouter()
 
 
-def _deploy_phases(mission) -> list:
-    phases = getattr(mission, "phases", None) or []
-    out = []
-    for p in phases:
-        pid = (getattr(p, "phase_id", None) or "").lower()
-        if "deploy" in pid or getattr(p, "gate", "") == "checkpoint":
-            if "deploy" in pid or "release" in pid or "production" in pid:
-                out.append(p)
-    return out
-
-
-@router.get("/api/missions/{mission_id}/hitl/deploy")
-async def hitl_deploy_status(mission_id: str):
-    """List deploy phases awaiting human approval."""
+@router.post("/api/missions/{mission_id}/validate")
+async def api_mission_validate(request: Request, mission_id: str):
+    """Human validates a checkpoint (GO/NOGO/PIVOT)."""
+    from ....a2a.bus import get_bus
     from ....missions.store import get_mission_run_store
+    from ....models import A2AMessage, MessageType, PhaseStatus
+    from ....sessions.store import MessageDef, get_session_store
+
+    data = await _parse_body(request)
+    decision = str(data.get("decision", "GO")).upper()
 
     run_store = get_mission_run_store()
     mission = run_store.get(mission_id)
     if not mission:
         return JSONResponse({"error": "Not found"}, status_code=404)
 
-    pending = []
-    for p in _deploy_phases(mission):
-        status = getattr(p, "status", "")
-        if status in (
-            PhaseStatus.WAITING_VALIDATION,
-            "waiting_validation",
-            "WAITING_VALIDATION",
-        ):
-            pending.append(
-                {
-                    "phase_id": p.phase_id,
-                    "status": str(status),
-                    "gate": getattr(p, "gate", ""),
-                }
+    updated_phase = False
+    if mission.current_phase:
+        for p in mission.phases:
+            if p.phase_id == mission.current_phase and p.status in (
+                PhaseStatus.WAITING_VALIDATION,
+                "waiting_validation",
+            ):
+                p.status = PhaseStatus.DONE if decision == "GO" else PhaseStatus.FAILED
+                updated_phase = True
+        run_store.update(mission)
+        if updated_phase:
+            new_status = "done" if decision == "GO" else "failed"
+            run_store.update_phase(mission.id, mission.current_phase, status=new_status)
+
+    orch_id = mission.cdp_agent_id or "chef_de_programme"
+    if mission.session_id:
+        session_store = get_session_store()
+        session_store.add_message(
+            MessageDef(
+                session_id=mission.session_id,
+                from_agent="user",
+                to_agent=orch_id,
+                message_type="response",
+                content=f"DECISION: {decision}",
             )
-    return JSONResponse(
-        {
-            "mission_id": mission_id,
-            "pending": pending,
-            "requires_action": len(pending) > 0,
-        }
-    )
+        )
+        bus = get_bus()
+        import uuid
+        from datetime import datetime
 
+        await bus.publish(
+            A2AMessage(
+                id=uuid.uuid4().hex[:8],
+                session_id=mission.session_id,
+                from_agent="user",
+                to_agent=orch_id,
+                message_type=MessageType.RESPONSE,
+                content=f"DECISION: {decision}",
+                timestamp=datetime.utcnow(),
+            )
+        )
 
-@router.post("/api/missions/{mission_id}/hitl/deploy")
-async def hitl_deploy_decide(request: Request, mission_id: str):
-    """Approve or reject a deploy HITL gate (GO / NOGO / PIVOT)."""
-    from .execution import api_mission_validate
-
-    data = await _parse_body(request)
-    phase_id = data.get("phase_id", "")
-    if not phase_id:
-        from ....missions.store import get_mission_run_store
-
-        mission = get_mission_run_store().get(mission_id)
-        deploy = _deploy_phases(mission) if mission else []
-        if deploy:
-            phase_id = deploy[0].phase_id
-    if phase_id:
-        request._body = None  # force re-read if needed
-    return await api_mission_validate(request, mission_id)
+    return JSONResponse({"decision": decision, "phase": mission.current_phase})
