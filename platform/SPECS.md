@@ -1,6 +1,8 @@
-# MACARON AGENT PLATFORM — SPECIFICATIONS v1.0
+# Architekt Agent Platform — SPECIFICATIONS v1.0
 
 > **Vision** : Une plateforme web locale permettant de créer, orchestrer et piloter des équipes d'agents IA collaboratifs sur des projets logiciels, avec mémoire persistante, outils MCP, et conversation temps réel style WhatsApp.
+
+**Inventaire (main)** : ~163 agents · 41 workflows · 104 définitions YAML skills · 15 patterns orchestration. Version produit : `platform/VERSION` (lu par `/api/health` et OpenAPI).
 
 ---
 
@@ -869,17 +871,6 @@ La mémoire projet est enrichie par le `ProjectContext` de la SF :
 | `total_tool_calls_24h` | Appels d'outils journaliers    |
 | `cross_project_errors` | Erreurs systémiques            |
 | `factory_uptime`       | Disponibilité de la plateforme |
-
-### 14.4 Interface i18n (UI)
-
-| Élément | Détail |
-| ------- | ------ |
-| Locales | `en`, `fr` — fichiers `platform/i18n/locales/{en,fr}.json` |
-| Détection | Cookies `sf_lang` / `lang`, puis `Accept-Language` |
-| API | `GET /api/set-lang/{lang}`, `GET /api/i18n/{lang}.json` — codes normalisés via `normalize_lang()` |
-| Hors scope UI | README multilingues et wiki GitHub : EN + FR ; pas de sélecteur zh/de/… dans `base.html` |
-
-Chiffres catalogue (référence code, 2026-05) : **~163 agents** en base, **41 workflows** builtin, **12 patterns** en DB, **104** définitions YAML skills.
 
 ---
 

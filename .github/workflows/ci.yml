@@ -90,6 +90,7 @@ jobs:
             tests/test_i18n_en_fr.py \
             tests/test_no_legacy_external_refs.py \
             tests/test_readme_en_fr.py \
+            tests/test_monitoring_live_perf.py \
             -q
 
   mutation:
