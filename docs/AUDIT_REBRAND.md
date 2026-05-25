@@ -52,3 +52,13 @@ Ces éléments peuvent encore mentionner Macaron / Software Factory sans casser 
 ## Note sur les agents parallèles
 
 Des sous-agents d’exploration ont parfois lu un état obsolète (cache / mauvais chemin). **Seuls les résultats reproduits par `git show HEAD:` et `pytest` sur la branche courante font foi.**
+
+
+### Documentation & wiki (Wave 8)
+
+Audit dédié et backlog d'exécution :
+
+- **`docs/architekt/REBRAND-DOC-AUDIT.md`** — inventaire P0–P2, pages incomplètes, plan de complétude
+- **`docs/architekt/PLATFORM-BACKLOG.md`** § Wave 8 — checkboxes de livraison
+
+État constaté (2026-05-25) : wiki `Home` / `Home‐FR` et README pointent encore vers `macaron-software/software-factory` ; `API-Reference` et `Security` documentent surtout `MACARON_API_KEY` ; pages wiki ES/IT/PT/DE/JA/ZH encore présentes hors scope i18n EN/FR.

@@ -5,7 +5,7 @@ Pas de site vitrine client en phase 0.
 
 > **Alignement tiers** : P0 = Tier **S** · P1 = Tier **A** · P2 = Tier **B** · P3 = Tier **C**
 > Catalogue complet : `docs/ROADMAP.md` § Catalogue features plateforme.
-> **Wave en cours** : voir § Wave 5 — reste P1 avant Phase 3 pilot.
+> **Wave en cours** : § **Wave 8** (doc & rebrand complet) — audit `docs/architekt/REBRAND-DOC-AUDIT.md`.
 
 ## Légende priorités
 
@@ -218,11 +218,59 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 | Projets L3 régulés (HIPAA, banque) | Refus | ADR-041, R24 |
 
 
-## Wave 6 — fondations (doc + CI + releases) — en cours
+## Wave 6 — fondations (doc + CI + releases) — livré
+
+> PR #11 — release `v2.3.0` sur `main`.
 
 - [x] CI verte post-PR #10 (pytest, ruff, secret-scan, tests rebrand)
 - [x] `platform/VERSION` semver + `/api/health` version/timestamp
 - [x] CI bandit + pip-audit **bloquants**
-- [x] Deploy demo/azure après CI `workflow_run`
+- [x] Deploy demo/azure après CI `workflow_run` (secrets deploy à configurer côté GitHub)
 - [x] `CHANGELOG.md` + `docs/architekt/RELEASE.md`
 - [x] Compteurs : ~163 agents, 41 workflows, 104 skills YAML
+
+---
+
+## Wave 7 — roadmap parallèle (PR #12 / #13) — en review
+
+> Ne pas dupliquer ici : merger puis cocher depuis les PR.
+
+- [ ] PR #12 — wiki Darwin/Deployment, monitoring.js, DPA régions, Dependabot, E2E gate, `HITL.md`
+- [ ] PR #13 — L2 LLM, mutation gate (ADR-003), dashboard :8080, CSP / Wave 7 doc
+
+---
+
+## Wave 8 — documentation & rebrand 100 % (P0–P1) — **à traiter en profondeur**
+
+> **Audit** : `docs/architekt/REBRAND-DOC-AUDIT.md` (2026-05-25).  
+> Objectif : doc/wiki/README **cohérents Architekt**, complétude des pages courtes, plus de Macaron/La Poste dans le périmètre utilisateur EN/FR.
+
+### P0 — Utilisateur (wiki + README)
+
+- [ ] Wiki `Home.md` / `Home‐FR` — branding **Architekt Factory**, release **v2.3.0**, repo `ede-bzh/architekt-factory-platform`, retirer tableau GitLab La Poste
+- [ ] README EN + FR — URLs demo/issues/clone studio ; compteurs alignés (163 / 41 / 104)
+- [ ] `API-Reference.md` — documenter `ARCHITEKT_API_KEY` (+ alias `MACARON_API_KEY` 6 mois, ADR-001)
+- [ ] `Security.md` — auth Architekt, HITL, L0–L2, CSP (lien doc CSP post-#13)
+- [ ] `Deployment-Guide.md` — colonnes « demo Architekt » vs « prod legacy macaron_* »
+- [ ] Compléter **`Patterns.md`** (cas d'usage, lien missions / adversarial)
+- [ ] Archiver ou supprimer wiki **Home‐ES/DE/IT/PT/JA/ZH** (hors scope i18n EN/FR officiel)
+- [ ] Pages FR manquantes référencées (`Security‐FR`, `Patterns‐FR`, etc.) — créer ou retirer les liens morts
+
+### P1 — Développeur & gates
+
+- [ ] Réécrire `CLAUDE.md` racine pour le dépôt **Architekt** (retirer `_LAPOSTE`, `sync-to-laposte`, chemins `~/_MACARON-SOFTWARE`)
+- [ ] Aligner `platform/CLAUDE.md` + `docs/AUDIT_REBRAND.md` avec cet audit
+- [ ] Test gate doc : interdire `macaron-software` / « Macaron Software Factory » dans `docs/wiki/Home*.md` + README EN/FR (exceptions Deployment encart legacy)
+- [ ] Index doc `docs/architekt/README.md` — liens phases, backlog, release, audit
+
+### P2 — Infra (lié vague E ROADMAP, pas bloquant Wave 8 doc)
+
+- [ ] Runbook renommage `macaron_platform` → `architekt_platform` (ADR-001 niveau 3)
+- [ ] Helm chart / compose : chemins cibles documentés sans supprimer alias prod tant que non migré
+
+### Critères de done Wave 8
+
+1. `rg -i 'macaron|laposte' docs/wiki/Home.md docs/wiki/Home‐FR.md README.md README.fr.md` → **0** (hors encarts « legacy infra » nommés)
+2. `pytest tests/test_no_legacy_external_refs.py tests/test_readme_en_fr.py tests/test_architekt_branding.py` → verts (+ nouveau test doc si ajouté)
+3. Chaque page du `_Sidebar.md` ≥ contenu « guide » (pas seulement tableaux vides)
+4. `docs/ROADMAP.md` pointe vers l'audit et marque Wave 8 **livré** quand checkboxes ci-dessus cochées
