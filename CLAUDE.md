@@ -1,48 +1,46 @@
-# Software Factory — Context
+# Architekt Factory Platform — Context
+
+Agent orchestration platform for **Architekt** (AI-native digital product studio). Repository: [ede-bzh/architekt-factory-platform](https://github.com/ede-bzh/architekt-factory-platform).
 
 ## STRUCTURE
 
 ```
-_SOFTWARE_FACTORY/     # Agent Platform + Dashboard
-  cli/sf.py            # CLI: sf <command> (platform client, SSE streaming)
-  cli/_api.py          # httpx REST + SSE streaming client
-  cli/_db.py           # SQLite direct (offline mode)
-  cli/_output.py       # ANSI tables, colors, JSON output
-  cli/_stream.py       # SSE consumer, agent colorizer
-  dashboard/           # Lightweight monitoring dashboard (port 8080)
-  platform/            # Agent Platform — FastAPI web app
-    server.py          # Port 8090 (prod) / 8099 (dev)
-    web/routes/        # 10 sub-modules (helpers.py: _parse_body dual JSON/form)
-    a2a/               # Agent-to-Agent: bus, negotiation, veto
-    agents/            # Loop, executor, store (156 agents)
-    patterns/          # 15 orchestration patterns (12 DB + 3 engine-only)
-    missions/          # SAFe lifecycle + ProductBacklog
-    workflows/         # 36 builtin workflows
-    llm/               # Multi-provider client + observability
-    tools/             # code, git, deploy, memory, security, browser, MCP bridge
-    ops/               # Auto-heal, chaos, endurance, backup/restore
-    services/          # Notification (Slack/Email/Webhook)
-    mcps/              # MCP server manager (fetch, memory, playwright)
-    deploy/            # Dockerfile + docker-compose (Azure VM)
-  mcp_lrm/             # MCP LRM server (port 9500)
-  skills/              # Agent YAML definitions
-  projects/            # Per-project configs
-  data/                # SQLite DBs (platform.db)
-  tests/               # pytest + Playwright E2E
-  deploy/              # Helm charts
+platform/            # Agent Platform — FastAPI web app
+  server.py          # Port 8090 (prod) / 8099 (dev)
+  web/routes/        # 10 sub-modules (helpers.py: _parse_body dual JSON/form)
+  a2a/               # Agent-to-Agent: bus, negotiation, veto
+  agents/            # Loop, executor, store (163 agents)
+  patterns/          # 15 orchestration patterns (12 DB + 3 engine-only)
+  missions/          # SAFe lifecycle + ProductBacklog
+  workflows/         # 41 builtin workflows
+  llm/               # Multi-provider client + observability
+  tools/             # code, git, deploy, memory, security, browser, MCP bridge
+  ops/               # Auto-heal, chaos, endurance, backup/restore
+  services/          # Notification (Slack/Email/Webhook)
+  mcps/              # MCP server manager (fetch, memory, playwright)
+  deploy/            # Dockerfile + docker-compose (Azure VM)
+cli/                 # sf <command> (platform client, SSE streaming)
+dashboard/           # Lightweight monitoring dashboard (port 8080)
+mcp_lrm/             # MCP LRM server (port 9500)
+skills/              # Agent YAML definitions
+projects/            # Per-project configs
+data/                # SQLite DBs (platform.db)
+tests/               # pytest + Playwright E2E
+deploy/              # Helm charts
+docs/                # wiki, architekt/, adr/
 ```
-
-Legacy: `_SOFTWARE_FACTORY-old/` (core/, factory CLI, brain, TDD workers — archived)
 
 ## REPOSITORY
 
 ```
-architekt-factory-platform/                ← GitHub ede-bzh/architekt-factory-platform (AGPL-3.0)
-  platform/  cli/  dashboard/  ...           ← code tracké
-  data/  logs/  workspace/                 ← runtime local (gitignore)
+ede-bzh/architekt-factory-platform   ← GitHub (this repo)
+  origin → github.com/ede-bzh/architekt-factory-platform
+  platform/  cli/  dashboard/  docs/  tests/  …
 ```
 
-**Workflow** : développer dans ce dépôt → `git push origin main`.
+**Workflow** : develop in this repository → `git push origin main`.
+
+Local data and secrets stay outside git (`data/`, `~/.config/factory/*.key`).
 
 ## ENVIRONMENTS (3 deployments)
 
@@ -55,7 +53,7 @@ architekt-factory-platform/                ← GitHub ede-bzh/architekt-factory-
 │                │ nginx basic auth        │ Container: deploy-platform-1     │
 │                │                         │ Compose: deploy/docker-compose-  │
 │                │                         │   vm.yml (context: /opt/macaron) │
-│                │                         │ Module: macaron_platform         │
+│                │                         │ Module: macaron_platform (*)     │
 │                │                         │ Patches: /opt/macaron/patches/   │
 │                │                         │ OTEL → Jaeger :16686             │
 ├────────────────┼─────────────────────────┼──────────────────────────────────┤
@@ -67,13 +65,15 @@ architekt-factory-platform/                ← GitHub ede-bzh/architekt-factory-
 │                │                         │ Image: software-factory-         │
 │                │                         │   platform:v2                    │
 ├────────────────┼─────────────────────────┼──────────────────────────────────┤
-│ Local Dev      │ http://localhost:8099    │ macOS, Python 3.12               │
+│ Local Dev      │ http://localhost:8099   │ Linux/macOS, Python 3.12+        │
 │                │ Dashboard: :8080        │ LLM: minimax / MiniMax-M2.5     │
-│                │                         │ Module: platform                 │
+│                │                         │ Module: platform (source tree)   │
 │                │                         │ DB: data/platform.db (SQLite)    │
 │                │                         │ No Docker, direct uvicorn        │
 └────────────────┴─────────────────────────┴──────────────────────────────────┘
 ```
+
+(*) **prod legacy alias** : runtime package and paths still use `macaron_platform`, `/opt/macaron`, Docker user `macaron` on Azure until infra wave E (see `docs/adr/001-rebrand-architekt.md`).
 
 ## DEPLOY
 
@@ -95,8 +95,8 @@ python3 -m uvicorn platform.server:app --host 0.0.0.0 --port 8099 --ws none --lo
 python3 -m dashboard.server  # → http://localhost:8080
 
 # Tests
-python3 -m pytest tests/ -v                    # 52 tests
-cd platform/tests/e2e && npx playwright test   # 82 tests (9 specs)
+python3 -m pytest tests/ -v                    # unit + doc gates
+cd platform/tests/e2e && npx playwright test   # E2E (9 specs)
 ```
 
 ## LLM
@@ -114,12 +114,12 @@ MiniMax: <think> consume tokens (min 16K). GPT-5-mini: NO temperature, max_compl
 
 ```
 VM:  <AZURE_VM_IP> (D4as_v5 4CPU/16GB, francecentral) — SSH macaron@<VM>, nginx basic auth
-     Container: deploy-platform-1, path /app/macaron_platform/, volume deploy_platform-data at /app/data
-     Active compose: /opt/macaron/platform/deploy/docker-compose-vm.yml (context: /opt/macaron)
-     Patches: /opt/macaron/patches/ → copied at container start via start-with-patches.sh
-     ⚠️ Module name = macaron_platform (NOT platform). Package maps platform/ → macaron_platform/.
-PG:  macaron-platform-pg.postgres.database.azure.com — B1ms PG17 32GB, pgvector, pg_trgm
-     DB: macaron_platform, user: macaron, SSL required, dual adapter (adapter.py)
+     Container: deploy-platform-1, path /app/macaron_platform/ (*), volume deploy_platform-data at /app/data
+     Active compose: /opt/macaron/platform/deploy/docker-compose-vm.yml (context: /opt/macaron) (*)
+     Patches: /opt/macaron/patches/ → copied at container start via start-with-patches.sh (*)
+     (*) prod legacy alias — source in repo is platform/; image maps platform/ → macaron_platform/.
+PG:  macaron-platform-pg.postgres.database.azure.com (*) — B1ms PG17 32GB, pgvector, pg_trgm
+     DB: macaron_platform, user: macaron, SSL required, dual adapter (adapter.py) (*)
 LLM: ascii-ui-openai (francecentral) — gpt-5-mini, 100req/min, 100K tok/min
 DR:  L3 full 14/14 — blob GRS (macaronbackups), snapshots, PG PITR 7d
      RPO: PG 24h+PITR 7d, SQLite 24h, VM 7d, secrets 24h, code 0 (git)
@@ -130,21 +130,21 @@ DR:  L3 full 14/14 — blob GRS (macaronbackups), snapshots, PG PITR 7d
 ## DEPLOY WORKFLOW
 
 ```
-rsync /tmp → sudo cp (perms). Ou: docker exec -i CID tee /app/macaron_platform/PATH
+rsync /tmp → sudo cp (perms). Ou: docker exec -i CID tee /app/macaron_platform/PATH (*)
 After: clear __pycache__ → docker restart → wait 15s → health check
-⚠️ Package = macaron_platform (NOT platform). Templates: no restart (Jinja2 re-reads).
+(*) prod legacy alias package name. Templates: no restart (Jinja2 re-reads).
 Auto-resume: lifespan restarts running missions on container restart.
 ```
 
 ## SECURITY
 
 ```
-Auth: AuthMiddleware bearer (MACARON_API_KEY), GET public, mutations require token
+Auth: AuthMiddleware bearer (MACARON_API_KEY — prod legacy env name), GET public, mutations require token
 Headers: HSTS, X-Frame DENY, CSP, X-XSS, Referrer strict
 XSS: Jinja2 autoescaping, CSP connect-src 'self'
 SQL: parameterized queries (? placeholders, zero f-strings)
 Prompt injection: L0+L1 adversarial guards
-Docker: non-root 'macaron', minimal image
+Docker: non-root 'macaron' user in image (*) — prod legacy alias
 Secrets: externalized ~/.config/factory/*.key, chmod 600
 Rate limit: PG-backed per-IP+token, survives restart
 ```
@@ -152,13 +152,13 @@ Rate limit: PG-backed per-IP+token, survives restart
 ## PLATFORM ARCHITECTURE
 
 ```
-FastAPI + HTMX + Jinja2 + SSE | Dark purple | SQLite/PostgreSQL dual
+FastAPI + HTMX + Jinja2 + SSE | Architekt theme | SQLite/PostgreSQL dual
 AgentLoop ←→ MessageBus (per-agent queues) → SSE → Frontend
 AgentExecutor → LLM → tool calls → route via bus
 Dual SSE: _push_sse() → _sse_queues (runner) + bus._sse_listeners (broadcast)
 ```
 
-### 156 AGENTS (store.py + skills/definitions/\*.yaml)
+### 163 AGENTS (store.py + skills/definitions/*.yaml)
 
 ```
 Dev (35+):     brain, lead_dev, dev_backend/frontend, workers, mobile_ios/android
@@ -170,9 +170,10 @@ DevOps (8+):   devops, sre, pipeline_engineer, backup-ops, monitoring-ops, canar
 Doc (3):       doc-writer (tech writer lead), changelog-gen, tech_writer
 RSE (8+):      rse-dpo, rse-ethique-ia, rse-eco, rse-a11y, rse-audit-social
 SAFe (6):      rte, epic_owner, lean_portfolio_manager, solution_train_engineer
+Architekt (10+): architekt-* studio skills (product, delivery, compliance, …)
 ```
 
-### 36 WORKFLOWS (builtins.py)
+### 41 WORKFLOWS (builtins.py)
 
 ```
 Lifecycle:     product-lifecycle (11 phases), feature-sprint (5), feature-request (6)
@@ -233,7 +234,7 @@ Dependencies: feature_deps table + visual 🔗 badges.
 Charts: Chart.js velocity, burndown, cycle time histogram, Gantt.
 ```
 
-### REST API (dual JSON + form via \_parse_body)
+### REST API (dual JSON + form via _parse_body)
 
 ```
 POST /api/projects, /api/missions, /api/missions/{id}/start, /api/missions/{id}/run
@@ -267,7 +268,8 @@ Wiki `/memory`, confidence bars. Retrospectives → LLM → lessons → global.
 DORA: deploy freq, lead time, CFR, MTTR + velocity + sparklines.
 LLM: per-call tracing (provider, model, tokens, cost). Live: `/monitoring` SSE.
 OpenTelemetry: opt-in via `OTEL_ENABLED=1`. Exports to Jaeger/OTEL collector via OTLP/HTTP.
-  Env vars: `OTEL_ENABLED=1`, `OTEL_SERVICE_NAME=macaron-prod`, `OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317`
+  Env vars: `OTEL_ENABLED=1`, `OTEL_SERVICE_NAME=architekt-prod` (or legacy `macaron-prod` on Azure),
+  `OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317`
   Jaeger UI: http://localhost:16686 (traces, spans, latency).
   Requires: `pip install opentelemetry-api opentelemetry-sdk opentelemetry-instrumentation-fastapi opentelemetry-exporter-otlp-proto-http`
 
@@ -299,7 +301,7 @@ cli/sf.py, cli/_api.py, cli/_db.py, cli/_output.py, cli/_stream.py
 
 ## DB
 
-`data/platform.db` (racine \_SOFTWARE_FACTORY). Dual: `DATABASE_URL` → PG, absent → SQLite.
+`data/platform.db` (repo `data/`). Dual: `DATABASE_URL` → PG, absent → SQLite.
 ⚠️ NEVER `rm -f data/platform.db`. ⚠️ NEVER `*_API_KEY=dummy`.
 
 ## CONVENTIONS
@@ -311,15 +313,13 @@ cli/sf.py, cli/_api.py, cli/_db.py, cli/_output.py, cli/_stream.py
 
 ## EXTERNAL TOOLS WATCHLIST
 
-Outils tiers à suivre pour intégration future dans la SF :
-
 | Outil | Repo | Pourquoi | Statut |
 |-------|------|----------|--------|
 | **rtk** (Rust Token Killer) | [rtk-ai/rtk](https://github.com/rtk-ai/rtk) | CLI proxy Rust, réduit 60-90% tokens LLM sur git/test/grep — intégrer dans `tool_runner.py` + wrappers agents | 🔭 watch |
 
-### rtk — notes d'intégration SF
+### rtk — notes d'intégration
 - **Approche hook** : `~/.claude/settings.json` `PreToolUse` → transparent pour Claude Code. Pas applicable server-side.
-- **Approche SF** : wrapper dans `platform/tools/git_tools.py`, `test_tools.py`, `build_tools.py` — détecter si `rtk` est dans PATH, préfixer les commandes.
+- **Approche plateforme** : wrapper dans `platform/tools/git_tools.py`, `test_tools.py`, `build_tools.py` — détecter si `rtk` est dans PATH, préfixer les commandes.
 - **Patterns à récupérer** : logique de compression `cargo_cmd.rs`, `diff_cmd.rs`, `grep_cmd.rs` → portage Python dans `platform/tools/`.
 - **Install local** : `curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh`
 - **Version analysée** : v0.22.2 (fév 2026) — 1572 ⭐, 115 forks
@@ -342,3 +342,7 @@ Accessibilité:    rse-a11y agent + rse-compliance a11y-audit phase ✓
 RSE/Green IT:     rse-compliance (eco + social + ethical AI audit) ✓
 SAFe:             pi-planning + epic-decompose (ART, portfolio, WSJF) ✓
 ```
+
+## DOC INDEX
+
+Studio and rebrand docs: `docs/architekt/README.md`.
