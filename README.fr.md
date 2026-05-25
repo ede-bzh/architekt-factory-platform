@@ -2,17 +2,18 @@
   <a href="README.md">English</a> |
   <a href="README.fr.md">Français</a>
 </p>
+
 <div align="center">
 
 # Architekt Factory Platform
 
-**Plateforme multi-agents pour une livraison logicielle accélérée par l'IA et consciente de la sécurité** (outil interne du studio Architekt Pte. Ltd.)
+**Plateforme multi-agents pour une livraison logicielle accélérée par l'IA et sécurisée**
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-Lancez en local avec **`PLATFORM_LLM_PROVIDER=demo`** (sans clé API) — voir [Démarrage rapide](#démarrage-rapide)
+**[Demo live : sf.macaron-software.com](https://sf.macaron-software.com)** — cliquez "Skip (Demo)" pour explorer
 
 [Fonctionnalités](#fonctionnalités) · [Démarrage rapide](#démarrage-rapide) · [Captures d'écran](#captures-décran) · [Architecture](#architecture) · [Contribuer](#contribuer)
 
@@ -22,16 +23,13 @@ Lancez en local avec **`PLATFORM_LLM_PROVIDER=demo`** (sans clé API) — voir [
 
 ## C'est quoi ?
 
-**Architekt Factory Platform** est le **moteur d'orchestration multi-agents interne** d'**Architekt** — studio de produits digitaux natif IA pour scale-ups et PME APAC.
+**Architekt Factory Platform** est le **moteur d'orchestration multi-agents interne** d'**Architekt**. Il couvre le cycle de vie logiciel de l'idéation au déploiement.
 
-> **Architekt ne vend pas du code. Architekt vend une livraison digitale globalement prête, accélérée par l'IA et consciente de la sécurité** — combinant la vitesse de l'IA, la rigueur du senior engineering, la preuve via rapports qualité automatisés, et une readiness globale dès le jour 1.
-
-Cette plateforme (anciennement *Software Factory*) orchestre des agents IA spécialisés via des workflows structurés — de l'idéation au déploiement — pour que le studio livre des projets clients avec la méthodologie SAFe, le TDD et des portes de qualité automatisées. Imaginez une **usine de livraison virtuelle** où 160+ agents collaborent sous supervision humaine.
+La plateforme coordonne **163 agents spécialisés** et **41 workflows intégrés**, en méthodologie SAFe, pratiques TDD et portes de qualité automatisées.
 
 ### Points clés
 
-- **160+ agents spécialisés** — architectes, développeurs, testeurs, SRE, analystes sécurité, product owners
-- **10 patterns d'orchestration** — solo, séquentiel, parallèle, hiérarchique, réseau, boucle, routeur, agrégateur, vague, human-in-the-loop
+- **163 agents spécialisés** — 10 patterns d'orchestration** — solo, séquentiel, parallèle, hiérarchique, réseau, boucle, routeur, agrégateur, vague, human-in-the-loop
 - **Cycle de vie SAFe** — Portfolio → Epic → Feature → Story avec cadence PI
 - **Résilience LLM** — fallback multi-provider, retry avec jitter, gestion rate-limit, config modèle par env
 - **Observabilité OpenTelemetry** — tracing distribué avec Jaeger, dashboard analytics pipeline
@@ -112,7 +110,7 @@ L'image inclut : **Node.js 20**, **Playwright + Chromium**, **bandit**, **semgre
 
 ```bash
 git clone https://github.com/ede-bzh/architekt-factory-platform.git
-cd architekt-factory-platform
+cd software-factory
 make setup   # copie .env.example → .env (éditez pour ajouter votre clé LLM)
 make run     # construit et lance la plateforme
 ```
@@ -124,7 +122,7 @@ Choisissez votre rôle SAFe ou cliquez sur **« Skip (Demo) »** pour explorer d
 
 ```bash
 git clone https://github.com/ede-bzh/architekt-factory-platform.git
-cd architekt-factory-platform
+cd software-factory
 cp .env.example .env                # créer votre config (éditer pour ajouter la clé LLM — voir Étape 3)
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r platform/requirements.txt
@@ -417,7 +415,7 @@ ln -s $(pwd)/cli/sf.py ~/.local/bin/sf
 sf status                              # Santé plateforme
 sf projects list                       # Tous les projets
 sf missions list                       # Missions avec scores WSJF
-sf agents list                         # 160+ agents
+sf agents list                         # 163 agents
 sf features list <epic_id>             # Features d'un epic
 sf stories list --feature <id>         # User stories
 
@@ -483,7 +481,7 @@ python3 -m platform.mcp_platform.server
           ┌────────────┴┐   ┌────┴─────┐   ┌──┴───────────┐
           │ Moteur       │   │ Moteur   │   │   Couche     │
           │  Agents      │   │ Workflow │   │   Missions   │
-          │ 160+ agents   │   │ 39 defs  │   │ Cycle SAFe   │
+          │ 163 agents   │   │ 39 defs  │   │ Cycle SAFe   │
           │ executeur    │   │ 10 ptrns │   │ Portfolio    │
           │ boucle+retry │   │ phases   │   │ Epic/Feature │
           └──────┬───────┘   │ retry    │   │ Story/Sprint │
@@ -592,8 +590,8 @@ Mission Creee
                      ┌───────┴────────┐
                      │                │
           ┌──────────▼─────┐  ┌───────▼────────┐
-          │ VM Azure (legacy)│  │ VPS OVH (legacy)│
-          │ sf.macaron-* (pré-rebrand)│  │ demo.macaron-* (pré-rebrand)│
+          │ VM Azure (Prod)│  │ VPS OVH (Demo) │
+          │ sf.macaron-software.com   │  │ demo.macaron-software.com  │
           │                │  │                │
           │ Nginx :443     │  │ Nginx :443     │
           │   │            │  │   │            │
@@ -614,8 +612,8 @@ Mission Creee
                              │
                     ┌────────▼────────┐
                     │ GitHub          │
-                    │ ede-bzh         │
-                    │ /architekt-factory-platform│
+                    │ macaron-software│
+                    │ /software-factory│
                     └─────────────────┘
 ```
 
@@ -980,7 +978,7 @@ docker-compose up -d
 ### Kubernetes (Helm)
 
 ```bash
-helm install architekt-factory ./deploy/helm/
+helm install software-factory ./deploy/helm/
 ```
 
 ### Variables d'Environnement
@@ -1011,6 +1009,6 @@ Ce projet est sous licence AGPL v3 - voir le fichier [LICENSE](LICENSE) pour dé
 
 ## Support
 
-- Démo legacy (pré-rebrand) : https://architekt (demo)
+- Demo live : https://sf.macaron-software.com
 - Issues : https://github.com/ede-bzh/architekt-factory-platform/issues
 - Discussions : https://github.com/ede-bzh/architekt-factory-platform/discussions

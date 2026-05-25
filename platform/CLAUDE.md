@@ -53,15 +53,22 @@ ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platf
 # UID mismatch: /opt/macaron owned by 501 (macOS), azureadmin=1001 → use docker cp
 ```
 
-## GIT
+## GIT (2 repos séparés)
 
 ```
-architekt-factory-platform/            ← GitHub ede-bzh/architekt-factory-platform
-  platform/ cli/ dashboard/ ...        ← code tracké
-  data/ logs/ workspace/               ← runtime local (gitignore)
+~/_MACARON-SOFTWARE/                   ← .git → GitHub macaron-software/software-factory
+  platform/ cli/ dashboard/ ...        ← CODE tracké
+  _SOFTWARE_FACTORY/                   ← runtime local NON TRACKÉ (.gitignore)
+    platform/ data/ logs/ ...          ← instance dev (DB, logs, workspace)
+
+~/_LAPOSTE/_SOFTWARE_FACTORY/          ← .git → GitLab udd-ia-native/software-factory
+  platform/ cli/ dashboard/ ...        ← squelette : skills/workflows/projects VIDES
+  SSH: ~/.ssh/gitlab_laposte_ed25519   ← ssh -T git@gitlab.azure... → ✅
 ```
 
-Push : `git push origin main`
+Push GitHub : `cd ~/_MACARON-SOFTWARE && git push origin main`
+Sync La Poste (one-way) : `cd ~/_MACARON-SOFTWARE && ./sync-to-laposte.sh`
+⚠️ Ne jamais éditer `~/_LAPOSTE/_SOFTWARE_FACTORY/` — écrasé par sync.
 
 ## STACK
 
@@ -69,7 +76,7 @@ Push : `git push origin main`
 - SQLite WAL + FTS5 (~35 tables)
 - LLM per environment (see LLM ENVIRONMENTS below)
 - Rate limit: 15 rpm (token-limited ~10-16 calls/min in practice, 100K tokens/60s)
-- **133+ agents** (95 YAML defs), 12 patterns, 19 workflows, 1271 skills
+- **163 agents** (104 YAML defs), 15 patterns, 41 workflows
 
 ---
 

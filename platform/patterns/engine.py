@@ -525,6 +525,10 @@ async def run_pattern(
     project_id: str = "",
     project_path: str = "",
     phase_id: str = "",
+    mission_id: str = "",
+    workflow_id: str = "",
+    phase_idx: int = 0,
+    phase_count: int = 8,
 ) -> PatternRun:
     """Execute a pattern graph in a session. Returns the run state."""
     run = PatternRun(
@@ -577,6 +581,24 @@ async def run_pattern(
             "pattern_name": pattern.name,
         },
     )
+
+    if phase_id and mission_id:
+        try:
+            from ..agents.rl_hooks import apply_rl_pattern_override
+
+            _new_ptype = apply_rl_pattern_override(
+                pattern.type,
+                mission_id=mission_id,
+                phase_id=phase_id,
+                workflow_id=workflow_id or pattern.id or "",
+                phase_idx=phase_idx,
+                phase_count=phase_count,
+            )
+            if _new_ptype != pattern.type:
+                pattern.type = _new_ptype
+                run.pattern = pattern
+        except Exception as _rl_err:
+            logger.debug("RL pattern hook skipped: %s", _rl_err)
 
     try:
         import sys
@@ -1487,9 +1509,7 @@ async def _build_node_context(agent: AgentDef, run: PatternRun) -> ExecutionCont
         try:
             lib = get_skill_library()
             parts = []
-            from ..agents.skill_limits import max_architekt_skills_for_role
-
-            for sid in agent.skills[: max_architekt_skills_for_role(agent.role)]:
+            for sid in agent.skills[:5]:
                 skill = lib.get(sid)
                 if skill and skill.get("content"):
                     parts.append(f"### {skill['name']}\n{skill['content'][:1500]}")
