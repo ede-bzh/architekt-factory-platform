@@ -53,22 +53,14 @@ ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platf
 # UID mismatch: /opt/macaron owned by 501 (macOS), azureadmin=1001 → use docker cp
 ```
 
-## GIT (2 repos séparés)
+## GIT
 
 ```
-~/_MACARON-SOFTWARE/                   ← .git → GitHub macaron-software/software-factory
-  platform/ cli/ dashboard/ ...        ← CODE tracké
-  _SOFTWARE_FACTORY/                   ← runtime local NON TRACKÉ (.gitignore)
-    platform/ data/ logs/ ...          ← instance dev (DB, logs, workspace)
-
-~/_LAPOSTE/_SOFTWARE_FACTORY/          ← .git → GitLab udd-ia-native/software-factory
-  platform/ cli/ dashboard/ ...        ← squelette : skills/workflows/projects VIDES
-  SSH: ~/.ssh/gitlab_laposte_ed25519   ← ssh -T git@gitlab.azure... → ✅
+ede-bzh/architekt-factory-platform   ← GitHub (source of truth)
+  platform/ cli/ dashboard/ ...     ← tracked application code
 ```
 
-Push GitHub : `cd ~/_MACARON-SOFTWARE && git push origin main`
-Sync La Poste (one-way) : `cd ~/_MACARON-SOFTWARE && ./sync-to-laposte.sh`
-⚠️ Ne jamais éditer `~/_LAPOSTE/_SOFTWARE_FACTORY/` — écrasé par sync.
+Push : `git push origin main`
 
 ## STACK
 
@@ -513,8 +505,8 @@ Three layers of adaptive intelligence optimize agent/workflow performance:
 
 ```
 Layer 1 (LIVE ✅)     Thompson Sampling     per-agent-slot runtime selection
-Layer 2 (PLANNED)     Genetic Algorithm     offline workflow template evolution
-Layer 3 (PLANNED)     Reinforcement Learning  mid-mission pattern adaptation
+Layer 2 (LIVE ✅)     Genetic Algorithm     offline workflow template evolution
+Layer 3 (LIVE ✅)     Reinforcement Learning  mid-mission pattern adaptation
 ```
 
 ---

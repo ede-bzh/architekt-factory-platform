@@ -94,7 +94,7 @@ Pas de site vitrine client en phase 0.
 
 **Reste P1 (non bloquant pilot Phase 3) :**
 
-- [ ] **4 DPA templates** par région (SG, UAE, EU, US)
+- [x] **4 DPA templates** (docs/compliance/dpa/ — modèles régionaux) par région (SG, UAE, EU, US)
 - [ ] **i18n ZH** — explicitement reporté (EN/FR seulement en prod)
 - [ ] **Dashboard `dashboard/` rebrand complet** — UI legacy port 8080 (README seulement livré)
 - [ ] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4)
