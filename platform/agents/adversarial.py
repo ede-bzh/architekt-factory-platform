@@ -2,9 +2,10 @@
 Adversarial Guard — Detect slop, hallucination, mock, and lies in agent output.
 ================================================================================
 
-Three-layer Swiss Cheese model:
+Four-layer Swiss Cheese model:
 - L0: Deterministic fast checks (regex, heuristics) — 0ms
-- L2: Architecture / security checks on code writes — 0ms
+- L2: Architecture / security checks on code writes (deterministic) — 0ms
+- L2-LLM: Architecture / API semantic review (LLM) — optional, ~5s
 - L1: Semantic LLM check (different model than producer) — optional, ~5s
 
 Runs INSIDE _execute_node() after agent produces output, BEFORE storing in memory.
@@ -14,6 +15,7 @@ Rejects output with a reason; the pattern engine can retry or flag.
 from __future__ import annotations
 
 import logging
+import os
 import re
 from dataclasses import dataclass
 
@@ -78,6 +80,20 @@ _L2_PATTERNS = [
     (r"skipAuthentication\s*=\s*true", "Authentication explicitly skipped"),
     (r"disable_auth\s*=\s*True", "Auth disabled flag"),
 ]
+
+
+# Heuristics: run L2-LLM only when output looks like API / architecture work
+_L2_LLM_ARCH_SIGNALS = [
+    r"@app\.(?:get|post|put|delete|patch|route)",
+    r"\bAPIRouter\b",
+    r"\b(?:FastAPI|Flask|Blueprint|router\.)",
+    r"\b(?:middleware|dependenc(?:y|ies)|OAuth|JWT|RBAC)\b",
+    r"\b(?:BaseModel|pydantic|OpenAPI|swagger)\b",
+    r"\b(?:/api/|REST|GraphQL|endpoint)\b",
+    r"\b(?:authorize|authentication|permission|role_required)\b",
+]
+
+# Mock/stub patterns
 
 # Mock/stub patterns — fake implementations
 _MOCK_PATTERNS = [
@@ -501,6 +517,150 @@ def check_l2(
     )
 
 
+def _l2_llm_role_applicable(agent_role: str) -> bool:
+    role_lower = (agent_role or "").lower()
+    arch_roles = ("dev", "arch", "security", "backend", "frontend", "devops", "lead")
+    return any(k in role_lower for k in arch_roles)
+
+
+def _content_suggests_architecture_review(
+    content: str, tool_calls: list | None, task: str
+) -> bool:
+    """True when text or code writes look like API / architecture design."""
+    parts = [content or "", task or ""]
+    for tc in tool_calls or []:
+        if tc.get("name") not in ("code_write", "code_edit"):
+            continue
+        args = tc.get("args") or {}
+        parts.append(
+            str(args.get("path", "") or args.get("file_path", ""))
+        )
+        parts.append(str(args.get("content", "")))
+    blob = "\n".join(parts)
+    return any(
+        re.search(pattern, blob, re.IGNORECASE) for pattern in _L2_LLM_ARCH_SIGNALS
+    )
+
+
+def _l2_llm_code_excerpt(tool_calls: list | None, content: str, limit: int = 3500) -> str:
+    lines = [f"AGENT TEXT:\n{(content or '')[:1200]}"]
+    for tc in tool_calls or []:
+        if tc.get("name") not in ("code_write", "code_edit"):
+            continue
+        args = tc.get("args") or {}
+        fp = str(args.get("path", "") or args.get("file_path", "") or "file")
+        fc = str(args.get("content", ""))
+        if fc:
+            lines.append(f"--- {fp} ---\n{fc[:1500]}")
+    excerpt = "\n\n".join(lines)
+    return excerpt[:limit]
+
+
+async def check_l2_llm(
+    content: str,
+    task: str = "",
+    agent_role: str = "",
+    agent_name: str = "",
+    tool_calls: list = None,
+    pattern_type: str = "",
+) -> GuardResult:
+    """L2-LLM: Semantic architecture / security review (distinct from deterministic L2).
+
+    Runs only after deterministic L2 passed, for dev code writes that look like API design.
+    Demo provider skips the LLM call; real providers use structured JSON (fail-closed on error).
+    """
+    tool_calls = tool_calls or []
+    if not _l2_llm_role_applicable(agent_role):
+        return GuardResult(passed=True, score=0, issues=[], level="L2-llm-skipped")
+    if not any(tc.get("name") in ("code_write", "code_edit") for tc in tool_calls):
+        return GuardResult(passed=True, score=0, issues=[], level="L2-llm-skipped")
+    if not _content_suggests_architecture_review(content, tool_calls, task):
+        return GuardResult(passed=True, score=0, issues=[], level="L2-llm-skipped")
+
+    if os.environ.get("PLATFORM_LLM_PROVIDER", "").strip().lower() == "demo":
+        return GuardResult(passed=True, score=0, issues=[], level="L2-llm-skipped")
+
+    try:
+        from ..llm.client import LLMMessage, get_llm_client
+
+        code_excerpt = _l2_llm_code_excerpt(tool_calls, content)
+        prompt = f"""Review this developer output for architecture and API security. Score 0-10 (0=excellent, 10=unsafe).
+
+AGENT: {agent_name} ({agent_role})
+TASK: {task[:500]}
+PATTERN: {pattern_type or "n/a"}
+
+CODE / OUTPUT:
+{code_excerpt}
+
+Check for (flag with clear prefixes RBAC:, VALIDATION:, API_DESIGN:, AUTH_BYPASS:, INSECURE:):
+1. RBAC: missing authorization on sensitive routes, privilege escalation
+2. VALIDATION: unvalidated user input on writes, missing schema/bounds checks
+3. API_DESIGN: inconsistent errors, missing auth on mutations, broken REST conventions
+4. AUTH_BYPASS: authentication disabled, trust-all middleware, open admin routes
+5. INSECURE: SQL injection patterns, mass assignment, secrets in responses
+
+Respond ONLY with JSON:
+{{"score": <0-10>, "issues": ["issue1", "issue2"], "verdict": "APPROVE" or "REJECT"}}"""
+
+        client = get_llm_client()
+        resp = await client.chat(
+            messages=[LLMMessage(role="user", content=prompt)],
+            system_prompt=(
+                "You are a security architect reviewer. Reject unsafe API and auth designs. "
+                "Be strict on RBAC and input validation."
+            ),
+            temperature=0.1,
+            max_tokens=350,
+        )
+
+        import json
+
+        raw = resp.content.strip()
+        if "```json" in raw:
+            raw = raw.split("```json", 1)[1].split("```", 1)[0].strip()
+        elif "```" in raw:
+            raw = raw.split("```", 1)[1].split("```", 1)[0].strip()
+
+        data = json.loads(raw)
+        l2_score = int(data.get("score", 0))
+        l2_issues = data.get("issues", [])
+        verdict = data.get("verdict", "APPROVE")
+
+        has_critical = any(
+            tag in (i or "").upper()
+            for i in l2_issues
+            for tag in (
+                "RBAC",
+                "VALIDATION",
+                "API_DESIGN",
+                "AUTH_BYPASS",
+                "INSECURE",
+                "AUTH",
+                "CORS",
+            )
+        )
+        if has_critical:
+            l2_score = max(l2_score, 7)
+            verdict = "REJECT"
+
+        return GuardResult(
+            passed=verdict == "APPROVE" and l2_score < 6,
+            score=l2_score,
+            issues=[f"L2-LLM: {i}" for i in l2_issues],
+            level="L2-LLM",
+        )
+
+    except Exception as e:
+        logger.warning(f"L2-LLM adversarial check failed: {e}")
+        return GuardResult(
+            passed=False,
+            score=7,
+            issues=[f"L2-LLM: reviewer unavailable ({e})"],
+            level="L2-llm-fail-closed",
+        )
+
+
 async def check_l1(
     content: str,
     task: str,
@@ -664,10 +824,11 @@ async def run_guard(
     pattern_type: str = "",
     enable_l1: bool = True,
 ) -> GuardResult:
-    """Run the full adversarial guard pipeline: L0 → L2 → L1.
+    """Run the full adversarial guard pipeline: L0 → L2 → L2-LLM → L1.
 
     L0 always runs (deterministic, 0ms).
     L2 runs after L0 passes — architecture/security on code writes (dev roles).
+    L2-LLM runs after deterministic L2 passes — semantic API/architecture review.
     L1 runs last for execution patterns and dev roles when enabled.
     """
     # L0: Fast deterministic
@@ -707,6 +868,15 @@ async def run_guard(
         l2.score = max(l0.score, l2.score)
         return l2
 
+    l2_llm = await check_l2_llm(
+        content, task, agent_role, agent_name, tool_calls, pattern_type
+    )
+    if not l2_llm.passed:
+        logger.info(f"GUARD L2-LLM REJECT [{agent_name}]: {l2_llm.summary}")
+        l2_llm.issues = l0.issues + l2.issues + l2_llm.issues
+        l2_llm.score = max(l0.score, l2.score, l2_llm.score)
+        return l2_llm
+
     # L1: Semantic LLM check — only for execution patterns AND dev/ops roles
     # Discussion patterns (network, human-in-the-loop) are debating, not producing code
     # Strategic/business/management roles produce analysis, not code — skip L1
@@ -716,17 +886,17 @@ async def run_guard(
         )
         if not l1.passed:
             logger.info(f"GUARD L1 REJECT [{agent_name}]: {l1.summary}")
-            l1.issues = l0.issues + l2.issues + l1.issues
-            l1.score = max(l0.score, l2.score, l1.score)
+            l1.issues = l0.issues + l2.issues + l2_llm.issues + l1.issues
+            l1.score = max(l0.score, l2.score, l2_llm.score, l1.score)
             return l1
 
-    level = "L0+L2"
+    level = "L0+L2+L2-LLM"
     if enable_l1 and pattern_type in execution_patterns and is_dev_role:
-        level = "L0+L2+L1"
+        level = "L0+L2+L2-LLM+L1"
 
     return GuardResult(
         passed=True,
-        score=max(l0.score, l2.score),
-        issues=l0.issues + l2.issues,
+        score=max(l0.score, l2.score, l2_llm.score),
+        issues=l0.issues + l2.issues + l2_llm.issues,
         level=level,
     )

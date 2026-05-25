@@ -82,6 +82,7 @@ jobs:
             tests/test_llm_budget.py \
             tests/test_quality_pdf.py \
             tests/test_adversarial_l2.py \
+            tests/test_adversarial_l2_llm.py \
             tests/test_finops_margin.py \
             tests/test_prometheus_architekt.py \
             tests/test_ai_audit_logs.py \

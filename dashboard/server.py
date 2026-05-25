@@ -36,10 +36,14 @@ BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = BASE_DIR / "data"
 PROJECTS_DIR = BASE_DIR / "projects"
 PID_DIR = Path("/tmp/factory")
+PLATFORM_URL = os.environ.get("PLATFORM_URL", "http://localhost:8099").rstrip("/")
+BRAND_NAME = "Architekt Factory Monitor"
 
 # FastAPI app
-app = FastAPI(title="Software Factory Dashboard", version="1.0.0")
+app = FastAPI(title=BRAND_NAME, version="1.0.0")
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
+templates.env.globals["platform_url"] = PLATFORM_URL
+templates.env.globals["brand_name"] = BRAND_NAME
 
 # ============================================================================
 # SIMPLE TTL CACHE (no external deps)
@@ -517,12 +521,34 @@ async def api_logs_stream(project_id: str):
 
 
 # ============================================================================
+# HEALTH
+# ============================================================================
+
+@app.get("/health")
+async def health():
+    """Dashboard health; platform API is on PLATFORM_URL."""
+    return {
+        "status": "ok",
+        "service": "architekt-factory-monitor",
+        "legacy": True,
+        "platform_url": PLATFORM_URL,
+        "platform_health": f"{PLATFORM_URL}/api/health",
+    }
+
+
+# ============================================================================
 # HTML PAGES
 # ============================================================================
 
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    """Dashboard home page."""
+async def root_landing(request: Request):
+    """Documentation landing with links to the primary platform UI."""
+    return templates.TemplateResponse("landing.html", {"request": request})
+
+
+@app.get("/legacy", response_class=HTMLResponse)
+async def legacy_home(request: Request):
+    """Legacy factory task monitor (former / home)."""
     stats, projects = await asyncio.gather(
         asyncio.to_thread(get_global_stats),
         asyncio.to_thread(get_all_projects),
@@ -587,8 +613,9 @@ def main():
     import uvicorn
 
     port = int(os.environ.get("PORT", 8080))
-    print(f"\n🏭 Software Factory Dashboard")
-    print(f"   http://localhost:{port}\n")
+    print(f"\n◆ {BRAND_NAME} (legacy :8080)")
+    print(f"   http://localhost:{port}/  → platform links ({PLATFORM_URL})")
+    print(f"   http://localhost:{port}/legacy  → task monitor\n")
 
     uvicorn.run(
         "dashboard.server:app",
