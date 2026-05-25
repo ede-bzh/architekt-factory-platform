@@ -29,3 +29,16 @@ Le package runtime reste `macaron_platform` dans les images existantes. Le renom
 
 1. Redéployer l'image ou le commit du tag précédent.
 2. `PLATFORM_VERSION` peut pointer vers l'ancienne version pour les sondes sans rebuild immédiat.
+
+## Compliance (DPA)
+
+Modèles de Data Processing Agreement par région pour engagements clients : [`docs/compliance/dpa/`](../compliance/dpa/).
+
+| Région | Fichier | Cadre |
+|--------|---------|-------|
+| Singapore | `dpa-singapore.md` | PDPA |
+| UAE | `dpa-uae.md` | PDPL |
+| EU | `dpa-eu.md` | GDPR (Art. 28) |
+| US | `dpa-us.md` | SCC-oriented processor / CCPA-ready |
+
+Faire relire par conseil juridique avant signature. Matrice régionale : [`docs/COMPLIANCE.md`](../COMPLIANCE.md).
