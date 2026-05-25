@@ -1,9 +1,55 @@
 # API Reference
 
-Base URL: `http://<host>:<port>`  
-Auth: Bearer token (`MACARON_API_KEY`). GET endpoints are public; mutations require auth.  
-Format: dual JSON + form-data (auto-detected via `_parse_body`).  
-Swagger: `/docs` (FastAPI auto-generated).
+REST API for the **Architekt** agent platform (Software Factory). Base URL: `http://<host>:<port>` (default local: `8099`, Docker: `8090`).
+
+**Swagger UI:** `/docs` (FastAPI auto-generated OpenAPI).
+
+## Authentication
+
+Per **ADR-001** (platform rebrand), use the canonical API key environment variable:
+
+| Variable | Status | Notes |
+|----------|--------|-------|
+| `ARCHITEKT_API_KEY` | **Primary** | Set this in production and new integrations |
+| `MACARON_API_KEY` | **Alias (6 months)** | Accepted until alias sunset; same value as `ARCHITEKT_API_KEY` |
+
+When either variable is set, `AuthMiddleware` protects API mutations. If neither is set, auth is disabled (development only).
+
+### Bearer token
+
+Send the key on every protected request:
+
+```http
+Authorization: Bearer architekt_live_xxxxxxxxxxxxxxxx
+```
+
+Example with `curl`:
+
+```bash
+export ARCHITEKT_API_KEY="architekt_live_xxxxxxxxxxxxxxxx"
+
+curl -s -X POST "http://localhost:8099/api/missions" \
+  -H "Authorization: Bearer ${ARCHITEKT_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"My Epic","workflow_id":"product-lifecycle"}'
+```
+
+Legacy deployments may still export `MACARON_API_KEY`; the middleware treats both names as equivalent during the 6-month alias window.
+
+### Access rules
+
+| Request type | Auth required |
+|--------------|---------------|
+| `GET` on listed public paths (projects, missions, agents, metrics, health, etc.) | No |
+| `POST`, `PATCH`, `DELETE` on `/api/*` | Yes (Bearer) |
+| HTML pages, `/static`, `/docs`, SSE streams | No (pages); SSE follows stream endpoint rules |
+| Query fallback `?token=<key>` | Supported for scripts (prefer `Authorization` header) |
+
+JWT session cookies (`access_token`) are used by the web UI; API automation should use the Bearer API key.
+
+## Request format
+
+Endpoints accept **dual JSON + form-data** via `_parse_body` (auto-detected). Prefer `Content-Type: application/json` for integrations.
 
 ## Projects
 
@@ -16,13 +62,13 @@ Swagger: `/docs` (FastAPI auto-generated).
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/missions` | Create mission |
-| POST | `/api/missions/{id}/start` | Start mission |
-| POST | `/api/missions/{id}/run` | Run phase |
+| POST | `/api/missions` | Create mission (epic) |
+| POST | `/api/missions/{id}/start` | Start mission run |
+| POST | `/api/missions/{id}/run` | Run current phase |
 | POST | `/api/missions/{id}/wsjf` | Set WSJF scores |
 | POST | `/api/missions/{id}/sprints` | Create sprint |
-| POST | `/api/missions/{id}/validate` | Validate phase |
-| GET | `/api/missions/{id}` | Get mission details |
+| POST | `/api/missions/{id}/validate` | Validate phase (HITL checkpoint) |
+| GET | `/api/missions/{id}` | Mission details |
 
 ## Epics / Features / Stories
 
@@ -60,11 +106,29 @@ Swagger: `/docs` (FastAPI auto-generated).
 | GET | `/api/mcps` | List MCP servers |
 | GET | `/docs` | Swagger UI |
 
-## SSE Streams
+## SSE streams
 
 | Endpoint | Description |
 |----------|-------------|
 | `/api/missions/{id}/stream` | Mission execution events |
 | `/api/monitoring/live` | System monitoring events |
+
+SSE clients do not send the API key on the EventSource connection; mission control mutations still require Bearer auth.
+
+## CLI (`sf`)
+
+The `sf` CLI uses the same Bearer token (from `ARCHITEKT_API_KEY` or legacy `MACARON_API_KEY`):
+
+```bash
+export ARCHITEKT_API_KEY="architekt_live_xxxxxxxxxxxxxxxx"
+sf status
+sf missions list
+```
+
+## Related docs
+
+- [Security](Security) — headers, rate limits, adversarial gates
+- [Deployment Guide](Deployment-Guide) — environment URLs and keys
+- [Patterns](Patterns) — orchestration used by mission phases
 
 ## 🇫🇷 [Référence API (FR)](API-Reference‐FR) · 🇪🇸 [ES](API-Reference‐ES) · 🇩🇪 [DE](API-Reference‐DE)
