@@ -10,6 +10,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from .sanitize import sanitize_user_input, sanitize_agent_output, sanitize_command
 from .prompt_guard import PromptInjectionGuard, get_prompt_guard
+from .rate_limit import RateLimitMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -74,4 +75,5 @@ __all__ = [
     "PromptInjectionGuard",
     "get_prompt_guard",
     "AuthMiddleware",
+    "RateLimitMiddleware",
 ]
