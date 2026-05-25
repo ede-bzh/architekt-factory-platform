@@ -36,34 +36,14 @@ def import_time():
 @router.get("/api/health", responses={200: {"model": HealthResponse}})
 async def health_check():
     """Liveness/readiness probe for Docker healthcheck."""
-    from datetime import datetime, timezone
-
     from ....db.migrations import get_db
-    from ....version import get_platform_version
 
-    version = get_platform_version()
-    timestamp = (
-        datetime.now(timezone.utc)
-        .replace(microsecond=0)
-        .isoformat()
-        .replace("+00:00", "Z")
-    )
     try:
         db = get_db()
         db.execute("SELECT 1")
-        return JSONResponse(
-            {"status": "ok", "version": version, "timestamp": timestamp}
-        )
+        return JSONResponse({"status": "ok"})
     except Exception as e:
-        return JSONResponse(
-            {
-                "status": "error",
-                "detail": str(e),
-                "version": version,
-                "timestamp": timestamp,
-            },
-            status_code=503,
-        )
+        return JSONResponse({"status": "error", "detail": str(e)}, status_code=503)
 
 
 @router.get("/api/metrics/load")
@@ -140,7 +120,7 @@ async def watchdog_metrics():
 @router.get("/api/monitoring/live")
 async def monitoring_live(request: Request, hours: int = 24):
     """Live monitoring data: system, LLM, agents, missions, memory.
-    Cached for 5 seconds to avoid hammering DB on rapid polling."""
+    Cached for MONITORING_CACHE_TTL seconds to avoid hammering DB on polling."""
     import os
     import time as _time
 

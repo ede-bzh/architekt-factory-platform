@@ -259,6 +259,33 @@ class MetricsCollector:
                 },
             }
 
+    def flush(self) -> bool:
+        """Persist current snapshot to platform_metrics_log. Returns True on success."""
+        try:
+            from ..db.migrations import get_db
+
+            payload = json.dumps(self.snapshot())
+            db = get_db()
+            db.execute(
+                """
+                CREATE TABLE IF NOT EXISTS platform_metrics_log (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    flushed_at TEXT NOT NULL DEFAULT (datetime('now')),
+                    payload_json TEXT NOT NULL
+                )
+                """
+            )
+            db.execute(
+                "INSERT INTO platform_metrics_log (payload_json) VALUES (?)",
+                (payload,),
+            )
+            db.commit()
+            db.close()
+            return True
+        except Exception as exc:
+            logger.debug("metrics collector flush failed: %s", exc)
+            return False
+
 
 def _path_prefix(path: str) -> str:
     """Normalize path to first 2 segments for grouping."""
