@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 """
-Software Factory Dashboard - Local Web Interface
-================================================
+Architekt Factory Monitor — legacy local dashboard (port 8080).
 
-A simple FastAPI dashboard to monitor the Software Factory.
+Primary UI: Architekt platform on :8099. This service monitors legacy factory SQLite/daemons.
 
 Usage:
     python3 -m dashboard.server
-    # or
-    factory dashboard
+    PLATFORM_URL=http://localhost:8099 python3 -m dashboard.server
 
-Opens at http://localhost:8080
+Opens at http://localhost:8080 — / links to platform; /legacy is the task monitor.
 """
 
 import asyncio
