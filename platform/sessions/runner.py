@@ -245,7 +245,9 @@ async def _build_context(agent: AgentDef, session: SessionDef) -> ExecutionConte
         try:
             lib = get_skill_library()
             parts = []
-            for sid in agent.skills[:5]:
+            from ..agents.skill_limits import max_architekt_skills_for_role
+
+            for sid in agent.skills[: max_architekt_skills_for_role(agent.role)]:
                 skill = lib.get(sid)
                 if skill and skill.get("content"):
                     parts.append(f"### {skill['name']}\n{skill['content'][:1500]}")
@@ -398,8 +400,8 @@ async def run_conversation(
     })
 
     # Build agent name map for context
-    {a.id: a.name for a in agents}
-    {a.id: a.role for a in agents}
+    agent_names = {a.id: a.name for a in agents}
+    agent_roles = {a.id: a.role for a in agents}
 
     # Conversation loop: lead speaks first, then others respond
     conversation_msgs: list[dict] = [

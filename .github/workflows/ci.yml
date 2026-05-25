@@ -29,7 +29,7 @@ jobs:
           ruff check platform/ tests/
 
       - name: Bandit
-        continue-on-error: true
+        
         run: |
           pip install bandit
           bandit -r platform/ -ll -q
@@ -38,10 +38,10 @@ jobs:
         run: bash scripts/ci/secret-scan.sh
 
       - name: Dependency audit (pip-audit)
-        continue-on-error: true
+        
         run: |
           pip install pip-audit
-          pip-audit -r platform/requirements.txt
+          pip-audit -r platform/requirements.txt --desc on
 
       - name: Generate SBOM (CycloneDX)
         continue-on-error: true
@@ -125,3 +125,20 @@ jobs:
             --no-progress \
             || echo "mutmut finished with non-zero exit (optional job)"
 
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: sbom-platform
+          path: .
+        continue-on-error: true
+      - name: Release summary
+        run: |
+          echo "## Release ${GITHUB_REF_NAME}" >> "$GITHUB_STEP_SUMMARY"
+          test -f sbom-platform.json && echo "- SBOM: sbom-platform.json attached" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Gate: pytest + bandit + pip-audit (see CI test job)" >> "$GITHUB_STEP_SUMMARY"

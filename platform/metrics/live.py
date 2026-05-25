@@ -1,144 +1,34 @@
-"""Health, sandbox, watchdog & live monitoring endpoints."""
+"""Live monitoring payload builder."""
 
 from __future__ import annotations
 
-import json
-import logging
 from datetime import datetime
 
-from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
+from fastapi import Request
 
-from ...schemas import HealthResponse
+MONITORING_CACHE_TTL = 20.0
 
-router = APIRouter()
-logger = logging.getLogger(__name__)
-
-# Prime psutil cpu_percent so interval=0 returns meaningful values
-try:
-    import os as _os
-
-    import psutil as _ps
-
-    _ps.Process(_os.getpid()).cpu_percent()
-    _ps.cpu_percent()
-except Exception:
-    pass
+_cache: dict | None = None
+_docker_cache: dict | None = None
+_git_cache: dict | None = None
 
 
 def import_time():
-    """Get current time as epoch."""
     import time
-
     return time.time()
 
 
-@router.get("/api/health", responses={200: {"model": HealthResponse}})
-async def health_check():
-    """Liveness/readiness probe for Docker healthcheck."""
-    from datetime import datetime, timezone
-
-    from ....db.migrations import get_db
-    from ....version import get_platform_version
-
-    version = get_platform_version()
-    timestamp = (
-        datetime.now(timezone.utc)
-        .replace(microsecond=0)
-        .isoformat()
-        .replace("+00:00", "Z")
-    )
-    try:
-        db = get_db()
-        db.execute("SELECT 1")
-        return JSONResponse(
-            {"status": "ok", "version": version, "timestamp": timestamp}
-        )
-    except Exception as e:
-        return JSONResponse(
-            {
-                "status": "error",
-                "detail": str(e),
-                "version": version,
-                "timestamp": timestamp,
-            },
-            status_code=503,
-        )
+def _parse_sections(sections: str) -> set[str] | None:
+    if not sections or sections.strip().lower() in ("all", "*"):
+        return None
+    return {s.strip().lower() for s in sections.split(",") if s.strip()}
 
 
-@router.get("/api/metrics/load")
-async def system_load():
-    """Lightweight system load endpoint — used by coordinator for worker dispatch decisions."""
-    import os
-    import time as _time
-
-    import psutil
-
-    cpu = psutil.cpu_percent(interval=1)
-    mem = psutil.virtual_memory()
-    from ....web.routes.helpers import get_mission_semaphore
-
-    sem = get_mission_semaphore()
-    try:
-        from ....web.routes.helpers import _active_mission_tasks
-
-        active = len(_active_mission_tasks)
-    except Exception:
-        active = -1
-    return JSONResponse(
-        {
-            "cpu_percent": round(cpu, 1),
-            "ram_percent": round(mem.percent, 1),
-            "ram_available_mb": round(mem.available / 1024 / 1024),
-            "active_missions": active,
-            "semaphore_value": sem._value if hasattr(sem, "_value") else -1,
-            "load_score": round(
-                (cpu * 0.6 + mem.percent * 0.4), 1
-            ),  # 0-100, lower = better
-            "node_id": os.environ.get("NODE_ID", os.environ.get("HOSTNAME", "unknown")),
-            "ts": _time.time(),
-        }
-    )
-
-
-@router.get("/api/sandbox/status")
-async def sandbox_status():
-    """Docker sandbox status."""
-    import shutil
-
-    from ....tools.sandbox import (
-        SANDBOX_ENABLED,
-        SANDBOX_IMAGE,
-        SANDBOX_MEMORY,
-        SANDBOX_NETWORK,
-    )
-
-    docker_available = shutil.which("docker") is not None
-    return JSONResponse(
-        {
-            "enabled": SANDBOX_ENABLED,
-            "docker_available": docker_available,
-            "default_image": SANDBOX_IMAGE,
-            "network": SANDBOX_NETWORK,
-            "memory_limit": SANDBOX_MEMORY,
-        }
-    )
-
-
-@router.get("/api/watchdog/metrics")
-async def watchdog_metrics():
-    """Get endurance watchdog metrics."""
-    from ....ops.endurance_watchdog import _ensure_table, get_metrics
-
-    try:
-        _ensure_table()
-    except Exception:
-        pass
-    return JSONResponse(get_metrics(limit=100))
-
-
-@router.get("/api/monitoring/live")
-async def monitoring_live(request: Request, hours: int = 24):
+async def build_monitoring_live_payload(
+    request: Request,
+    hours: int = 24,
+    sections: str = "",
+) -> dict:
     """Live monitoring data: system, LLM, agents, missions, memory.
     Cached for 5 seconds to avoid hammering DB on rapid polling."""
     import os
@@ -148,11 +38,14 @@ async def monitoring_live(request: Request, hours: int = 24):
 
     hours = max(1, min(hours, 8760))
 
+    section_set = _parse_sections(sections)
+    cache_key = f"{hours}:{sections or 'all'}"
+
     # ── TTL cache (5s) ──
-    cache = getattr(monitoring_live, "_cache", None)
+    cache = _cache
     now = _time.monotonic()
-    if cache and cache.get("hours") == hours and now - cache.get("ts", 0) < 5:
-        return JSONResponse(cache["data"])
+    if cache and cache.get("key") == cache_key and now - cache.get("ts", 0) < MONITORING_CACHE_TTL:
+        return cache["data"]
 
     # System metrics — primed at module load, interval=0 measures since last call
     process = psutil.Process(os.getpid())
@@ -480,7 +373,7 @@ async def monitoring_live(request: Request, hours: int = 24):
     # ── Docker containers (via Docker socket API) — cached 5 min ──
     docker_info = []
     docker_system = {}
-    _docker_cache = getattr(monitoring_live, "_docker_cache", None)
+    _docker_cache = _docker_cache
     if _docker_cache and now - _docker_cache.get("ts", 0) < 300:
         docker_info = _docker_cache["data"]["containers"]
         docker_system = _docker_cache["data"]["system"]
@@ -682,7 +575,7 @@ async def monitoring_live(request: Request, hours: int = 24):
                     conn3.close()
                 except Exception:
                     pass
-            monitoring_live._docker_cache = {
+            _docker_cache = {
                 "data": {"containers": docker_info, "system": docker_system},
                 "ts": now,
             }
@@ -691,7 +584,7 @@ async def monitoring_live(request: Request, hours: int = 24):
 
     # Git info (all workspace repos) - cached 5 min
     git_info = []
-    _git_cache = getattr(monitoring_live, "_git_cache", None)
+    _git_cache = _git_cache
     if _git_cache and now - _git_cache.get("ts", 0) < 300:
         git_info = _git_cache["data"]
     else:
@@ -788,7 +681,7 @@ async def monitoring_live(request: Request, hours: int = 24):
             except Exception:
                 pass
 
-            monitoring_live._git_cache = {"data": git_info, "ts": now}
+            _git_cache = {"data": git_info, "ts": now}
         except Exception:
             pass
 
@@ -946,5 +839,5 @@ async def monitoring_live(request: Request, hours: int = 24):
     }
 
     # Store in cache
-    monitoring_live._cache = {"data": result, "hours": hours, "ts": _time.monotonic()}
-    return JSONResponse(result)
+    _cache = {"data": result, "hours": hours, "ts": _time.monotonic()}
+    return result

@@ -44,3 +44,11 @@ Plateforme multi-agents SAFe pour le cycle de vie logiciel. UI **EN / FR** uniqu
 
 - Spécifications détaillées : `platform/SPECS.md`
 - Backlog technique : issues GitHub `ede-bzh/architekt-factory-platform`
+
+
+## Vague 6 — Fondations post-rebrand (en cours)
+
+- `platform/VERSION` + `CHANGELOG.md` + `docs/architekt/RELEASE.md`
+- CI : bandit + pip-audit bloquants ; deploy après CI verte
+- Monitoring extrait (`platform/metrics/live.py`), cache 20s
+- L2 + L1 fail-closed ; rate limit unifié ; HITL deploy API

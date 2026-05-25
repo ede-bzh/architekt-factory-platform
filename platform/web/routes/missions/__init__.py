@@ -8,6 +8,7 @@ from .backlog import router as backlog_router
 from .crud import router as crud_router
 from .dispatch import router as dispatch_router
 from .execution import router as execution_router
+from .hitl import router as hitl_router
 from .integrations import router as integrations_router
 from .internal import (
     _auto_retrospective,
@@ -25,6 +26,7 @@ router = APIRouter()
 router.include_router(partials_router)
 router.include_router(crud_router)
 router.include_router(execution_router)
+router.include_router(hitl_router)
 router.include_router(sprints_router)
 router.include_router(backlog_router)
 router.include_router(integrations_router)

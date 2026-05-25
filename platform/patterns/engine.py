@@ -1087,6 +1087,7 @@ This is BLOCKING: developers cannot start without your design tokens."""
                 # Track rejection in agent scores + update quality_score
                 try:
                     from ..db.migrations import get_db
+                    import time as _time
 
                     db = get_db()
                     db.execute(
@@ -1486,7 +1487,9 @@ async def _build_node_context(agent: AgentDef, run: PatternRun) -> ExecutionCont
         try:
             lib = get_skill_library()
             parts = []
-            for sid in agent.skills[:5]:
+            from ..agents.skill_limits import max_architekt_skills_for_role
+
+            for sid in agent.skills[: max_architekt_skills_for_role(agent.role)]:
                 skill = lib.get(sid)
                 if skill and skill.get("content"):
                     parts.append(f"### {skill['name']}\n{skill['content'][:1500]}")
