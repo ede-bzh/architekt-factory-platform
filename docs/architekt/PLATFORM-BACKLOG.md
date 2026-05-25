@@ -5,7 +5,7 @@ Pas de site vitrine client en phase 0.
 
 > **Alignement tiers** : P0 = Tier **S** · P1 = Tier **A** · P2 = Tier **B** · P3 = Tier **C**
 > Catalogue complet : `docs/ROADMAP.md` § Catalogue features plateforme.
-> **Wave en cours** : voir § Wave 5 — reste P1 avant Phase 3 pilot.
+> **Wave en cours** : voir § Wave 6 (fondations) + § Wave 7 (P2 scale & CSP doc).
 
 ## Légende priorités
 
@@ -90,9 +90,9 @@ Pas de site vitrine client en phase 0.
 - [ ] **`MAX_ARCHITEKT_SKILLS`** — relever le plafond d'injection (4 → 14 skills selon rôle)
 - [ ] **i18n EN/FR/ZH** baseline plateforme (catalogue + routes, pas seulement skills)
 - [ ] **4 DPA templates** par région (SG, UAE, EU, US)
-- [ ] **Dashboard `dashboard/`** rebrand Architekt + health unifié avec `/api/health`
-- [ ] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4)
-- [ ] **Mutation testing** seuil 50 % sur modules critiques (job CI mutmut optionnel seulement)
+- [ ] **Dashboard `dashboard/`** rebrand Architekt + health unifié avec `/api/health` — *in progress* (autres agents)
+- [ ] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4) — *in progress* (autres agents)
+- [ ] **Mutation testing** seuil 50 % sur modules critiques (job CI mutmut optionnel seulement) — *reporté Wave 7*
 
 ---
 
@@ -144,7 +144,7 @@ Pas de site vitrine client en phase 0.
 
 ### Qualité & preuve client
 
-- [ ] Mutation testing (ADR-003) — mutmut sur modules critiques (seuil 50 %) → **Wave 5**
+- [ ] Mutation testing (ADR-003) — mutmut sur modules critiques (seuil 50 %) → **Wave 7**
 - [x] E2E Playwright smoke en CI (login + health — pas les 82 specs)
 - [x] Mini dashboard `/proof` (DORA, Lighthouse, a11y, SBOM)
 - [x] Case study generator (template + métriques mission)
@@ -194,14 +194,15 @@ Pas de site vitrine client en phase 0.
 ## P3 — Tier C (Phase 6–7+)
 
 > **Gate** : multi-tenant après 10+ clients ; SaaS = optionnel (Phase 7).
+> Items multi-tenant / Stripe / pentest / docker rename / mutation 50 % sont **trackés en Wave 7** (P2) — voir `ROADMAP-WAVE7.md`.
 
-- [ ] Multi-tenant + isolation tenant
-- [ ] Billing Stripe / facturation auto
+- [ ] Multi-tenant + isolation tenant → **Wave 7**
+- [ ] Billing Stripe / facturation auto → **Wave 7**
 - [ ] Marketplace skills/templates public
 - [ ] Canary deployment workflow prod (1%→100% + HITL)
 - [ ] Darwin teams / Thompson scoring agents
-- [ ] Pentest externe workflow (L3 regulated)
-- [ ] Packaging Docker `architekt_platform` (niveau 3 ADR)
+- [ ] Pentest externe workflow (L3 regulated) → **Wave 7**
+- [ ] Packaging Docker `architekt_platform` (niveau 3 ADR) → **Wave 7**
 
 ---
 
@@ -226,3 +227,20 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 - [x] Deploy demo/azure après CI `workflow_run`
 - [x] `CHANGELOG.md` + `docs/architekt/RELEASE.md`
 - [x] Compteurs : ~163 agents, 41 workflows, 104 skills YAML
+
+
+---
+
+## Wave 7 — scale P2 & security polish (doc + CSP)
+
+> Détail : `docs/architekt/ROADMAP-WAVE7.md` · CSP : `docs/architekt/CSP.md`
+
+- [x] **CSP** — politique documentée (default vs workspace), lien `security_headers` middleware
+- [x] **`PLATFORM_CSP_NONCE=0|1`** — `ServerConfig.csp_nonce` + génération nonce optionnelle `script-src` (HTMX : `unsafe-inline` conservé)
+- [ ] **Multi-tenant** + isolation tenant (gate 10+ clients)
+- [ ] **Stripe** billing / usage LLM
+- [ ] **Pentest externe** (L3 regulated workflow)
+- [ ] **Docker rename** `architekt_platform` (alias `macaron_platform`)
+- [ ] **Mutation testing** — seuil **50 %** modules critiques (mutmut CI)
+- [ ] **Adversarial L2 LLM** — *in progress* (autres agents)
+- [ ] **Dashboard `dashboard/`** rebrand — *in progress* (autres agents)

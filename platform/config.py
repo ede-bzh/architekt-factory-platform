@@ -22,7 +22,6 @@ PLATFORM_ROOT = Path(__file__).parent
 FACTORY_ROOT = PLATFORM_ROOT.parent
 DATA_DIR = FACTORY_ROOT / "data"
 SKILLS_DIR = PLATFORM_ROOT / "skills" / "definitions"
-ARCHITEKT_SKILLS_DIR = PLATFORM_ROOT / "skills" / "architekt"
 LEGACY_SKILLS_DIR = FACTORY_ROOT / "skills"
 CONFIG_PATH = Path.home() / ".config" / "factory" / "platform.yaml"
 
@@ -195,6 +194,8 @@ def load_config() -> PlatformConfig:
         cfg.server.port = int(p)
     if h := os.environ.get("PLATFORM_HOST"):
         cfg.server.host = h
+    if v := os.environ.get("PLATFORM_CSP_NONCE"):
+        cfg.server.csp_nonce = v.strip().lower() in ("1", "true", "yes", "on")
 
     return cfg
 
