@@ -33,15 +33,31 @@ def import_time():
     return time.time()
 
 
+def _health_version() -> str:
+    from pathlib import Path
+
+    ver_file = Path(__file__).resolve().parents[3] / "VERSION"
+    if ver_file.exists():
+        return ver_file.read_text().strip().split(":")[0]
+    return "dev"
+
+
 @router.get("/api/health", responses={200: {"model": HealthResponse}})
 async def health_check():
     """Liveness/readiness probe for Docker healthcheck."""
+    from datetime import timezone
+
     from ....db.migrations import get_db
 
+    payload = {
+        "status": "ok",
+        "version": _health_version(),
+        "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
     try:
         db = get_db()
         db.execute("SELECT 1")
-        return JSONResponse({"status": "ok"})
+        return JSONResponse(payload)
     except Exception as e:
         return JSONResponse({"status": "error", "detail": str(e)}, status_code=503)
 
@@ -120,7 +136,7 @@ async def watchdog_metrics():
 @router.get("/api/monitoring/live")
 async def monitoring_live(request: Request, hours: int = 24):
     """Live monitoring data: system, LLM, agents, missions, memory.
-    Cached for MONITORING_CACHE_TTL seconds to avoid hammering DB on polling."""
+    Cached for 5 seconds to avoid hammering DB on rapid polling."""
     import os
     import time as _time
 
