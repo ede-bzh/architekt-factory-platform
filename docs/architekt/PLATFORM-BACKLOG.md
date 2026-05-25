@@ -90,8 +90,8 @@ Pas de site vitrine client en phase 0.
 - [ ] **`MAX_ARCHITEKT_SKILLS`** — relever le plafond d'injection (4 → 14 skills selon rôle)
 - [ ] **i18n EN/FR/ZH** baseline plateforme (catalogue + routes, pas seulement skills)
 - [ ] **4 DPA templates** par région (SG, UAE, EU, US)
-- [ ] **Dashboard `dashboard/`** rebrand Architekt + health unifié avec `/api/health` — *in progress* (autres agents)
-- [ ] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4) — *in progress* (autres agents)
+- [x] **Dashboard `dashboard/`** rebrand Architekt + health unifié avec `/api/health` — *done (wave 2)* (autres agents)
+- [x] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4) — *done (wave 2)* (autres agents)
 - [x] **Mutation testing** gate pragmatique CI (ADR-003) — adversarial ≥15 %, api_key ≥10 % ; 50 % global reporté (Wave 7 pour seuil global)
 
 ---
@@ -242,5 +242,5 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 - [ ] **Pentest externe** (L3 regulated workflow)
 - [ ] **Docker rename** `architekt_platform` (alias `macaron_platform`)
 - [ ] **Mutation testing** — seuil **50 %** modules critiques (mutmut CI)
-- [ ] **Adversarial L2 LLM** — *in progress* (autres agents)
-- [ ] **Dashboard `dashboard/`** rebrand — *in progress* (autres agents)
+- [x] **Adversarial L2 LLM** — *done (wave 2)* (autres agents)
+- [x] **Dashboard `dashboard/`** rebrand — *done (wave 2)* (autres agents)
