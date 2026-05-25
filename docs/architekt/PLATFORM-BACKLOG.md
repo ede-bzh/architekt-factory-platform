@@ -138,8 +138,8 @@ Pas de site vitrine client en phase 0.
 
 - [x] Skills specs Architekt dans `platform/skills/architekt/` (14 skills — injections agents)
 - [ ] Adversarial L1 (LLM semantic) en production stable
-- [ ] Adversarial L2 LLM (architecture) + câblage `run_guard` → **Wave 5**
-- [ ] HITL gates deploy + décisions IA sensibles → **Wave 5**
+- [x] Adversarial L2 (architecture) + `run_guard` L0→L2→L1
+- [x] HITL deploy API (`/api/missions/{id}/hitl/deploy`)
 - [x] AI audit logs append-only
 
 ### Qualité & preuve client
@@ -153,9 +153,9 @@ Pas de site vitrine client en phase 0.
 
 ### Global delivery
 
-- [ ] i18n EN/FR/ZH baseline plateforme → **Wave 5**
+- [x] i18n UI **EN/FR** uniquement (ZH hors scope)
 - [ ] 4 DPA templates par région (SG, UAE, EU, US) → **Wave 5**
-- [ ] Dashboard `dashboard/` rebrand + health unifié → **Wave 5**
+- [x] Dashboard legacy documenté ; monitoring `/monitoring` + `/proof`
 
 ---
 
@@ -216,3 +216,13 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 | Premier client payant / démo GTM | Business Phase 3–4 | Pas backlog plateforme |
 | E2E Playwright complet (82 specs) | P3 | Smoke suffit Phase 2–4 |
 | Projets L3 régulés (HIPAA, banque) | Refus | ADR-041, R24 |
+
+
+## Wave 6 — fondations (doc + CI + releases) — en cours
+
+- [x] CI verte post-PR #10 (pytest, ruff, secret-scan, tests rebrand)
+- [x] `platform/VERSION` semver + `/api/health` version/timestamp
+- [x] CI bandit + pip-audit **bloquants**
+- [x] Deploy demo/azure après CI `workflow_run`
+- [x] `CHANGELOG.md` + `docs/architekt/RELEASE.md`
+- [x] Compteurs : ~163 agents, 41 workflows, 104 skills YAML

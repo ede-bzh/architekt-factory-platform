@@ -1,12 +1,15 @@
 name: Deploy → Azure Prod
 
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
-  workflow_dispatch:  # allow manual trigger + GitLab CI dispatch
+  workflow_dispatch:
 
 jobs:
   deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,10 +20,13 @@ jobs:
           echo "${{ secrets.AZURE_SSH_KEY }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.AZURE_IP }}" >> ~/.ssh/known_hosts 2>/dev/null || true
-          echo -e "Host *\n  StrictHostKeyChecking no\n  ConnectTimeout 15" >> ~/.ssh/config
+          echo -e "Host *\n  StrictHostKeyChecking yes\n  ConnectTimeout 15" >> ~/.ssh/config
 
       - name: Rsync to Azure VM
         run: |
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          SHA=$(git rev-parse --short HEAD)
+          echo "${TAG:-$SHA}:${SHA}" > platform/VERSION
           rsync -az --delete \
             --exclude '__pycache__' \
             --exclude '*.pyc' \
@@ -38,5 +44,5 @@ jobs:
             docker exec $CONTAINER find /app/macaron_platform -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
             docker stop $CONTAINER && sleep 3 && docker start $CONTAINER
             sleep 8
-            docker exec $CONTAINER curl -sf http://localhost:8099/api/health && echo "OK" || echo "WARN: health check failed"
+            docker exec $CONTAINER curl -sf http://localhost:8099/api/health | grep -q "\"status\":\"ok\""
           '

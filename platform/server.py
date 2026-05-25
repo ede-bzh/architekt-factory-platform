@@ -37,10 +37,12 @@ if os.environ.get("OTEL_ENABLED"):
         from opentelemetry.sdk.trace import TracerProvider
         from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
+        from .version import get_platform_version
+
         _otel_resource = Resource.create(
             {
                 "service.name": os.environ.get("OTEL_SERVICE_NAME", "macaron-platform"),
-                "service.version": "1.2.0",
+                "service.version": get_platform_version(),
                 "deployment.environment": os.environ.get("PLATFORM_ENV", "production"),
             }
         )
@@ -257,6 +259,8 @@ async def lifespan(app: FastAPI):
 
     # Start evolution scheduler (nightly GA + RL retraining at 02:00 UTC)
     try:
+        from .ops.prune_llm_traces import prune_llm_traces
+        prune_llm_traces()
         from .agents.evolution_scheduler import start_evolution_scheduler as _evo_sched
 
         _asyncio.create_task(_evo_sched())
@@ -759,16 +763,53 @@ def create_app() -> FastAPI:
             return RedirectResponse(url="/onboarding", status_code=302)
         return await call_next(request)
 
-    # ── Locale detection middleware (EN/FR only) ────────────────────────
-    from .i18n import get_lang as _resolve_lang, normalize_lang as _normalize_lang
+    # ── Locale detection middleware ─────────────────────────────────────
+    SUPPORTED_LOCALES = {"en", "fr", "es", "it", "de", "pt", "ja", "zh"}
 
     @app.middleware("http")
     async def locale_middleware(request, call_next):
-        """Detect and set user locale from cookie or Accept-Language (en/fr)."""
-        cookie_lang = request.cookies.get("sf_lang") or request.cookies.get("lang")
-        locale = _resolve_lang(request)
+        """Detect and set user locale from Accept-Language header or cookie."""
+        import re as _locale_re
+
+        # Priority: 1) Cookie 2) Accept-Language header 3) Default to 'en'
+        locale = None
+
+        # Check cookie first
+        cookie_lang = request.cookies.get("sf_lang")
+        if cookie_lang and cookie_lang in SUPPORTED_LOCALES:
+            locale = cookie_lang
+
+        # Parse Accept-Language header if no cookie
+        if not locale:
+            accept_lang = request.headers.get("Accept-Language", "")
+            # Parse: "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7"
+            langs = []
+            for part in accept_lang.split(","):
+                match = _locale_re.match(
+                    r"([a-z]{2})(?:-[A-Z]{2})?(?:;q=([\d.]+))?", part.strip()
+                )
+                if match:
+                    lang_code = match.group(1)
+                    quality = float(match.group(2) or "1.0")
+                    langs.append((quality, lang_code))
+
+            # Sort by quality score (descending)
+            langs.sort(reverse=True)
+
+            # Find first supported locale
+            for _, lang_code in langs:
+                if lang_code in SUPPORTED_LOCALES:
+                    locale = lang_code
+                    break
+
+        # Fallback to English
+        if not locale:
+            locale = "en"
+
+        # Set in request state for templates
         request.state.lang = locale
 
+        # Inject current user into request state for templates
         if not hasattr(request.state, "user"):
             try:
                 from .auth.middleware import get_current_user as _get_user
@@ -779,12 +820,12 @@ def create_app() -> FastAPI:
 
         response = await call_next(request)
 
-        normalized_cookie = _normalize_lang(cookie_lang) if cookie_lang else None
-        if not cookie_lang or normalized_cookie != locale:
+        # Set cookie if not present or different
+        if not cookie_lang or cookie_lang != locale:
             response.set_cookie(
                 key="sf_lang",
                 value=locale,
-                max_age=31536000,
+                max_age=31536000,  # 1 year
                 httponly=True,
                 samesite="lax",
             )
@@ -1032,7 +1073,8 @@ def create_app() -> FastAPI:
         except Exception:
             _sha, _tag = "unknown", ""
     templates.env.globals["app_commit"] = _sha
-    templates.env.globals["app_version"] = _tag or _sha
+    from .version import get_platform_version
+    templates.env.globals["app_version"] = get_platform_version()
 
     # Middleware to set current language per-request
     from starlette.middleware.base import BaseHTTPMiddleware

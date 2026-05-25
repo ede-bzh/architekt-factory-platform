@@ -86,13 +86,16 @@ def enrich_agent_with_skills(
         return _fallback_skills_prompt(fallback_skills)
 
 
-def _format_skills_section(skills: list[dict]) -> str:
+def _format_skills_section(skills: list[dict], agent_role: str = "") -> str:
     """Format injected skills into prompt section."""
     if not skills:
         return ""
 
+    from .skill_limits import max_architekt_skills_for_role
+
+    cap = max_architekt_skills_for_role(agent_role)
     parts = []
-    for skill in skills[:10]:  # Max 10 skills
+    for skill in skills[:cap]:
         name = skill.get("name", "Unknown")
         content = skill.get("content", "")
         similarity = skill.get("similarity", 0.0)

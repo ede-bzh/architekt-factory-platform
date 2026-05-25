@@ -56,9 +56,9 @@ ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platf
 ## GIT
 
 ```
-architekt-factory-platform/            ← GitHub ede-bzh/architekt-factory-platform
-  platform/ cli/ dashboard/ ...        ← code tracké
-  data/ logs/ workspace/               ← runtime local (gitignore)
+ede-bzh/architekt-factory-platform   ← GitHub (source of truth)
+  platform/ cli/ dashboard/ ...     ← tracked application code
+  data/ (local)                    ← SQLite runtime — not committed
 ```
 
 Push : `git push origin main`
@@ -69,7 +69,7 @@ Push : `git push origin main`
 - SQLite WAL + FTS5 (~35 tables)
 - LLM per environment (see LLM ENVIRONMENTS below)
 - Rate limit: 15 rpm (token-limited ~10-16 calls/min in practice, 100K tokens/60s)
-- **133+ agents** (95 YAML defs), 12 patterns, 19 workflows, 1271 skills
+- **163 agents** (104 YAML defs), 15 patterns, 41 workflows
 
 ---
 

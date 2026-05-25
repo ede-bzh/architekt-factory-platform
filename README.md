@@ -2,11 +2,12 @@
   <a href="README.md">English</a> |
   <a href="README.fr.md">Français</a>
 </p>
+
 <div align="center">
 
 # Architekt Factory Platform
 
-**Multi-agent platform for AI-accelerated, security-conscious software delivery** (internal studio tool for Architekt Pte. Ltd.)
+**Multi-agent platform for AI-accelerated, security-conscious software delivery**
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
@@ -22,15 +23,13 @@ Run locally with **`PLATFORM_LLM_PROVIDER=demo`** (no API keys) — see [Quick S
 
 ## What is this?
 
-**Architekt Factory Platform** is the **internal multi-agent orchestration engine** for **Architekt** — an AI-native digital product studio for APAC scale-ups and SMEs.
+**Architekt Factory Platform** is the **internal multi-agent orchestration engine** for **Architekt** — an AI-native digital product studio. It orchestrates the full software lifecycle from ideation to deployment using specialized AI agents.
 
-> **Architekt does not sell code. Architekt sells globally-ready, AI-accelerated, security-conscious digital delivery** — combining the speed of AI, the rigor of senior engineering, proof via automated quality reports, and global readiness from day one.
-
-This platform (formerly *Software Factory*) orchestrates specialized AI agents through structured workflows — from ideation to deployment — so the studio can ship client projects with SAFe methodology, TDD practices, and automated quality gates. Think of it as a **virtual delivery factory** where 160+ agents collaborate under human oversight.
+The platform coordinates **163 specialized agents** and **41 built-in workflows**, following SAFe methodology, TDD practices, and automated quality gates.
 
 ### Key Highlights
 
-- **160+ specialized agents** — architects, developers, testers, SREs, security analysts, product owners
+- **163 specialized agents** — architects, developers, testers, SREs, security analysts, product owners
 - **10 orchestration patterns** — solo, sequential, parallel, hierarchical, network, loop, router, aggregator, wave, human-in-the-loop
 - **SAFe-aligned lifecycle** — Portfolio → Epic → Feature → Story with PI cadence
 - **Auto-heal** — autonomous incident detection, triage, and self-repair
@@ -113,7 +112,7 @@ The Docker image includes: **Node.js 20**, **Playwright + Chromium**, **bandit**
 
 ```bash
 git clone https://github.com/ede-bzh/architekt-factory-platform.git
-cd architekt-factory-platform
+cd software-factory
 make setup   # copies .env.example → .env (edit it to add your LLM API key)
 make run     # builds & starts the platform
 ```
@@ -124,7 +123,7 @@ Open http://localhost:8090 — click **"Skip (Demo)"** to explore without an API
 
 ```bash
 git clone https://github.com/ede-bzh/architekt-factory-platform.git
-cd architekt-factory-platform
+cd software-factory
 cp .env.example .env                # create your config (edit to add LLM key — see Step 3)
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r platform/requirements.txt
@@ -225,7 +224,7 @@ All four are created with the project. TMA, Security, and Self-Healing start as 
 
 ## Features
 
-### 160+ Specialized AI Agents
+### 163 Specialized AI Agents
 
 Agents are organized in teams mirroring real software organizations:
 
@@ -489,7 +488,7 @@ python3 -m platform.mcp_platform.server
                        │          │            │
           ┌────────────┴┐   ┌────┴─────┐   ┌──┴───────────┐
           │ Agent Engine │   │ Workflow │   │   Mission    │
-          │ 160+ agents  │   │  Engine  │   │    Layer     │
+          │ 163 agents   │   │  Engine  │   │    Layer     │
           │ executor     │   │ 39 defs  │   │ SAFe cycle   │
           │ loop+retry   │   │ 10 ptrns │   │ Portfolio    │
           └──────┬───────┘   │ phases   │   │ Epic/Feature │
@@ -599,8 +598,8 @@ Mission Created
                      ┌───────┴────────┐
                      │                │
           ┌──────────▼─────┐  ┌───────▼────────┐
-          │ Azure VM (legacy)│  │ OVH VPS (legacy)│
-          │ sf.macaron-* (pre-rebrand)│  │ demo.macaron-* (pre-rebrand)│
+          │ Azure VM (Prod)│  │ OVH VPS (Demo) │
+          │ sf.macaron-software.com   │  │ demo.macaron-software.com  │
           │                │  │                │
           │ Nginx :443     │  │ Nginx :443     │
           │   │            │  │   │            │
@@ -620,8 +619,8 @@ Mission Created
                              │
                     ┌────────▼────────┐
                     │ GitHub          │
-                    │ ede-bzh         │
-                    │ /architekt-factory-platform│
+                    │ macaron-software│
+                    │ /software-factory│
                     └─────────────────┘
 ```
 
@@ -721,7 +720,7 @@ docker-compose up -d
 ### Kubernetes (Helm)
 
 ```bash
-helm install architekt-factory ./deploy/helm/
+helm install software-factory ./deploy/helm/
 ```
 
 ### Environment Variables
@@ -1043,6 +1042,6 @@ This project is licensed under the AGPL v3 License - see the [LICENSE](LICENSE) 
 
 ## Support
 
-- Legacy demo (pre-rebrand): https://architekt (demo)
+- Live Demo: https://sf.macaron-software.com
 - Issues: https://github.com/ede-bzh/architekt-factory-platform/issues
 - Discussions: https://github.com/ede-bzh/architekt-factory-platform/discussions

@@ -596,6 +596,10 @@ class MissionOrchestrator:
                                     project_id=mission.project_id or mission.id,
                                     project_path=mission.workspace_path,
                                     phase_id=phase.phase_id,
+                                    mission_id=mission.id,
+                                    workflow_id=mission.workflow_id or "",
+                                    phase_idx=i,
+                                    phase_count=len(wf.phases) if wf and wf.phases else 8,
                                 ),
                                 timeout=PHASE_TIMEOUT,
                             )

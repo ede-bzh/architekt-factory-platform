@@ -1,0 +1,10 @@
+# CI gate: block on new findings; skip known platform debt (agent shell, internal SQL builders).
+# See docs/architekt/RELEASE.md — tighten skips incrementally.
+skips:
+  - B602  # subprocess shell=True (dev/build tools)
+  - B501  # httpx verify=False (dev/demo endpoints)
+  - B324  # md5 non-crypto (cache keys)
+  - B608  # dynamic SQL with parameterized execution
+exclude_dirs:
+  - /tests
+  - platform/tests

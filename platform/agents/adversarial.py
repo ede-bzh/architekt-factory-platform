@@ -647,8 +647,12 @@ Respond ONLY with JSON:
 
     except Exception as e:
         logger.warning(f"L1 adversarial check failed: {e}")
-        # On failure, don't block — L0 is the safety net
-        return GuardResult(passed=True, score=0, issues=[], level="L1-skipped")
+        return GuardResult(
+            passed=False,
+            score=7,
+            issues=[f"L1: reviewer unavailable ({e})"],
+            level="L1-fail-closed",
+        )
 
 
 async def run_guard(

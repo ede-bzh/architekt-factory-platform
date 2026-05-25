@@ -11,22 +11,22 @@ Each agent runs as an independent asyncio.Task:
 from __future__ import annotations
 
 import asyncio
-import logging
-import re
-import time
-from dataclasses import dataclass
-from datetime import datetime
 from typing import TYPE_CHECKING
-
-from ..models import A2AMessage, AgentInstance, AgentStatus, MessageType
-
-logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from ..a2a.bus import MessageBus
     from .executor import AgentExecutor, ExecutionContext
     from .store import AgentDef
 
+import logging
+import re
+import time
+from dataclasses import dataclass
+from datetime import datetime
+
+from ..models import A2AMessage, AgentInstance, AgentStatus, MessageType
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Action dataclass
@@ -480,13 +480,13 @@ class AgentLoop:
 
         # Skills - Auto-inject relevant skills based on mission context
         skills_prompt = ""
-        mission_desc = None
 
         # Try automatic skills injection first
         try:
             from .skills_integration import enrich_agent_with_skills
 
             # Get mission description for context
+            mission_desc = None
             if history_dicts:
                 # Use first user message as mission context
                 for msg in history_dicts:
@@ -509,7 +509,11 @@ class AgentLoop:
                 try:
                     lib = get_skill_library()
                     parts = []
-                    for sid in self.agent.skills[:5]:
+                    from .skill_limits import max_architekt_skills_for_role
+
+                    for sid in self.agent.skills[
+                        : max_architekt_skills_for_role(self.agent.role)
+                    ]:
                         skill = lib.get(sid)
                         if skill and skill.get("content"):
                             parts.append(
@@ -518,23 +522,6 @@ class AgentLoop:
                     skills_prompt = "\n\n".join(parts)
                 except Exception:
                     pass
-
-        try:
-            from .architekt_skills import inject_architekt_skills
-
-            doctrine = inject_architekt_skills(
-                self.agent.id,
-                self.agent.role,
-                mission_desc,
-            )
-            if doctrine:
-                skills_prompt = (
-                    f"{skills_prompt}\n\n{doctrine}".strip()
-                    if skills_prompt
-                    else doctrine
-                )
-        except Exception as exc:
-            logger.debug("Architekt skills injection failed: %s", exc)
 
         # Vision — organizers only (executors don't need strategic vision to implement a task)
         vision = ""

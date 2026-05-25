@@ -1,11 +1,14 @@
 name: Deploy → OVH Demo
 
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,7 +16,6 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          # Secret stored as: cat ~/.ssh/id_rsa | base64 -w 0
           echo "${{ secrets.OVH_SSH_KEY }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.OVH_IP }}" >> ~/.ssh/known_hosts
@@ -21,16 +23,15 @@ jobs:
           Host *
             IdentityFile ~/.ssh/id_rsa
             IdentitiesOnly yes
+            StrictHostKeyChecking yes
           EOF
 
       - name: Rsync to OVH
         run: |
-          # Write VERSION file so the container knows git tag + commit (no .git inside Docker)
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
           SHA=$(git rev-parse --short HEAD)
           echo "${TAG:-$SHA}:${SHA}" > platform/VERSION
 
-          # Sync each directory as a proper subdirectory (no trailing slash = preserve dir name)
           rsync -az --delete \
             --exclude '__pycache__' \
             --exclude '*.pyc' \
@@ -38,32 +39,27 @@ jobs:
             --exclude 'workspace/' \
             platform cli skills dashboard mcp_lrm \
             debian@${{ secrets.OVH_IP }}:/opt/software-factory/
-          # Also sync root Dockerfile + docker-compose.yml
           rsync -az Dockerfile docker-compose.yml debian@${{ secrets.OVH_IP }}:/opt/software-factory/
 
       - name: Disk cleanup (Docker cache + old images)
         run: |
-          ssh -o StrictHostKeyChecking=no debian@${{ secrets.OVH_IP }} '
-            # Free build cache (safe, rebuilt on demand)
+          ssh debian@${{ secrets.OVH_IP }} '
             docker builder prune --all --force 2>/dev/null || true
-            # Remove images older than 48h (keeps last 2 builds)
             docker image prune -a --force --filter "until=48h" 2>/dev/null || true
-            # Remove stopped containers
             docker container prune --force 2>/dev/null || true
-            AVAIL=$(df -h / | awk "NR==2 {print \$4}")
-            echo "Disk available after cleanup: $AVAIL"
-          ' || true
+            df -h /
+          '
 
       - name: Deploy (hotpatch)
         run: |
-          ssh -o StrictHostKeyChecking=no debian@${{ secrets.OVH_IP }} '
+          ssh debian@${{ secrets.OVH_IP }} '
             CONTAINER=$(docker ps --format "{{.Names}}" | grep -i platform | head -1)
             docker cp /opt/software-factory/platform/. $CONTAINER:/app/platform/
             docker exec $CONTAINER find /app/platform -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-            # Install any new requirements (PYTHONPATH cleared to avoid platform/ module conflict)
             docker exec -e PYTHONPATH= -w /tmp $CONTAINER pip install -r /app/platform/requirements.txt -q 2>/dev/null || true
             docker stop $CONTAINER && sleep 2 && docker start $CONTAINER
             sleep 10
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/ 2>/dev/null || echo 000)
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/api/health 2>/dev/null || echo 000)
             echo "Health: $STATUS"
-          ' || true
+            test "$STATUS" = "200"
+          '
