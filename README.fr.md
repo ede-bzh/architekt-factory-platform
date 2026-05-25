@@ -13,7 +13,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-**[Demo live : sf.macaron-software.com](https://sf.macaron-software.com)** — cliquez "Skip (Demo)" pour explorer
+**[Demo live : demo.architekt.dev](https://demo.architekt.dev)** — cliquez "Skip (Demo)" pour explorer
 
 [Fonctionnalités](#fonctionnalités) · [Démarrage rapide](#démarrage-rapide) · [Captures d'écran](#captures-décran) · [Architecture](#architecture) · [Contribuer](#contribuer)
 
@@ -29,7 +29,8 @@ La plateforme coordonne **163 agents spécialisés** et **41 workflows intégré
 
 ### Points clés
 
-- **163 agents spécialisés** — 10 patterns d'orchestration** — solo, séquentiel, parallèle, hiérarchique, réseau, boucle, routeur, agrégateur, vague, human-in-the-loop
+- **163 agents spécialisés** — architectes, développeurs, testeurs, SRE, analystes sécurité, product owners
+- **10 patterns d'orchestration** — solo, séquentiel, parallèle, hiérarchique, réseau, boucle, routeur, agrégateur, vague, human-in-the-loop
 - **Cycle de vie SAFe** — Portfolio → Epic → Feature → Story avec cadence PI
 - **Résilience LLM** — fallback multi-provider, retry avec jitter, gestion rate-limit, config modèle par env
 - **Observabilité OpenTelemetry** — tracing distribué avec Jaeger, dashboard analytics pipeline
@@ -110,7 +111,7 @@ L'image inclut : **Node.js 20**, **Playwright + Chromium**, **bandit**, **semgre
 
 ```bash
 git clone https://github.com/ede-bzh/architekt-factory-platform.git
-cd software-factory
+cd architekt-factory-platform
 make setup   # copie .env.example → .env (éditez pour ajouter votre clé LLM)
 make run     # construit et lance la plateforme
 ```
@@ -122,7 +123,7 @@ Choisissez votre rôle SAFe ou cliquez sur **« Skip (Demo) »** pour explorer d
 
 ```bash
 git clone https://github.com/ede-bzh/architekt-factory-platform.git
-cd software-factory
+cd architekt-factory-platform
 cp .env.example .env                # créer votre config (éditer pour ajouter la clé LLM — voir Étape 3)
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r platform/requirements.txt
@@ -209,7 +210,7 @@ Apres l'installation, voici comment passer d'une idee a un projet fonctionnel :
 
 ## Fonctionnalités
 
-### 🤖 145 Agents IA Spécialisés
+### 163 Agents IA Spécialisés
 
 Les agents sont organisés en équipes reflétant de vraies organisations logicielles :
 
@@ -591,7 +592,7 @@ Mission Creee
                      │                │
           ┌──────────▼─────┐  ┌───────▼────────┐
           │ VM Azure (Prod)│  │ VPS OVH (Demo) │
-          │ sf.macaron-software.com   │  │ demo.macaron-software.com  │
+          │ demo.architekt.dev   │  │ demo.architekt.dev  │
           │                │  │                │
           │ Nginx :443     │  │ Nginx :443     │
           │   │            │  │   │            │
@@ -612,8 +613,8 @@ Mission Creee
                              │
                     ┌────────▼────────┐
                     │ GitHub          │
-                    │ macaron-software│
-                    │ /software-factory│
+                    │ ede-bzh         │
+                    │ /architekt-factory-platform│
                     └─────────────────┘
 ```
 
@@ -978,7 +979,7 @@ docker-compose up -d
 ### Kubernetes (Helm)
 
 ```bash
-helm install software-factory ./deploy/helm/
+helm install architekt-factory-platform ./deploy/helm/
 ```
 
 ### Variables d'Environnement
@@ -1009,6 +1010,6 @@ Ce projet est sous licence AGPL v3 - voir le fichier [LICENSE](LICENSE) pour dé
 
 ## Support
 
-- Demo live : https://sf.macaron-software.com
+- Demo live : https://demo.architekt.dev
 - Issues : https://github.com/ede-bzh/architekt-factory-platform/issues
 - Discussions : https://github.com/ede-bzh/architekt-factory-platform/discussions
