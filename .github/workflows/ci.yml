@@ -93,6 +93,8 @@ jobs:
             tests/test_no_legacy_external_refs.py \
             tests/test_readme_en_fr.py \
             tests/test_monitoring_live_perf.py \
+            tests/test_wave_e_runtime.py \
+            tests/test_doc_no_architekt_user_facing.py \
             -q
 
   mutation:
