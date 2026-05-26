@@ -1,0 +1,80 @@
+# Architecture
+
+## Vue d'ensemble
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        PLATEFORME (FastAPI)                     │
+│  ┌──────────┐  ┌───────────┐  ┌───────────┐  ┌──────────────┐ │
+│  │  Web UI   │  │   REST    │  │    SSE    │  │     CLI      │ │
+│  │  (HTMX)   │  │   API     │  │  Stream   │  │   (sf.py)    │ │
+│  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘  └──────┬───────┘ │
+│        └──────────┬────┴────────┬─────┘              │         │
+│              ┌────┴────┐  ┌────┴────┐                │         │
+│              │ Routes  │  │ Helpers │                │         │
+│              └────┬────┘  └─────────┘                │         │
+│  ┌────────────────┴──────────────────────────────────┘         │
+│  │                                                              │
+│  │  ┌──────────────┐  ┌───────────────┐  ┌────────────────┐   │
+│  │  │  AgentLoop    │  │  MessageBus   │  │  PatternEngine │   │
+│  │  │  (executor)   │←→│  (pub/sub)    │←→│  (15 patterns) │   │
+│  │  └──────┬───────┘  └───────────────┘  └────────────────┘   │
+│  │         │                                                    │
+│  │  ┌──────┴───────┐  ┌───────────────┐  ┌────────────────┐   │
+│  │  │  LLM Client  │  │  Tool Runner  │  │  MCP Bridge    │   │
+│  │  │  (multi-prov) │  │  (50+ tools)  │  │  (3 servers)   │   │
+│  │  └──────────────┘  └───────────────┘  └────────────────┘   │
+│  │                                                              │
+│  │  ┌──────────────┐  ┌───────────────┐  ┌────────────────┐   │
+│  │  │  Missions    │  │  Workflows    │  │  Memory        │   │
+│  │  │  (SAFe)      │  │  (41 builtin) │  │  (4 couches)   │   │
+│  │  └──────────────┘  └───────────────┘  └────────────────┘   │
+│  └──────────────────────────────────────────────────────────────│
+│                                                                 │
+│  ┌──────────────┐  ┌───────────────┐  ┌────────────────────┐  │
+│  │  SQLite/PG   │  │  OTEL/Jaeger  │  │  Ops (auto-heal)   │  │
+│  │  (dual DB)   │  │  (tracing)    │  │  (chaos/endurance)  │  │
+│  └──────────────┘  └───────────────┘  └────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Pile technique
+
+| Couche | Technologie |
+|--------|-------------|
+| Backend | Python 3.12, FastAPI, uvicorn |
+| Frontend | HTMX, Jinja2, Chart.js, SortableJS |
+| Base de données | SQLite (local) / PostgreSQL (prod), adaptateur dual |
+| LLM | Multi-fournisseur : MiniMax, Azure OpenAI, Azure AI |
+| Streaming | SSE (Server-Sent Events), canal dual |
+| Monitoring | OpenTelemetry → Jaeger, métriques DORA |
+| CI/CD | GitHub Actions, Docker, Helm |
+| MCP | 3 serveurs : fetch, memory-kg, playwright |
+
+## Architecture des agents
+
+Plus de 160 agents organisés en plusieurs domaines :
+
+| Domaine | Nombre | Agents clés |
+|---------|--------|-------------|
+| Dev | 35+ | brain, lead_dev, dev_backend, dev_frontend, workers |
+| QA | 18+ | testeur, test_automation, perf-tester |
+| Sécurité | 14+ | securite, devsecops, pentester-lead |
+| Produit | 10+ | product_owner, metier, business_owner |
+| Architecture | 7+ | architecte, enterprise_architect, adr-writer |
+| DevOps | 8+ | devops, sre, pipeline_engineer |
+| Doc | 3 | doc-writer, changelog-gen, tech_writer |
+| RSE | 8+ | rse-dpo, rse-ethique-ia, rse-eco, rse-a11y |
+| SAFe | 6 | rte, epic_owner, lean_portfolio_manager |
+
+## Validation adversariale (Team of Rivals)
+
+```
+L0 : contrôles déterministes (test.skip, @ts-ignore, catch vide) → VETO
+L1 : revue sémantique LLM (slop, hallucination, logique)         → VETO
+L2 : revue architecture (RBAC, validation, design API)           → VETO + ESCALADE
+Multi-fournisseur : Brain=Opus, Worker=MiniMax, Security=GLM, Arch=Opus
+Règle : « Les auteurs de code ne peuvent pas déclarer leur propre succès »
+```
+
+[English](Architecture)
