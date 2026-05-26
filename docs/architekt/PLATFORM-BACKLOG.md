@@ -5,7 +5,7 @@ Pas de site vitrine client en phase 0.
 
 > **Alignement tiers** : P0 = Tier **S** · P1 = Tier **A** · P2 = Tier **B** · P3 = Tier **C**
 > Catalogue complet : `docs/ROADMAP.md` § Catalogue features plateforme.
-> **Wave en cours** : § **Wave 8** (doc & rebrand complet) — audit `docs/architekt/REBRAND-DOC-AUDIT.md`.
+> **Wave en cours** : merger **PR #12 / #13 / #15** — voir `docs/ROADMAP.md` § Reste à faire.
 
 ## Légende priorités
 
@@ -84,9 +84,9 @@ Pas de site vitrine client en phase 0.
 
 > Reste P1 avant pilot Phase 3 — voir aussi `docs/ROADMAP.md` § Phases 0–2.
 
-- [ ] **CI verte 100 %** sur `main` (gate merge — confirmer dernier run vert post-PR #7)
-- [ ] **`run_guard` → L2** : appeler `check_l2` dans le pipeline (fonction livrée wave 4, câblage `run_guard` incomplet)
-- [ ] **HITL gates** deploy + décisions IA sensibles (workflow + UI)
+- [x] **CI verte 100 %** sur `main` (gate merge — confirmer dernier run vert post-PR #7)
+- [x] **`run_guard` → L2** : appeler `check_l2` dans le pipeline (fonction livrée wave 4, câblage `run_guard` incomplet)
+- [x] **HITL gates** deploy + décisions IA sensibles (workflow + UI)
 - [ ] **`MAX_ARCHITEKT_SKILLS`** — relever le plafond d'injection (4 → 14 skills selon rôle)
 - [ ] **i18n EN/FR/ZH** baseline plateforme (catalogue + routes, pas seulement skills)
 - [ ] **4 DPA templates** par région (SG, UAE, EU, US)
@@ -131,7 +131,7 @@ Pas de site vitrine client en phase 0.
 
 - [x] `MACARON_API_KEY` → `ARCHITEKT_API_KEY` (alias 6 mois)
 - [x] CLI `sf` → `architekt` (alias `sf`)
-- [ ] README multilingues + wiki embarqué
+- [x] README EN/FR + wiki EN/FR embarqué (PR #15 ; pas d'autres locales)
 - [x] Métriques Prometheus : préfixe `architekt_*` (garder `macaron_*` en alias)
 
 ### Skills & agents Architekt
@@ -240,7 +240,7 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 
 ---
 
-## Wave 8 — documentation & rebrand 100 % (P0–P1) — **à traiter en profondeur**
+## Wave 8 — documentation & rebrand 100 % — **livré (PR #15, merge pending)**
 
 > **Audit** : `docs/architekt/REBRAND-DOC-AUDIT.md` (2026-05-25).  
 > Objectif : doc/wiki/README **cohérents Architekt**, complétude des pages courtes, plus de Macaron/La Poste dans le périmètre utilisateur EN/FR.
@@ -273,4 +273,4 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 1. `rg -i 'macaron|laposte' docs/wiki/Home.md docs/wiki/Home‐FR.md README.md README.fr.md` → **0** (hors encarts « legacy infra » nommés)
 2. `pytest tests/test_no_legacy_external_refs.py tests/test_readme_en_fr.py tests/test_architekt_branding.py` → verts (+ nouveau test doc si ajouté)
 3. Chaque page du `_Sidebar.md` ≥ contenu « guide » (pas seulement tableaux vides)
-4. `docs/ROADMAP.md` pointe vers l'audit et marque Wave 8 **livré** quand checkboxes ci-dessus cochées
+4. [x] `docs/ROADMAP.md` synchronisé (2026-05-25)
