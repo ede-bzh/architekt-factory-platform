@@ -21,15 +21,13 @@ The **repo layout** always uses the directory `platform/`. Inside Docker images 
 | Context | Python import | Path in container |
 |---------|---------------|-------------------|
 | Local dev | `platform` | `platform/` at repo root |
-| **Target Docker** (post-rebuild) | `architekt_platform` | `/app/architekt_platform/` |
-| Legacy alias (6 months) | `architekt_platform` | Symlink → `architekt_platform` |
-| Pre-migration image (not rebuilt yet) | `architekt_platform` | `/app/architekt_platform/` (real directory) |
+| Docker (prod VM image) | `architekt_platform` | `/app/architekt_platform/` |
 
 Detection in code: `platform/runtime.py` (`runtime_package_name()`, `container_code_dir()`).
 
 **Operational runbook (rebuild, rollback, `.env` PG):** [`docs/architekt/WAVE-E-RUNBOOK.md`](../architekt/WAVE-E-RUNBOOK.md).
 
-> **Infra names on Azure stay legacy** until a separate migration: VM tree `/opt/architekt`, PostgreSQL host `architekt-platform-pg...`, database name `architekt_platform` when `PG_DB` is set in `.env`. Only the **in-container Python package path** is rebranded.
+> **Ops note:** Some Azure control-plane resource IDs (e.g. managed PostgreSQL server hostname) may still use historical names in the portal; runtime on the VM uses `/opt/architekt`, user `architekt`, and `PG_DB=architekt_platform` in `.env`.
 
 ## Environment comparison
 
@@ -37,18 +35,18 @@ Detection in code: `platform/runtime.py` (`runtime_package_name()`, `container_c
 |---|--------------------------|----------------------|
 | **Purpose** | Public demo, no LLM keys required | Customer production, Azure OpenAI |
 | **Host** | OVH VPS (`<OVH_IP>`) | Azure VM (`<AZURE_VM_IP>`, francecentral) |
-| **SSH user** | `debian@<OVH_IP>` | `azureadmin@<AZURE_VM_IP>` |
+| **SSH user** | `debian@<OVH_IP>` | `architekt@<AZURE_VM_IP>` |
 | **URL** | `http://<OVH_IP>` | `http://<AZURE_VM_IP>` (+ nginx basic auth) |
 | **LLM** | `PLATFORM_LLM_PROVIDER=demo` (mock) | Azure OpenAI `gpt-5-mini` |
-| **Python package** | `platform` (repo layout) | `architekt_platform` in container (target) |
+| **Python package** | `platform` (repo layout) | `architekt_platform` in container |
 | **Container** | `software-factory-platform-1` | `deploy-platform-1` |
-| **Code on VM** | `/opt/software-factory/` | `/opt/architekt/platform/` (host path unchanged) |
+| **Code on VM** | `/opt/software-factory/` | `/opt/architekt/platform/` |
 | **Compose file** | `/opt/software-factory/platform/docker-compose.yml` | `/opt/architekt/platform/deploy/docker-compose-vm.yml` |
 | **Database** | SQLite | PostgreSQL (`PG_DB` from `.env`, often `architekt_platform`) |
 | **Tracing** | Optional | OTEL `architekt-platform` → Jaeger `:16686` |
-| **API key env** | `ARCHITEKT_API_KEY` (preferred) | `ARCHITEKT_API_KEY` or legacy `ARCHITEKT_API_KEY` |
+| **API key env** | `ARCHITEKT_API_KEY` | `ARCHITEKT_API_KEY` |
 
-New integrations should target **OVH demo** paths and the `platform` module. Azure **host** paths remain under `/opt/architekt` until infra migration.
+New integrations should target **OVH demo** paths and the `platform` module. Azure production uses `/opt/architekt` and `architekt_platform` in the container.
 
 ---
 
@@ -132,20 +130,18 @@ PLATFORM_LLM_PROVIDER=demo make run
 
 ## Azure production (VM `/opt/architekt`)
 
-> **Host layout is legacy-named** (`/opt/architekt`, PG host `architekt-platform-pg`). **Container runtime** follows Wave E: import `architekt_platform` after image rebuild.
-
 | Property | Value |
 |----------|-------|
 | VM | D4as_v5 (4 CPU, 16 GB), francecentral |
+| SSH user | `architekt@<AZURE_VM_IP>` |
 | Web | `http://<AZURE_VM_IP>` (nginx basic auth) |
 | LLM | Azure OpenAI / gpt-5-mini |
 | Container | `deploy-platform-1` |
-| **In-container code (target)** | `/app/architekt_platform/` |
-| **Legacy symlink / old image** | `/app/architekt_platform/` |
+| In-container code | `/app/architekt_platform/` |
 | Compose on VM | `/opt/architekt/platform/deploy/docker-compose-vm.yml` |
 | Build context | `/opt/architekt` |
 | Patches dir | `/opt/architekt/patches/` (applied at container start) |
-| DB | Azure PostgreSQL + dual adapter; keep `PG_DB=architekt_platform` in `.env` until DB rename |
+| DB | Azure PostgreSQL + dual adapter; `PG_DB=architekt_platform` in `.env` |
 
 ### Full rebuild (Wave E image)
 
@@ -163,21 +159,20 @@ docker exec deploy-platform-1 python3 -c "from architekt_platform.runtime import
 
 ### Hot deploy (CI or manual, no rebuild)
 
-GitHub Actions (`.github/workflows/deploy-azure.yml`) copies into `architekt_platform` or `architekt_platform` depending on the running image.
+GitHub Actions (`.github/workflows/deploy-azure.yml`) copies into `/app/architekt_platform/`.
 
 Manual rsync + restart:
 
 ```bash
-rsync -avz platform/ azureadmin@<AZURE_VM_IP>:/home/azureadmin/architekt_update/platform/
-ssh azureadmin@<AZURE_VM_IP> '
+rsync -avz platform/ architekt@<AZURE_VM_IP>:/home/architekt/architekt_update/platform/
+ssh architekt@<AZURE_VM_IP> '
   CONTAINER=$(docker ps --format "{{.Names}}" | grep -E "platform" | head -1)
-  PKG=$(docker exec $CONTAINER bash -c "[ -d /app/architekt_platform ] && echo architekt_platform || echo architekt_platform")
-  docker cp ~/architekt_update/platform/. $CONTAINER:/app/$PKG/
+  docker cp ~/architekt_update/platform/. $CONTAINER:/app/architekt_platform/
   docker restart $CONTAINER
 '
 ```
 
-### Legacy patch directory (optional)
+### Patch directory (optional)
 
 ```bash
 ssh <AZURE_VM_IP> "sudo cp /home/azureadmin/platform/web/routes/*.py /opt/architekt/patches/"
@@ -193,7 +188,7 @@ GitLab CI: `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE
 
 ## Helm (Kubernetes)
 
-Chart: `deploy/helm/architekt/` (`architekt-platform`). Legacy chart `deploy/helm/architekt/` remains for reference until removed.
+Chart: `deploy/helm/architekt/` (`architekt-platform`).
 
 ---
 

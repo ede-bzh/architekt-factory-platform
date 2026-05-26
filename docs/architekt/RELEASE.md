@@ -21,9 +21,9 @@ Sur push de tag `v*` :
 
 - Job `release` dans `.github/workflows/ci.yml` attache `sbom-platform.json` et résume pytest.
 
-## Docker (vague E — hors release courante)
+## Docker (image VM prod)
 
-Les **nouvelles** images Docker importent `architekt_platform` (symlink legacy `architekt_platform` 6 mois). Les conteneurs prod non reconstruits restent sur l’ancien layout jusqu’au rebuild — voir [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md).
+Les images construites via `platform/deploy/Dockerfile` installent le package **`architekt_platform`** sous `/app/architekt_platform/`. Rebuild et vérification : [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md).
 
 ## Rollback
 
