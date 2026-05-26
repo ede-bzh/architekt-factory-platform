@@ -3,8 +3,7 @@ kind: Service
 metadata:
   name: {{ include "architekt.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "architekt.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "architekt.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -13,5 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "architekt.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "architekt.selectorLabels" . | nindent 4 }}
