@@ -14,11 +14,10 @@ echo "==> secret-scan"
 bash scripts/ci/secret-scan.sh
 
 echo "==> pip-audit"
-(
-  cd /tmp
-  pip install -q pip-audit
-  pip-audit -r "$ROOT/platform/requirements.txt" --desc on
-)
+if ! PYTHONPATH= python3 -m pip_audit --version >/dev/null 2>&1; then
+  PYTHONPATH= python3 -m pip install -q pip-audit
+fi
+PYTHONPATH= python3 -m pip_audit -r "$ROOT/platform/requirements.txt" --desc on
 
 echo "==> pytest (CI gate)"
 export PYTHONPATH=.
