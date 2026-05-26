@@ -8,8 +8,8 @@ import { test, expect } from "@playwright/test";
 test.describe("Smoke", () => {
   test("login page loads", async ({ page }) => {
     await page.goto("/login", { waitUntil: "domcontentloaded" });
-    await expect(page).toHaveTitle(/Software Factory|Login/i);
-    await expect(page.locator("#loginForm, .login-box")).toBeVisible();
+    await expect(page).toHaveTitle(/Architekt|Login/i);
+    await expect(page.locator("#loginForm")).toBeVisible();
     await expect(page.locator('input[type="email"], #email')).toBeVisible();
   });
 

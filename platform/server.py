@@ -1042,6 +1042,18 @@ def create_app() -> FastAPI:
     templates.env.globals["i18n_catalog"] = _i18n_catalog_global()
     templates.env.globals["SUPPORTED_LANGS"] = SUPPORTED_LANGS
 
+    from .branding import (
+        PRODUCT_FULL_NAME,
+        PRODUCT_NAME,
+        PRODUCT_SHORT,
+        THEME_STORAGE_KEY,
+    )
+
+    templates.env.globals["product_full_name"] = PRODUCT_FULL_NAME
+    templates.env.globals["product_name"] = PRODUCT_NAME
+    templates.env.globals["product_short"] = PRODUCT_SHORT
+    templates.env.globals["theme_storage_key"] = THEME_STORAGE_KEY
+
     # Version + git commit for header display
     import subprocess as _sp
     from pathlib import Path as _Path
