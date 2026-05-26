@@ -160,4 +160,4 @@ GitLab CI: `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE
 - [Security](Security) — nginx, CSP, HITL gates
 - [LLM Configuration](LLM-Configuration) — provider per environment
 
-## 🇫🇷 [Guide de déploiement (FR)](Deployment-Guide‐FR) · 🇪🇸 [ES](Deployment-Guide‐ES) · 🇩🇪 [DE](Deployment-Guide‐DE)
+## 🇫🇷 [Guide de déploiement (FR)](Deployment-Guide‐FR)

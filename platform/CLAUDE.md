@@ -33,7 +33,9 @@ VERIFY: curl -s -o /dev/null -w "%{http_code}" http://localhost:8099/
 KILL:   lsof -ti:8099 | xargs kill -9
 ```
 
-## DEPLOY (Azure VM 4.233.64.30)
+## DEPLOY — prod legacy (Azure)
+
+> **Legacy production alias** (ADR-001 vague E): VM layout and Docker package name from the former Macaron stack. Repo source remains `platform/`; the running container imports **`macaron_platform`**, host tree **`/opt/macaron`**, SSH key **`RG-MACARON-vm-macaron`**. Keep these commands if you operate the Azure VM (`4.233.64.30`).
 
 ```bash
 SSH_KEY="$HOME/.ssh/az_ssh_config/RG-MACARON-vm-macaron/id_rsa"
@@ -46,12 +48,21 @@ tar cf /tmp/update.tar <files...>
 scp -i "$SSH_KEY" /tmp/update.tar azureadmin@4.233.64.30:/tmp/
 ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platform-1:/tmp/ && docker exec deploy-platform-1 bash -c 'cd /app/macaron_platform && tar xf /tmp/update.tar' && docker restart deploy-platform-1"
 # ⚠️ Hotpatch is LOST on docker compose --build → always rsync BEFORE rebuild
-# Container code path: /app/macaron_platform/ (NOT /app/platform/)
-# Auth: admin@demo.local (Skip Demo button) | admin@macaron-software.com / macaron2026
+# Container code path: /app/macaron_platform/ (legacy alias — NOT /app/platform/)
 # Prod LLM: Azure OpenAI gpt-5-mini only (AZURE_DEPLOY=1, NO minimax fallback)
-# Custom domain: sf.macaron-software.com → 4.233.64.30:80 (nginx)
+# Legacy domain (nginx): sf.macaron-software.com → 4.233.64.30:80
 # UID mismatch: /opt/macaron owned by 501 (macOS), azureadmin=1001 → use docker cp
 ```
+
+## DEPLOY — Architekt demo (OVH/local)
+
+Primary path for demos and development. Full steps: **[docs/wiki/Deployment-Guide.md](../docs/wiki/Deployment-Guide.md)** (OVH VPS, local uvicorn, Docker quick start).
+
+| Target | Access | Notes |
+|--------|--------|-------|
+| OVH demo | `debian@<OVH_IP>`, `/opt/software-factory/` | `PLATFORM_LLM_PROVIDER=demo`, CI: `.github/workflows/deploy-demo.yml` |
+| Local dev | `http://localhost:8099` | See RUN above; keys in `~/.config/factory/*.key` |
+| Auth | `admin@demo.local` | Skip Demo button (Architekt demo/local only — not legacy Azure nginx) |
 
 ## GIT
 
@@ -289,9 +300,12 @@ STRATEGY                     ENGINEERING
 ┌──────────────────────┬──────────────┬─────────────┬──────────────────────┐
 │ Environment          │ Provider     │ Model       │ Fallback             │
 ├──────────────────────┼──────────────┼─────────────┼──────────────────────┤
-│ Azure VM (prod)      │ azure-openai │ gpt-5-mini  │ none (AZURE_DEPLOY=1)│
+│ Azure VM (legacy prod)│ azure-openai │ gpt-5-mini  │ none (AZURE_DEPLOY=1)│
 │ 4.233.64.30          │              │             │                      │
-│ sf.macaron-software  │              │             │                      │
+│ sf.macaron-software* │              │             │                      │
+│ *legacy nginx alias  │              │             │                      │
+├──────────────────────┼──────────────┼─────────────┼──────────────────────┤
+│ OVH demo (Architekt) │ demo         │ mock        │ —                    │
 ├──────────────────────┼──────────────┼─────────────┼──────────────────────┤
 │ Local dev            │ minimax      │ MiniMax-M2.5│ → azure-openai       │
 ├──────────────────────┼──────────────┼─────────────┼──────────────────────┤

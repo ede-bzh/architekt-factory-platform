@@ -131,4 +131,4 @@ sf missions list
 - [Deployment Guide](Deployment-Guide) — environment URLs and keys
 - [Patterns](Patterns) — orchestration used by mission phases
 
-## 🇫🇷 [Référence API (FR)](API-Reference‐FR) · 🇪🇸 [ES](API-Reference‐ES) · 🇩🇪 [DE](API-Reference‐DE)
+## 🇫🇷 [Référence API (FR)](API-Reference‐FR)

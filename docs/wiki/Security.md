@@ -144,4 +144,4 @@ Agent-to-agent messages support veto strength: `ABSOLUTE`, `STRONG`, `ADVISORY` 
 - [Patterns](Patterns) — HITL and adversarial patterns
 - [Deployment Guide](Deployment-Guide) — production hardening
 
-## 🇫🇷 [Sécurité (FR)](Security‐FR) · 🇪🇸 [ES](Security‐ES)
+## 🇫🇷 [Sécurité (FR)](Security‐FR)

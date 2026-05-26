@@ -90,4 +90,4 @@ The Architekt Factory Platform orchestrates 163 specialized AI agents across 9 d
 | `lean_portfolio_manager` | Portfolio management |
 | `solution_train_engineer` | Solution train coordination |
 
-## 🇫🇷 [Agents (FR)](Agents‐FR) · 🇪🇸 [ES](Agents‐ES) · 🇩🇪 [DE](Agents‐DE)
+## 🇫🇷 [Agents (FR)](Agents‐FR)

@@ -76,4 +76,4 @@ Each workflow defines a sequence of phases executed by specialized agents. Built
 | `review-cycle` | 2 | Code review cycle |
 | `sf-pipeline` | 3 | Self-improvement pipeline |
 
-## 🇫🇷 [Workflows (FR)](Workflows‐FR) · 🇪🇸 [ES](Workflows‐ES)
+## 🇫🇷 [Workflows (FR)](Workflows‐FR)

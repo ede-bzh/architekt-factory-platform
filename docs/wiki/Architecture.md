@@ -77,4 +77,4 @@ Multi-vendor: Brain=Opus, Worker=MiniMax, Security=GLM, Arch=Opus
 Rule: "Code writers cannot declare their own success"
 ```
 
-## 🇫🇷 [Architecture (FR)](Architecture‐FR) · 🇪🇸 [ES](Architecture‐ES) · 🇩🇪 [DE](Architecture‐DE)
+## 🇫🇷 [Architecture (FR)](Architecture‐FR)

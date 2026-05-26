@@ -105,4 +105,4 @@ GET /api/teams/llm-ab-tests?limit=20
 Each LLM call is traced with: provider, model, tokens (in/out), cost, latency.  
 View: `/api/llm/stats`, `/api/llm/traces`, and **Monitoring → MCP Tool Calls** in the dashboard.
 
-## 🇫🇷 [Configuration LLM (FR)](LLM-Configuration‐FR) · 🇪🇸 [ES](LLM-Configuration‐ES)
+## 🇫🇷 [Configuration LLM (FR)](LLM-Configuration‐FR)
