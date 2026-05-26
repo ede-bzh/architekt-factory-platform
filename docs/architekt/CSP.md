@@ -25,7 +25,7 @@ Other headers set in the same middleware:
 
 ```
 default-src 'self';
-script-src 'self' ['nonce-…'] 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net;
+script-src 'self' ['nonce-…'] 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net;
 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
 font-src 'self' https://fonts.gstatic.com;
 img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com;
@@ -50,13 +50,12 @@ frame-ancestors 'none'
 
 No `X-Frame-Options` (iframes are required for preview tooling).
 
-## `unsafe-inline` today
+## `unsafe-inline` / `unsafe-eval` today
 
-Both policies keep `'unsafe-inline'` and `'unsafe-eval'` on `script-src` because:
+- **Default policy**: `'unsafe-inline'` only (no `'unsafe-eval'`). Enforced by `tests/test_platform_api.py::TestSecurity::test_csp_header`.
+- **Workspace policy**: keeps `'unsafe-eval'` for embedded dev previews (Portainer, DBGate, etc.).
 
-- HTMX uses inline attributes and dynamic script injection patterns across many templates.
-- Some pages load inline bootstrapping without external bundles.
-- Chart.js / legacy snippets may rely on eval in dev tooling.
+HTMX still needs `'unsafe-inline'` on most pages until the nonce roadmap below is complete.
 
 Jinja2 auto-escaping and `connect-src 'self'` limit XSS impact; CSP is defense-in-depth, not the only control.
 
@@ -90,7 +89,7 @@ Target end state (security-frontend-dev skill alignment):
 | 1 | Enable `PLATFORM_CSP_NONCE=1` in staging; tag all first-party `<script>` in `base.html` and shared partials with `nonce="{{ request.state.csp_nonce }}"` |
 | 2 | Move inline `<script>` blocks to `/static/js/*.js` or `type="module"` with nonce |
 | 3 | Audit HTMX `hx-on::*` and inline handlers; replace with `htmx.config` / external listeners where possible |
-| 4 | Drop `'unsafe-eval'` when no dependency requires it |
+| 4 | Drop `'unsafe-eval'` on workspace when embedded tools no longer need it (done on default routes) |
 | 5 | Remove `'unsafe-inline'` from `script-src`; keep `'unsafe-inline'` on `style-src` only if needed for critical CSS |
 | 6 | Add CSP violation reporting (`report-uri` / `report-to`) and Playwright smoke asserting no console CSP errors |
 

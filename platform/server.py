@@ -30,6 +30,30 @@ TEMPLATES_DIR = WEB_DIR / "templates"
 STATIC_DIR = WEB_DIR / "static"
 
 
+def content_security_policy(path: str) -> str:
+    """CSP string for a request path (no unsafe-eval except project workspace)."""
+    if path.startswith("/projects/") and path.endswith("/workspace"):
+        return (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "font-src 'self' data:; "
+            "img-src 'self' data: blob: https:; "
+            "connect-src 'self'; "
+            "frame-src 'self' http://localhost:* http://127.0.0.1:* https:; "
+            "frame-ancestors 'none'"
+        )
+    return (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'"
+    )
+
+
 # ── OpenTelemetry setup (module-level, before create_app) ──────────────────
 _otel_provider = None
 if os.environ.get("OTEL_ENABLED"):
@@ -602,29 +626,9 @@ def create_app() -> FastAPI:
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 
         path = request.url.path
-        # Workspace pages need iframes (preview, dbgate, portainer)
-        if path.startswith("/projects/") and path.endswith("/workspace"):
-            response.headers["Content-Security-Policy"] = (
-                "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
-                "style-src 'self' 'unsafe-inline'; "
-                "font-src 'self' data:; "
-                "img-src 'self' data: blob: https:; "
-                "connect-src 'self'; "
-                "frame-src 'self' http://localhost:* http://127.0.0.1:* https:; "
-                "frame-ancestors 'none'"
-            )
-        else:
+        if not (path.startswith("/projects/") and path.endswith("/workspace")):
             response.headers["X-Frame-Options"] = "DENY"
-            response.headers["Content-Security-Policy"] = (
-                "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; "
-                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
-                "font-src 'self' https://fonts.gstatic.com; "
-                "img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com; "
-                "connect-src 'self'; "
-                "frame-ancestors 'none'"
-            )
+        response.headers["Content-Security-Policy"] = content_security_policy(path)
         if request.url.scheme == "https":
             response.headers["Strict-Transport-Security"] = (
                 "max-age=31536000; includeSubDomains"
