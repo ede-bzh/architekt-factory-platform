@@ -64,22 +64,22 @@ def live_session(live_url):
 
 @pytest.fixture(scope="session")
 def canvas_project_id(live_session):
-    """Create or find the 'macaron-canvas' project, return its id."""
+    """Create or find the 'architekt-canvas' project, return its id."""
     r = live_session.get("/api/projects")
     r.raise_for_status()
     for p in r.json():
-        if p.get("id") == "macaron-canvas" or p.get("name") == "macaron-canvas":
+        if p.get("id") == "architekt-canvas" or p.get("name") == "architekt-canvas":
             return p["id"]
     r = live_session.post(
         "/api/projects",
         json={
-            "id": "macaron-canvas",
-            "name": "Macaron Canvas",
+            "id": "architekt-canvas",
+            "name": "Architekt Canvas",
             "description": "Collaborative design tool — endurance test project",
         },
     )
     r.raise_for_status()
-    return "macaron-canvas"
+    return "architekt-canvas"
 
 
 @pytest.fixture(scope="module")

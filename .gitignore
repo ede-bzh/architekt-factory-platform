@@ -50,3 +50,4 @@ platform/VERSION
 workspace/
 platform/src/
 src/
+.mutmut-cache

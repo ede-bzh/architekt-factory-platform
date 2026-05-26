@@ -49,12 +49,12 @@ Local data and secrets stay outside git (`data/`, `~/.config/factory/*.key`).
 │ Environment    │ URL / Access            │ Details                          │
 ├────────────────┼─────────────────────────┼──────────────────────────────────┤
 │ Azure Prod     │ http://<AZURE_VM_IP>    │ D4as_v5 4CPU/16GB, francecentral │
-│                │ SSH: macaron@<VM>       │ LLM: azure-openai / gpt-5-mini  │
+│                │ SSH: architekt@<VM>       │ LLM: azure-openai / gpt-5-mini  │
 │                │ nginx basic auth        │ Container: deploy-platform-1     │
 │                │                         │ Compose: deploy/docker-compose-  │
-│                │                         │   vm.yml (context: /opt/macaron) │
-│                │                         │ Module: macaron_platform (*)     │
-│                │                         │ Patches: /opt/macaron/patches/   │
+│                │                         │   vm.yml (context: /opt/architekt) │
+│                │                         │ Module: architekt_platform (*)     │
+│                │                         │ Patches: /opt/architekt/patches/   │
 │                │                         │ OTEL → Jaeger :16686             │
 ├────────────────┼─────────────────────────┼──────────────────────────────────┤
 │ OVH Demo       │ http://<OVH_IP>         │ VPS OVH, Debian                  │
@@ -73,7 +73,7 @@ Local data and secrets stay outside git (`data/`, `~/.config/factory/*.key`).
 └────────────────┴─────────────────────────┴──────────────────────────────────┘
 ```
 
-(*) **prod legacy alias** : runtime package and paths still use `macaron_platform`, `/opt/macaron`, Docker user `macaron` on Azure until infra wave E (see `docs/adr/001-rebrand-architekt.md`).
+Runtime prod : package `architekt_platform`, `/opt/architekt`, user Docker `architekt` (voir `docs/adr/001-rebrand-architekt.md`).
 
 ## DEPLOY
 
@@ -113,15 +113,15 @@ MiniMax: <think> consume tokens (min 16K). GPT-5-mini: NO temperature, max_compl
 ## AZURE
 
 ```
-VM:  <AZURE_VM_IP> (D4as_v5 4CPU/16GB, francecentral) — SSH macaron@<VM>, nginx basic auth
-     Container: deploy-platform-1, path /app/macaron_platform/ (*), volume deploy_platform-data at /app/data
-     Active compose: /opt/macaron/platform/deploy/docker-compose-vm.yml (context: /opt/macaron) (*)
-     Patches: /opt/macaron/patches/ → copied at container start via start-with-patches.sh (*)
-     (*) prod legacy alias — source in repo is platform/; image maps platform/ → macaron_platform/.
-PG:  macaron-platform-pg.postgres.database.azure.com (*) — B1ms PG17 32GB, pgvector, pg_trgm
-     DB: macaron_platform, user: macaron, SSL required, dual adapter (adapter.py) (*)
+VM:  <AZURE_VM_IP> (D4as_v5 4CPU/16GB, francecentral) — SSH architekt@<VM>, nginx basic auth
+     Container: deploy-platform-1, path /app/architekt_platform/ (*), volume deploy_platform-data at /app/data
+     Active compose: /opt/architekt/platform/deploy/docker-compose-vm.yml (context: /opt/architekt) (*)
+     Patches: /opt/architekt/patches/ → copied at container start via start-with-patches.sh (*)
+     (*) wave E complete — source in repo is platform/; image maps platform/ → architekt_platform/.
+PG:  architekt-platform-pg.postgres.database.azure.com (*) — B1ms PG17 32GB, pgvector, pg_trgm
+     DB: architekt_platform, user: architekt, SSL required, dual adapter (adapter.py) (*)
 LLM: ascii-ui-openai (francecentral) — gpt-5-mini, 100req/min, 100K tok/min
-DR:  L3 full 14/14 — blob GRS (macaronbackups), snapshots, PG PITR 7d
+DR:  L3 full 14/14 — blob GRS (architektbackups), snapshots, PG PITR 7d
      RPO: PG 24h+PITR 7d, SQLite 24h, VM 7d, secrets 24h, code 0 (git)
      RTO: PG 15min, SQLite 5min, VM 30min
      Cron: daily 3h, weekly dimanche 2h. Runbook: ops/RUNBOOK.md
@@ -130,21 +130,21 @@ DR:  L3 full 14/14 — blob GRS (macaronbackups), snapshots, PG PITR 7d
 ## DEPLOY WORKFLOW
 
 ```
-rsync /tmp → sudo cp (perms). Ou: docker exec -i CID tee /app/macaron_platform/PATH (*)
+rsync /tmp → sudo cp (perms). Ou: docker exec -i CID tee /app/architekt_platform/PATH (*)
 After: clear __pycache__ → docker restart → wait 15s → health check
-(*) prod legacy alias package name. Templates: no restart (Jinja2 re-reads).
+(*) wave E complete package name. Templates: no restart (Jinja2 re-reads).
 Auto-resume: lifespan restarts running missions on container restart.
 ```
 
 ## SECURITY
 
 ```
-Auth: AuthMiddleware bearer (MACARON_API_KEY — prod legacy env name), GET public, mutations require token
+Auth: AuthMiddleware bearer (ARCHITEKT_API_KEY), GET public, mutations require token
 Headers: HSTS, X-Frame DENY, CSP, X-XSS, Referrer strict
 XSS: Jinja2 autoescaping, CSP connect-src 'self'
 SQL: parameterized queries (? placeholders, zero f-strings)
 Prompt injection: L0+L1 adversarial guards
-Docker: non-root 'macaron' user in image (*) — prod legacy alias
+Docker: non-root `architekt` user in image
 Secrets: externalized ~/.config/factory/*.key, chmod 600
 Rate limit: PG-backed per-IP+token, survives restart
 ```
@@ -268,7 +268,7 @@ Wiki `/memory`, confidence bars. Retrospectives → LLM → lessons → global.
 DORA: deploy freq, lead time, CFR, MTTR + velocity + sparklines.
 LLM: per-call tracing (provider, model, tokens, cost). Live: `/monitoring` SSE.
 OpenTelemetry: opt-in via `OTEL_ENABLED=1`. Exports to Jaeger/OTEL collector via OTLP/HTTP.
-  Env vars: `OTEL_ENABLED=1`, `OTEL_SERVICE_NAME=architekt-prod` (or legacy `macaron-prod` on Azure),
+  Env vars: `OTEL_ENABLED=1`, `OTEL_SERVICE_NAME=architekt-prod` (or legacy `architekt-prod` on Azure),
   `OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317`
   Jaeger UI: http://localhost:16686 (traces, spans, latency).
   Requires: `pip install opentelemetry-api opentelemetry-sdk opentelemetry-instrumentation-fastapi opentelemetry-exporter-otlp-proto-http`

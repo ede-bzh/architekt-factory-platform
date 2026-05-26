@@ -19,7 +19,7 @@ Trois couches optimisent la performance agents/workflows — voir [`platform/CLA
 | Section | Description |
 |---------|-------------|
 | [Architecture](Architecture‐FR) | Architecture de la plateforme, composants, flux de données |
-| [Guide de déploiement](Deployment-Guide‐FR) | Demo Architekt (OVH/local) et prod legacy Azure |
+| [Guide de déploiement](Deployment-Guide‐FR) | Démo Architekt (OVH/local) et production Azure |
 | [Référence API](API-Reference‐FR) | Endpoints REST, authentification |
 | [Agents](Agents‐FR) | ~163 agents répartis en 9 domaines |
 | [Workflows](Workflows‐FR) | 41 workflows intégrés |

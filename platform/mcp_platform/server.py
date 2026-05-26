@@ -66,8 +66,10 @@ def log(msg: str, level: str = "INFO"):
 # ---------------------------------------------------------------------------
 _stores: dict = {}
 
-# Detect container layout
-_PKG = "macaron_platform" if Path("/app/macaron_platform").exists() else "platform"
+# Detect container layout (architekt_platform + legacy architekt_platform symlink)
+from ..runtime import runtime_package_name
+
+_PKG = runtime_package_name()
 
 
 def _agent_store():

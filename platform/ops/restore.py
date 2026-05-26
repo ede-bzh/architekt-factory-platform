@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Macaron Platform — Full Restore from Azure Blob Storage.
+"""Architekt Platform — Full Restore from Azure Blob Storage.
 
 Usage:
     python3 -m platform.ops.restore --list                    # List available backups
@@ -27,7 +27,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-STORAGE_ACCOUNT = "macaronbackups"
+STORAGE_ACCOUNT = "architektbackups"
 
 
 def _get_factory_root() -> Path:
@@ -102,7 +102,7 @@ def list_backups():
 
     # Snapshots
     result = _run(
-        "az snapshot list -g RG-MACARON --query \"[?starts_with(name,'vm-macaron-snap-')]"
+        "az snapshot list -g RG-ARCHITEKT --query \"[?starts_with(name,'vm-architekt-snap-')]"
         ".{name:name,time:timeCreated,size:diskSizeGb}\" -o json",
         check=False,
     )
@@ -279,9 +279,9 @@ def restore_vm_from_snapshot(snapshot_name: str, dry_run: bool = False) -> bool:
         return True
 
     # Create new disk from snapshot
-    disk_name = f"vm-macaron-restored-{snapshot_name}"
+    disk_name = f"vm-architekt-restored-{snapshot_name}"
     result = _run(
-        f"az disk create -n {disk_name} -g RG-MACARON "
+        f"az disk create -n {disk_name} -g RG-ARCHITEKT "
         f"--source {snapshot_name} --query name -o tsv",
         check=False,
     )
@@ -290,15 +290,15 @@ def restore_vm_from_snapshot(snapshot_name: str, dry_run: bool = False) -> bool:
         return False
 
     print(f"  ✅ Disk created: {disk_name}")
-    print(f"  ⚠ To swap: az vm update -n vm-macaron -g RG-MACARON --os-disk {disk_name}")
-    print("  ⚠ Then: az vm start -n vm-macaron -g RG-MACARON")
+    print(f"  ⚠ To swap: az vm update -n vm-architekt -g RG-ARCHITEKT --os-disk {disk_name}")
+    print("  ⚠ Then: az vm start -n vm-architekt -g RG-ARCHITEKT")
     return True
 
 
 def run_full_restore(date_filter: str = "", dry_run: bool = False):
     """Full restore pipeline."""
     print(f"\n{'='*60}")
-    print(f"🔄 MACARON FULL RESTORE {'[DRY-RUN]' if dry_run else ''}")
+    print(f"🔄 ARCHITEKT FULL RESTORE {'[DRY-RUN]' if dry_run else ''}")
     print(f"{'='*60}\n")
 
     if not dry_run:
@@ -323,7 +323,7 @@ def run_full_restore(date_filter: str = "", dry_run: bool = False):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Macaron Platform Restore")
+    parser = argparse.ArgumentParser(description="Architekt Platform Restore")
     parser.add_argument("--list", action="store_true", help="List available backups")
     parser.add_argument("--latest", action="store_true", help="Restore latest backup")
     parser.add_argument("--date", help="Restore from specific date (YYYYMMDD)")

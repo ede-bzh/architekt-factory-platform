@@ -21,12 +21,37 @@ from starlette.responses import JSONResponse
 
 from .config import get_config
 from .db.migrations import init_db
+from .runtime import default_otel_service_name, runtime_module
 
 logger = logging.getLogger(__name__)
 
 WEB_DIR = Path(__file__).parent / "web"
 TEMPLATES_DIR = WEB_DIR / "templates"
 STATIC_DIR = WEB_DIR / "static"
+
+
+def content_security_policy(path: str) -> str:
+    """CSP string for a request path (no unsafe-eval except project workspace)."""
+    if path.startswith("/projects/") and path.endswith("/workspace"):
+        return (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "font-src 'self' data:; "
+            "img-src 'self' data: blob: https:; "
+            "connect-src 'self'; "
+            "frame-src 'self' http://localhost:* http://127.0.0.1:* https:; "
+            "frame-ancestors 'none'"
+        )
+    return (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'"
+    )
 
 
 # ── OpenTelemetry setup (module-level, before create_app) ──────────────────
@@ -40,7 +65,7 @@ if os.environ.get("OTEL_ENABLED"):
 
         _otel_resource = Resource.create(
             {
-                "service.name": os.environ.get("OTEL_SERVICE_NAME", "macaron-platform"),
+                "service.name": default_otel_service_name(),
                 "service.version": "1.2.0",
                 "deployment.environment": os.environ.get("PLATFORM_ENV", "production"),
             }
@@ -377,11 +402,7 @@ async def lifespan(app: FastAPI):
     # Start unified MCP SF server (platform + LRM tools merged)
     _mcp_procs: dict[str, Any] = {}
 
-    _mcp_sf_mod = (
-        "macaron_platform.mcp_platform.server"
-        if Path("/app/macaron_platform").exists()
-        else "platform.mcp_platform.server"
-    )
+    _mcp_sf_mod = runtime_module("mcp_platform.server")
 
     def _kill_port(port: int) -> None:
         """Kill any process holding the given TCP port (best-effort)."""
@@ -605,29 +626,9 @@ def create_app() -> FastAPI:
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 
         path = request.url.path
-        # Workspace pages need iframes (preview, dbgate, portainer)
-        if path.startswith("/projects/") and path.endswith("/workspace"):
-            response.headers["Content-Security-Policy"] = (
-                "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
-                "style-src 'self' 'unsafe-inline'; "
-                "font-src 'self' data:; "
-                "img-src 'self' data: blob: https:; "
-                "connect-src 'self'; "
-                "frame-src 'self' http://localhost:* http://127.0.0.1:* https:; "
-                "frame-ancestors 'none'"
-            )
-        else:
+        if not (path.startswith("/projects/") and path.endswith("/workspace")):
             response.headers["X-Frame-Options"] = "DENY"
-            response.headers["Content-Security-Policy"] = (
-                "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; "
-                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
-                "font-src 'self' https://fonts.gstatic.com; "
-                "img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com; "
-                "connect-src 'self'; "
-                "frame-ancestors 'none'"
-            )
+        response.headers["Content-Security-Policy"] = content_security_policy(path)
         if request.url.scheme == "https":
             response.headers["Strict-Transport-Security"] = (
                 "max-age=31536000; includeSubDomains"
@@ -1040,6 +1041,18 @@ def create_app() -> FastAPI:
     templates.env.globals["_"] = _i18n_global
     templates.env.globals["i18n_catalog"] = _i18n_catalog_global()
     templates.env.globals["SUPPORTED_LANGS"] = SUPPORTED_LANGS
+
+    from .branding import (
+        PRODUCT_FULL_NAME,
+        PRODUCT_NAME,
+        PRODUCT_SHORT,
+        THEME_STORAGE_KEY,
+    )
+
+    templates.env.globals["product_full_name"] = PRODUCT_FULL_NAME
+    templates.env.globals["product_name"] = PRODUCT_NAME
+    templates.env.globals["product_short"] = PRODUCT_SHORT
+    templates.env.globals["theme_storage_key"] = THEME_STORAGE_KEY
 
     # Version + git commit for header display
     import subprocess as _sp

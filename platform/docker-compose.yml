@@ -10,7 +10,7 @@ services:
     environment:
       - FOUNDRY_PROJECT_ENDPOINT=${FOUNDRY_PROJECT_ENDPOINT:-}
       - FOUNDRY_MODEL_DEPLOYMENT_NAME=${FOUNDRY_MODEL_DEPLOYMENT_NAME:-gpt-4o}
-      - ARCHITEKT_API_KEY=${ARCHITEKT_API_KEY:-${MACARON_API_KEY:-}}
+      - ARCHITEKT_API_KEY=${ARCHITEKT_API_KEY:-${ARCHITEKT_API_KEY:-}}
     volumes:
       - platform-data:/app/data
     restart: unless-stopped

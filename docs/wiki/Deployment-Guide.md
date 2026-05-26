@@ -14,34 +14,39 @@ Production and demo deploys run **only after a successful CI workflow** on `main
 
 Release tags `v*` also trigger the CI SBOM artifact job. See `docs/architekt/RELEASE.md`.
 
-## Azure module name (`macaron_platform` — legacy)
+## Runtime package names (Wave E)
 
-On Azure VM Docker, the Python package is imported as **`macaron_platform`**, not `platform`:
+The **repo layout** always uses the directory `platform/`. Inside Docker images built from `platform/deploy/Dockerfile`, code is installed as **`architekt_platform`** (ADR-001 level 3).
 
-- Container code path: `/app/macaron_platform/`
-- Dockerfile copies `platform/` → `macaron_platform/` at build time
-- Local dev uses `platform` directly (`python3 -m uvicorn platform.server:app`)
+| Context | Python import | Path in container |
+|---------|---------------|-------------------|
+| Local dev | `platform` | `platform/` at repo root |
+| Docker (prod VM image) | `architekt_platform` | `/app/architekt_platform/` |
 
-Rebrand context (API keys, metrics): ADR-001 and `docs/architekt/PLATFORM-BACKLOG.md`.
+Detection in code: `platform/runtime.py` (`runtime_package_name()`, `container_code_dir()`).
+
+**Operational runbook (rebuild, rollback, `.env` PG):** [`docs/architekt/WAVE-E-RUNBOOK.md`](../architekt/WAVE-E-RUNBOOK.md).
+
+> **Ops note:** Some Azure control-plane resource IDs (e.g. managed PostgreSQL server hostname) may still use historical names in the portal; runtime on the VM uses `/opt/architekt`, user `architekt`, and `PG_DB=architekt_platform` in `.env`.
 
 ## Environment comparison
 
-| | **Architekt demo (OVH)** | **Legacy Azure production** |
-|---|--------------------------|----------------------------|
+| | **Architekt demo (OVH)** | **Azure production** |
+|---|--------------------------|----------------------|
 | **Purpose** | Public demo, no LLM keys required | Customer production, Azure OpenAI |
 | **Host** | OVH VPS (`<OVH_IP>`) | Azure VM (`<AZURE_VM_IP>`, francecentral) |
-| **SSH user** | `debian@<OVH_IP>` | `azureadmin@<AZURE_VM_IP>` (or legacy `macaron@`) |
+| **SSH user** | `debian@<OVH_IP>` | `architekt@<AZURE_VM_IP>` |
 | **URL** | `http://<OVH_IP>` | `http://<AZURE_VM_IP>` (+ nginx basic auth) |
 | **LLM** | `PLATFORM_LLM_PROVIDER=demo` (mock) | Azure OpenAI `gpt-5-mini` |
-| **Python package** | `platform` (repo layout) | `macaron_platform` (import alias in container) |
+| **Python package** | `platform` (repo layout) | `architekt_platform` in container |
 | **Container** | `software-factory-platform-1` | `deploy-platform-1` |
-| **Code on VM** | `/opt/software-factory/` | `/opt/macaron/platform/` |
-| **Compose file** | `/opt/software-factory/platform/docker-compose.yml` | `/opt/macaron/platform/deploy/docker-compose-vm.yml` |
-| **Database** | SQLite | PostgreSQL + SQLite adapter |
-| **Tracing** | Optional | OTEL → Jaeger `:16686` |
-| **API key env** | `ARCHITEKT_API_KEY` (preferred) | `ARCHITEKT_API_KEY` or legacy `MACARON_API_KEY` |
+| **Code on VM** | `/opt/software-factory/` | `/opt/architekt/platform/` |
+| **Compose file** | `/opt/software-factory/platform/docker-compose.yml` | `/opt/architekt/platform/deploy/docker-compose-vm.yml` |
+| **Database** | SQLite | PostgreSQL (`PG_DB` from `.env`, often `architekt_platform`) |
+| **Tracing** | Optional | OTEL `architekt-platform` → Jaeger `:16686` |
+| **API key env** | `ARCHITEKT_API_KEY` | `ARCHITEKT_API_KEY` |
 
-New integrations should target **OVH demo** paths and `platform` module names. Azure rows are **legacy** until migration completes.
+New integrations should target **OVH demo** paths and the `platform` module. Azure production uses `/opt/architekt` and `architekt_platform` in the container.
 
 ---
 
@@ -113,6 +118,8 @@ make run      # start Docker containers
 # → http://localhost:8090
 ```
 
+Root `Dockerfile` (dev laptop) still uses `platform` on port **8099**. Production VM image uses `platform/deploy/Dockerfile` → `architekt_platform` on port **8090**.
+
 Demo without LLM keys:
 
 ```bash
@@ -121,47 +128,67 @@ PLATFORM_LLM_PROVIDER=demo make run
 
 ---
 
-## Legacy Azure production
-
-> **Legacy only.** Container imports `macaron_platform`, not `platform`. Do not use these paths for new Architekt deployments unless you operate this stack.
+## Azure production (VM `/opt/architekt`)
 
 | Property | Value |
 |----------|-------|
 | VM | D4as_v5 (4 CPU, 16 GB), francecentral |
+| SSH user | `architekt@<AZURE_VM_IP>` |
 | Web | `http://<AZURE_VM_IP>` (nginx basic auth) |
 | LLM | Azure OpenAI / gpt-5-mini |
 | Container | `deploy-platform-1` |
-| **In-container code** | `/app/macaron_platform/` |
-| Compose on VM | `/opt/macaron/platform/deploy/docker-compose-vm.yml` |
-| Build context | `/opt/macaron` |
-| Patches dir | `/opt/macaron/patches/` (applied at container start) |
-| DB | Azure PostgreSQL (`macaron-platform-pg...`) + dual adapter |
+| In-container code | `/app/architekt_platform/` |
+| Compose on VM | `/opt/architekt/platform/deploy/docker-compose-vm.yml` |
+| Build context | `/opt/architekt` |
+| Patches dir | `/opt/architekt/patches/` (applied at container start) |
+| DB | Azure PostgreSQL + dual adapter; `PG_DB=architekt_platform` in `.env` |
 
-### Legacy deploy process
+### Full rebuild (Wave E image)
 
 ```bash
-# 1. rsync from build artifact to VM
-rsync -avz /tmp/gh_push_ops/software-factory/{platform,cli,skills,dashboard,mcp_lrm,projects}/ \
-  <AZURE_VM_IP>:/home/macaron/
-
-# 2. Hot-patch files (optional)
-ssh <AZURE_VM_IP> "sudo cp /home/macaron/platform/web/routes/*.py /opt/macaron/patches/"
-
-# 3. Restart legacy container
-ssh <AZURE_VM_IP> "sudo docker restart deploy-platform-1"
+cd /opt/architekt
+docker compose --env-file .env -f platform/deploy/docker-compose-vm.yml up -d --build --no-deps platform
 ```
 
-Full rebuild:
+Verify inside the container:
 
 ```bash
-ssh <AZURE_VM_IP> "cd /opt/macaron && docker compose -f platform/deploy/docker-compose-vm.yml up -d --build"
+docker exec deploy-platform-1 python3 -c "from architekt_platform.runtime import runtime_package_name; print(runtime_package_name())"
+# Expected: architekt_platform
+```
+
+### Hot deploy (CI or manual, no rebuild)
+
+GitHub Actions (`.github/workflows/deploy-azure.yml`) copies into `/app/architekt_platform/`.
+
+Manual rsync + restart:
+
+```bash
+rsync -avz platform/ architekt@<AZURE_VM_IP>:/home/architekt/architekt_update/platform/
+ssh architekt@<AZURE_VM_IP> '
+  CONTAINER=$(docker ps --format "{{.Names}}" | grep -E "platform" | head -1)
+  docker cp ~/architekt_update/platform/. $CONTAINER:/app/architekt_platform/
+  docker restart $CONTAINER
+'
+```
+
+### Patch directory (optional)
+
+```bash
+ssh <AZURE_VM_IP> "sudo cp /home/azureadmin/platform/web/routes/*.py /opt/architekt/patches/"
 ```
 
 GitLab CI: `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE_USER`.
 
-### Legacy hotpatch note
+### Hotpatch note
 
-`docker cp` into `deploy-platform-1:/app/macaron_platform/` survives restart but is **lost** on `docker compose --build` — rsync to the VM before rebuild.
+`docker cp` survives container restart but is **lost** on `docker compose --build` — rsync to the VM before rebuild.
+
+---
+
+## Helm (Kubernetes)
+
+Chart: `deploy/helm/architekt/` (`architekt-platform`).
 
 ---
 
@@ -170,7 +197,7 @@ GitLab CI: `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE
 | Environment | Secret | Where |
 |-------------|--------|-------|
 | OVH demo | `OVH_SSH_KEY`, `OVH_IP` | GitHub Actions |
-| Azure legacy | `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE_USER` | GitLab CI/CD |
+| Azure | `AZURE_SSH_KEY`, `AZURE_VM_IP` (or `AZURE_IP`) | GitHub / GitLab CI/CD |
 | All prod | `ARCHITEKT_API_KEY` | VM `.env` / orchestrator secrets |
 | LLM | Provider keys in `~/.config/factory/*.key` | Never `*_API_KEY=dummy` |
 
@@ -181,5 +208,6 @@ GitLab CI: `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE
 - [API Reference](API-Reference) — auth header for deployed hosts
 - [Security](Security) — nginx, CSP, HITL gates
 - [LLM Configuration](LLM-Configuration) — provider per environment
+- [Wave E runbook](../architekt/WAVE-E-RUNBOOK.md) — container rename, rollback, PG `.env`
 
 ## 🇫🇷 [Guide de déploiement (FR)](Deployment-Guide‐FR)

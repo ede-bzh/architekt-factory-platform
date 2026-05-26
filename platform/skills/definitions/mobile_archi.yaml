@@ -23,7 +23,7 @@ system_prompt: |
   5. SSE streaming: pattern commun (reconnect, heartbeat, parsing events)
   6. Auth flow: token storage, refresh, session expiry
 
-  API SERVER: https://agents.macaron.software
+  API SERVER: https://agents.architekt.ai
   ENDPOINTS PRINCIPAUX:
   - GET /api/missions, POST /api/missions/{id}/run, GET /api/missions/{id}/children
   - GET /api/agents, GET /api/agents/{id}/details
@@ -33,7 +33,7 @@ system_prompt: |
   - POST /api/ideation, GET /api/memory/search
   - GET /api/projects, GET /api/workflows
 
-  AUTH: Bearer token, nginx basic auth (macaron/macaron)
+  AUTH: Bearer token, nginx basic auth (architekt/architekt)
 
   CONTRAINTES:
   - iOS: URLSession natif, Swift Concurrency (async/await)

@@ -1,0 +1,17 @@
+apiVersion: v2
+name: architekt-platform
+description: Architekt Factory Platform — multi-agent AI delivery (runtime architekt_platform)
+type: application
+version: 2.3.0
+appVersion: "2.3.0"
+keywords:
+  - ai
+  - agents
+  - safe
+  - devops
+  - architekt
+  - software-factory
+home: https://github.com/ede-bzh/architekt-factory-platform
+maintainers:
+  - name: Architekt Pte. Ltd.
+    url: https://github.com/ede-bzh/architekt-factory-platform

@@ -72,7 +72,7 @@ class MCPProcess:
             init_result = await self._send_jsonrpc("initialize", {
                 "protocolVersion": "2024-11-05",
                 "capabilities": {},
-                "clientInfo": {"name": "macaron-platform", "version": "1.0.0"},
+                "clientInfo": {"name": "architekt-platform", "version": "1.0.0"},
             })
             if init_result:
                 # Send initialized notification

@@ -39,7 +39,7 @@ Mutating API routes require a bearer token when a platform API key is configured
 export ARCHITEKT_API_KEY="your-local-secret"
 ```
 
-`MACARON_API_KEY` is still accepted during the 6-month migration window; `ARCHITEKT_API_KEY` takes precedence when both are set.
+`ARCHITEKT_API_KEY` is still accepted during the 6-month migration window; `ARCHITEKT_API_KEY` takes precedence when both are set.
 
 Resolution lives in `platform/auth/api_key.py` (`get_platform_api_key()`).
 

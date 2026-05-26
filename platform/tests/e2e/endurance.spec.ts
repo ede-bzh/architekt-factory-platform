@@ -71,7 +71,7 @@ test.describe("Endurance Health", () => {
     const r = await page.request.get(`${BASE}/api/metrics/prometheus`);
     expect(r.status()).toBe(200);
     const text = await r.text();
-    expect(text).toContain("macaron_uptime_seconds");
+    expect(text).toContain("architekt_uptime_seconds");
   });
 });
 

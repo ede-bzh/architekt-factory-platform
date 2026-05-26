@@ -10,10 +10,9 @@ Per **ADR-001** (platform rebrand), use the canonical API key environment variab
 
 | Variable | Status | Notes |
 |----------|--------|-------|
-| `ARCHITEKT_API_KEY` | **Primary** | Set this in production and new integrations |
-| `MACARON_API_KEY` | **Alias (6 months)** | Accepted until alias sunset; same value as `ARCHITEKT_API_KEY` |
+| `ARCHITEKT_API_KEY` | **Required (production)** | Set on all deployed hosts and in CI secrets |
 
-When either variable is set, `AuthMiddleware` protects API mutations. If neither is set, auth is disabled (development only).
+When `ARCHITEKT_API_KEY` is set, `AuthMiddleware` protects API mutations. If unset, auth is disabled (development only).
 
 ### Bearer token
 
@@ -33,8 +32,6 @@ curl -s -X POST "http://localhost:8099/api/missions" \
   -H "Content-Type: application/json" \
   -d '{"name":"My Epic","workflow_id":"product-lifecycle"}'
 ```
-
-Legacy deployments may still export `MACARON_API_KEY`; the middleware treats both names as equivalent during the 6-month alias window.
 
 ### Access rules
 
@@ -117,7 +114,7 @@ SSE clients do not send the API key on the EventSource connection; mission contr
 
 ## CLI (`sf`)
 
-The `sf` CLI uses the same Bearer token (from `ARCHITEKT_API_KEY` or legacy `MACARON_API_KEY`):
+The `sf` CLI uses the same Bearer token from `ARCHITEKT_API_KEY`:
 
 ```bash
 export ARCHITEKT_API_KEY="architekt_live_xxxxxxxxxxxxxxxx"

@@ -15,7 +15,7 @@
 | 1 | **Multi-tenant** | DB row-level `tenant_id`, auth scope, per-tenant secrets | Was P3; gate = 10+ clients — track design in Wave 7, implement post-gate |
 | 2 | **Stripe billing** | Subscriptions, usage metering (LLM tokens), webhook idempotency | SaaS Phase 7 optional; API keys + customer portal |
 | 3 | **External pentest** | Third-party assessment + remediation sprint | L3 regulated workflows; report → backlog |
-| 4 | **Docker `architekt_platform` rename** | Image, compose service, `/app/architekt_platform/` path | Align with ADR rebrand; alias `macaron_platform` 6 months |
+| 4 | **Docker `architekt_platform` rename** | Image, compose service, `/app/architekt_platform/` path | Align with ADR rebrand; alias `architekt_platform` 6 months |
 | 5 | **Mutation testing 50 %** | mutmut on `platform/agents/`, `platform/security/`, `platform/llm/` | CI job optional; **full mutation 50 %** threshold on critical modules |
 
 ---

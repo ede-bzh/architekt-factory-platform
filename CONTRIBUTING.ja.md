@@ -21,7 +21,7 @@ Software Factory への貢献に興味をお持ちいただきありがとうご
 
 ### バグの報告
 
-1. 重複を避けるため、[既存の Issue](https://github.com/macaron-software/software-factory/issues) を確認してください
+1. 重複を避けるため、[既存の Issue](https://github.com/ede-bzh/architekt-factory-platform/issues) を確認してください
 2. [バグ報告テンプレート](.github/ISSUE_TEMPLATE/bug_report.md)を使用してください
 3. 含めるもの：再現手順、期待される動作と実際の動作、環境の詳細
 
@@ -44,7 +44,7 @@ Software Factory への貢献に興味をお持ちいただきありがとうご
 ## 開発環境のセットアップ
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
 cd software-factory
 cp .env.example .env
 python3 -m venv .venv && source .venv/bin/activate

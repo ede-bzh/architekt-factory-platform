@@ -1,5 +1,5 @@
 /**
- * Agent interaction logic for Macaron Agent Platform.
+ * Agent interaction logic for Architekt Agent Platform.
  * Handles agent card updates and status rendering.
  */
 document.addEventListener("DOMContentLoaded", () => {

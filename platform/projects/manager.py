@@ -407,7 +407,7 @@ def scaffold_project(p: "Project") -> dict:
                 ["git", "init"], cwd=str(root), capture_output=True, timeout=10
             )
             subprocess.run(
-                ["git", "config", "user.email", "factory@macaron-software.com"],
+                ["git", "config", "user.email", "factory@architekt.ai"],
                 cwd=str(root),
                 capture_output=True,
                 timeout=5,
@@ -1210,7 +1210,7 @@ class ProjectStore:
         # Auto-create sessions for projects with linked workflows
         self._seed_workflow_sessions()
 
-        # Seed DSI project (Macaron Platform itself)
+        # Seed DSI project (Architekt Platform itself)
         self._seed_dsi_project()
 
     def _seed_dsi_project(self):

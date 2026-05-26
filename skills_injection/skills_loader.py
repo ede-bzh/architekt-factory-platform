@@ -31,7 +31,10 @@ class SkillsLoader:
     def load_skills_from_python_api(self):
         """Load skills directly from Python platform module."""
         # Import platform skills module
-        sys.path.insert(0, '/app/macaron_platform')
+        for _pkg in ('/app/architekt_platform', '/app/architekt_platform', '/app/platform'):
+            if os.path.isdir(_pkg) and _pkg not in sys.path:
+                sys.path.insert(0, _pkg)
+                break
         try:
             from skills import manager as skills_manager
             return skills_manager.get_all_github_skills()
@@ -67,7 +70,7 @@ class SkillsLoader:
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
-    load_dotenv("/opt/macaron/.env")
+    load_dotenv("/opt/architekt/.env")
     
     loader = SkillsLoader(
         platform_url="http://localhost",

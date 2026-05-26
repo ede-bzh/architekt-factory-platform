@@ -208,7 +208,7 @@ class ConfluenceClient:
     # ── Utility ────────────────────────────────────────────────
 
     def ensure_page_hierarchy(self, *titles: str, root_id: str = HOMEPAGE_ID) -> str:
-        """Ensure a chain of pages exists (e.g. PROJETS / Macaron / Epic).
+        """Ensure a chain of pages exists (e.g. PROJETS / Architekt / Epic).
         Returns the ID of the deepest page."""
         parent_id = root_id
         for title in titles:

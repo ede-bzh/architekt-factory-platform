@@ -15,14 +15,14 @@ ALLOWED_READMES = frozenset(
 )
 
 FORBIDDEN = re.compile(
-    r"\b(Software Factory|Macaron Software|macaron-software/software-factory)\b",
+    r"\b(Macaron|MACARON|Macaron Software|macaron-software)\b",
     re.IGNORECASE,
 )
 ALLOWLIST_SUBSTR = (
     "formerly *Software Factory*",
     "anciennement *Software Factory*",
-    "sf.macaron-* (pre-rebrand)",
-    "sf.macaron-* (pré-rebrand)",
+    "pre-rebrand",
+    "pré-rebrand",
 )
 
 

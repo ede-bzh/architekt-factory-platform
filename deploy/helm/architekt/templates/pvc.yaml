@@ -2,7 +2,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "macaron.fullname" . }}-data
+  name: {{ include "architekt.fullname" . }}-data
+  labels:
+    {{- include "architekt.labels" . | nindent 4 }}
 spec:
   accessModes:
     - ReadWriteOnce

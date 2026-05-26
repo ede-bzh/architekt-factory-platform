@@ -1,7 +1,12 @@
 import { test, expect } from "@playwright/test";
-import {collectErrors, assertNoErrors, safeGoto, gateE2E} from "./helpers";
+import {collectErrors, assertNoErrors, safeGoto, gateE2E, setupDemoSession} from "./helpers";
 
-test.beforeEach(gateE2E);
+test.beforeEach(async ({ page }, testInfo) => {
+  gateE2E();
+  if (!testInfo.title.includes("GET /api/health")) {
+    await setupDemoSession(page);
+  }
+});
 /**
  * Smoke E2E — every major page loads, has content, zero console/network errors.
  * Real selectors from actual templates, real data assertions.
@@ -10,10 +15,10 @@ test.beforeEach(gateE2E);
 test.describe("Portfolio (Home) page", () => {
   test("loads with projects and badges", async ({ page }) => {
     const errors = collectErrors(page);
-    await safeGoto(page, "/");
+    await safeGoto(page, "/portfolio");
 
     // Title
-    await expect(page).toHaveTitle(/Macaron/i);
+    await expect(page).toHaveTitle(/Architekt/i);
 
     // Sidebar nav visible
     await expect(page.locator("nav.sidebar, .sidebar")).toBeVisible();
@@ -47,7 +52,7 @@ test.describe("Portfolio (Home) page", () => {
 
   test("project cards have status and missions", async ({ page }) => {
     const errors = collectErrors(page);
-    await safeGoto(page, "/");
+    await safeGoto(page, "/portfolio");
 
     const card = page.locator(".project-mission-card").first();
     await expect(card).toBeVisible();
@@ -62,7 +67,7 @@ test.describe("Portfolio (Home) page", () => {
 
 test.describe("All pages smoke test", () => {
   const pages = [
-    { path: "/", name: "Portfolio", selector: ".project-mission-card" },
+    { path: "/portfolio", name: "Portfolio", selector: ".project-mission-card" },
     { path: "/pi", name: "PI Board", selector: ".epic-card, .pi-section-header, .tma-card" },
     { path: "/agents", name: "Agents", selector: '.agent-card, [class*="agent"]' },
     { path: "/skills", name: "Skills", selector: '.skill-card, [class*="skill"]' },

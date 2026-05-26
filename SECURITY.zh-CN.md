@@ -24,7 +24,7 @@
 如果您发现安全漏洞，请负责任地报告：
 
 1. **不要**打开公开的 GitHub Issue
-2. 发送邮件至 **security@macaron-software.com**
+2. 发送邮件至 **security@architekt.ai**
 3. 包括：
    - 漏洞描述
    - 重现步骤

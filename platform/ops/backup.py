@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Macaron Platform — Full Backup to Azure Blob Storage.
+"""Architekt Platform — Full Backup to Azure Blob Storage.
 
 Usage:
     python3 platform/ops/backup.py [--full|--daily|--weekly|--monthly]
@@ -13,7 +13,7 @@ Backs up:
   4. Docker compose + nginx config from VM
 
 Destinations:
-  Azure Blob: macaronbackups (GRS: francecentral → francesouth)
+  Azure Blob: architektbackups (GRS: francecentral → francesouth)
   Containers: db-backups/, pg-dumps/, secrets/
 
 Lifecycle: daily=90d, weekly=365d, monthly=forever
@@ -29,7 +29,12 @@ import sys
 import tempfile
 from pathlib import Path
 
-STORAGE_ACCOUNT = "macaronbackups"
+STORAGE_ACCOUNT = "architektbackups"
+
+
+def _pg_dump_slug() -> str:
+    """Blob filename prefix for PG dumps (respects prod PG_DB in .env)."""
+    return os.environ.get("PG_DB", "architekt_platform").replace("-", "_")
 VM_HOST = os.getenv("AZURE_VM_IP", "localhost")
 VM_USER = "azureadmin"
 
@@ -163,7 +168,8 @@ def backup_postgresql(tier: str = "daily") -> bool:
         conn = psycopg.connect(pg_url)
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            dump_path = Path(tmpdir) / f"macaron_platform_{ts}.sql"
+            db_slug = _pg_dump_slug()
+            dump_path = Path(tmpdir) / f"{db_slug}_{ts}.sql"
 
             # Get all tables
             cur = conn.execute(
@@ -219,7 +225,7 @@ def backup_postgresql(tier: str = "daily") -> bool:
             with open(dump_path, "rb") as f_in, gzip.open(gz_path, "wb") as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
-            blob_name = f"{prefix}macaron_platform_{ts}.sql.gz"
+            blob_name = f"{prefix}{db_slug}_{ts}.sql.gz"
             if _az_upload(gz_path, "pg-dumps", blob_name):
                 size_mb = os.path.getsize(gz_path) / (1024 * 1024)
                 print(
@@ -277,11 +283,11 @@ def backup_vm_snapshot() -> bool:
     """Create incremental Azure VM disk snapshot."""
     print("💾 Creating VM disk snapshot...")
     ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d")
-    snap_name = f"vm-macaron-snap-{ts}"
+    snap_name = f"vm-architekt-snap-{ts}"
 
     result = _run(
-        f"az snapshot create --name {snap_name} --resource-group RG-MACARON "
-        f"--location francecentral --source vm-macaron_OsDisk_1_0c8a0321411042f8a7f7948127c8cbbc "
+        f"az snapshot create --name {snap_name} --resource-group RG-ARCHITEKT "
+        f"--location francecentral --source vm-architekt_OsDisk_1_0c8a0321411042f8a7f7948127c8cbbc "
         f"--incremental true --query name -o tsv",
         check=False,
     )
@@ -299,7 +305,7 @@ def backup_vm_snapshot() -> bool:
 def _cleanup_snapshots(keep: int = 4):
     """Delete old snapshots, keep most recent N."""
     result = _run(
-        "az snapshot list -g RG-MACARON --query \"[?starts_with(name,'vm-macaron-snap-')]"
+        "az snapshot list -g RG-ARCHITEKT --query \"[?starts_with(name,'vm-architekt-snap-')]"
         '.{name:name,time:timeCreated}" -o json',
         check=False,
     )
@@ -314,14 +320,14 @@ def _cleanup_snapshots(keep: int = 4):
     for snap in snaps[keep:]:
         print(f"  🗑 Deleting old snapshot: {snap['name']}")
         _run(
-            f"az snapshot delete -n {snap['name']} -g RG-MACARON --no-wait", check=False
+            f"az snapshot delete -n {snap['name']} -g RG-ARCHITEKT --no-wait", check=False
         )
 
 
 def run_full_backup(tier: str = "daily"):
     """Run complete backup pipeline."""
     print(f"\n{'=' * 60}")
-    print(f"🚀 MACARON FULL BACKUP — tier={tier} — {_timestamp()}")
+    print(f"🚀 ARCHITEKT FULL BACKUP — tier={tier} — {_timestamp()}")
     print(f"{'=' * 60}\n")
 
     results = {}
@@ -347,7 +353,7 @@ def run_full_backup(tier: str = "daily"):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Macaron Platform Backup")
+    parser = argparse.ArgumentParser(description="Architekt Platform Backup")
     parser.add_argument(
         "--tier", choices=["daily", "weekly", "monthly"], default="daily"
     )

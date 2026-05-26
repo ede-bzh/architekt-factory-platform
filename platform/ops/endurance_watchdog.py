@@ -199,7 +199,7 @@ async def _cleanup_temp_files():
             "find",
             "/tmp",
             "-name",
-            "macaron_*",
+            "architekt_*",
             "-mtime",
             "+7",
             "-delete",

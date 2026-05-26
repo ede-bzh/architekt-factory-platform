@@ -9,7 +9,7 @@ except ImportError:
 
 
 class APIBackend:
-    """Connects to the Macaron platform via REST API."""
+    """Connects to the Architekt platform via REST API."""
 
     def __init__(self, base_url: str, token: str | None = None):
         if httpx is None:

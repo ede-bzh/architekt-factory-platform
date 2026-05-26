@@ -1,10 +1,10 @@
 #!/bin/bash
-# Create DNS record for sf.macaron-software.com via Porkbun API
+# Create DNS record for sf.architekt.ai via Porkbun API
 # COPY THIS FILE TO setup-dns.sh AND ADD YOUR CREDENTIALS
 
 API_KEY="YOUR_PORKBUN_API_KEY"
 SECRET="YOUR_PORKBUN_SECRET_KEY"
-DOMAIN="macaron-software.com"
+DOMAIN="architekt.ai"
 SUBDOMAIN="sf"
 IP="YOUR_VPS_IP"
 

@@ -87,7 +87,7 @@ test.describe("Chaos API Resilience", () => {
     const r = await page.request.post(`${BASE}/api/missions`, {
       data: {
         name: "chaos-e2e-verify",
-        project_id: "macaron-canvas",
+        project_id: "architekt-canvas",
         type: "task",
         description: "Chaos E2E verification mission",
       },

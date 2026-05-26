@@ -20,7 +20,7 @@ from ..interfaces import SessionStatus, WorkspaceInfo, WorkspaceProtocol, Worksp
 
 logger = logging.getLogger(__name__)
 
-WORKSPACES_ROOT = Path.home() / ".macaron" / "workspaces"
+WORKSPACES_ROOT = Path.home() / ".architekt" / "workspaces"
 
 
 def _short_hash(text: str) -> str:
@@ -31,7 +31,7 @@ class WorktreeManager:
     """Creates isolated git worktrees per agent session.
 
     Layout:
-        ~/.macaron/workspaces/{project_id}/
+        ~/.architekt/workspaces/{project_id}/
             {session_short}/          ← git worktree
             ...
     """

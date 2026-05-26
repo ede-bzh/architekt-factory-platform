@@ -1,6 +1,6 @@
 id: dsi-platform-tma
 name: DSI Plateforme — TMA Maintenance
-description: Pipeline réactif de maintenance applicative pour la plateforme Macaron. Détection d'incidents (auto + manuel)
+description: Pipeline réactif de maintenance applicative pour la plateforme Architekt. Détection d'incidents (auto + manuel)
   → Triage P0-P4 → Diagnostic root cause parallèle → Fix TDD itératif → Non-régression complète → Deploy hotfix.
 icon: tool
 is_builtin: true

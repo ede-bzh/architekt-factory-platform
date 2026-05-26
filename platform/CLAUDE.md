@@ -35,23 +35,23 @@ KILL:   lsof -ti:8099 | xargs kill -9
 
 ## DEPLOY — prod legacy (Azure)
 
-> **Legacy production alias** (ADR-001 vague E): VM layout and Docker package name from the former Macaron stack. Repo source remains `platform/`; the running container imports **`macaron_platform`**, host tree **`/opt/macaron`**, SSH key **`RG-MACARON-vm-macaron`**. Keep these commands if you operate the Azure VM (`4.233.64.30`).
+> **Production Azure** (ADR-001 vague E): repo source `platform/`; **new images** install `/app/architekt_platform/`. VM host tree **`/opt/architekt`** unchanged. See [`docs/architekt/WAVE-E-RUNBOOK.md`](../docs/architekt/WAVE-E-RUNBOOK.md).
 
 ```bash
-SSH_KEY="$HOME/.ssh/az_ssh_config/RG-MACARON-vm-macaron/id_rsa"
+SSH_KEY="$HOME/.ssh/az_ssh_config/RG-ARCHITEKT-vm-architekt/id_rsa"
 # FULL deploy (rsync local → VM → rebuild):
 rsync -azP --delete --exclude='__pycache__' --exclude='*.pyc' --exclude='data/' --exclude='.git' --exclude='tests/' \
-  platform/ -e "ssh -i $SSH_KEY" azureadmin@4.233.64.30:/opt/macaron/platform/
-ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "cd /opt/macaron && docker compose --env-file .env -f platform/deploy/docker-compose-vm.yml up -d --build --no-deps platform"
+  platform/ -e "ssh -i $SSH_KEY" azureadmin@4.233.64.30:/opt/architekt/platform/
+ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "cd /opt/architekt && docker compose --env-file .env -f platform/deploy/docker-compose-vm.yml up -d --build --no-deps platform"
 # FAST hotpatch (no rebuild, preserves container state):
 tar cf /tmp/update.tar <files...>
 scp -i "$SSH_KEY" /tmp/update.tar azureadmin@4.233.64.30:/tmp/
-ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platform-1:/tmp/ && docker exec deploy-platform-1 bash -c 'cd /app/macaron_platform && tar xf /tmp/update.tar' && docker restart deploy-platform-1"
+ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platform-1:/tmp/ && docker exec deploy-platform-1 bash -c 'cd /app/architekt_platform && tar xf /tmp/update.tar' && docker restart deploy-platform-1"
 # ⚠️ Hotpatch is LOST on docker compose --build → always rsync BEFORE rebuild
-# Container code path: /app/macaron_platform/ (legacy alias — NOT /app/platform/)
+# Container code path: /app/architekt_platform/
 # Prod LLM: Azure OpenAI gpt-5-mini only (AZURE_DEPLOY=1, NO minimax fallback)
-# Legacy domain (nginx): sf.macaron-software.com → 4.233.64.30:80
-# UID mismatch: /opt/macaron owned by 501 (macOS), azureadmin=1001 → use docker cp
+# Legacy domain (nginx): sf.architekt.ai → 4.233.64.30:80
+# UID mismatch: /opt/architekt owned by 501 (macOS), azureadmin=1001 → use docker cp
 ```
 
 ## DEPLOY — Architekt demo (OVH/local)
@@ -301,14 +301,14 @@ STRATEGY                     ENGINEERING
 ├──────────────────────┼──────────────┼─────────────┼──────────────────────┤
 │ Azure VM (legacy prod)│ azure-openai │ gpt-5-mini  │ none (AZURE_DEPLOY=1)│
 │ 4.233.64.30          │              │             │                      │
-│ sf.macaron-software* │              │             │                      │
+│ sf.architekt.ai* │              │             │                      │
 │ *legacy nginx alias  │              │             │                      │
 ├──────────────────────┼──────────────┼─────────────┼──────────────────────┤
 │ OVH demo (Architekt) │ demo         │ mock        │ —                    │
 ├──────────────────────┼──────────────┼─────────────┼──────────────────────┤
 │ Local dev            │ minimax      │ MiniMax-M2.5│ → azure-openai       │
 ├──────────────────────┼──────────────┼─────────────┼──────────────────────┤
-│ VPS Macaron (future) │ minimax      │ MiniMax-M2.5│ → azure-openai       │
+│ VPS Architekt (future) │ minimax      │ MiniMax-M2.5│ → azure-openai       │
 └──────────────────────┴──────────────┴─────────────┴──────────────────────┘
 
 Config: PLATFORM_LLM_PROVIDER + PLATFORM_LLM_MODEL env vars
@@ -477,9 +477,9 @@ platform/
 
 - `NodeStatus` enum: PENDING, RUNNING, COMPLETED, VETOED, FAILED — **NO** `DONE` value
 - HTTP 400 tool message ordering: `messages with role 'tool' must follow 'tool_calls'` — executor bug, non-fatal
-- UID mismatch on Azure: /opt/macaron owned by 501, azureadmin=1001 → docker cp workaround
+- UID mismatch on Azure: /opt/architekt owned by 501, azureadmin=1001 → docker cp workaround
 - `_mission_semaphore = Semaphore(1)` — only 1 mission runs at a time, others queue
-- Container path: `/app/macaron_platform/` (Dockerfile copies `platform/` as `macaron_platform/`)
+- Container path: `/app/architekt_platform/` (Dockerfile)
 - curl inside container: use docker network IP, NOT localhost (nginx proxies port 80→8090)
 
 ## CI/CD SECRETS
@@ -504,8 +504,8 @@ Configure in: GitLab → Settings → CI/CD → Variables
 ### Local deploy (manual)
 ```bash
 # Azure: scp → docker cp → restart
-scp -i ~/.ssh/az_ssh_config/RG-MACARON-vm-macaron/id_rsa <file> azureadmin@4.233.64.30:~/
-ssh -i ~/.ssh/az_ssh_config/RG-MACARON-vm-macaron/id_rsa azureadmin@4.233.64.30 \
+scp -i ~/.ssh/az_ssh_config/RG-ARCHITEKT-vm-architekt/id_rsa <file> azureadmin@4.233.64.30:~/
+ssh -i ~/.ssh/az_ssh_config/RG-ARCHITEKT-vm-architekt/id_rsa azureadmin@4.233.64.30 \
   "docker cp ~/<file> platform-platform-1:/app/<path>/ && docker restart platform-platform-1"
 ```
 

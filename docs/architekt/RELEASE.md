@@ -21,9 +21,9 @@ Sur push de tag `v*` :
 
 - Job `release` dans `.github/workflows/ci.yml` attache `sbom-platform.json` et résume pytest.
 
-## Docker (vague E — hors release courante)
+## Docker (image VM prod)
 
-Le package runtime reste `macaron_platform` dans les images existantes. Le renommage `architekt_platform` est documenté dans `docs/adr/001-rebrand-architekt.md` et traité en vague E séparée.
+Les images construites via `platform/deploy/Dockerfile` installent le package **`architekt_platform`** sous `/app/architekt_platform/`. Rebuild et vérification : [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md).
 
 ## Rollback
 

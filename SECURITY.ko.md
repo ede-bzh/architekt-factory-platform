@@ -24,7 +24,7 @@
 보안 취약점을 발견한 경우 책임감 있게 보고해 주세요:
 
 1. 공개 GitHub Issue를 **열지 마세요**
-2. **security@macaron-software.com**으로 이메일을 보내주세요
+2. **security@architekt.ai**으로 이메일을 보내주세요
 3. 포함 사항:
    - 취약점 설명
    - 재현 단계

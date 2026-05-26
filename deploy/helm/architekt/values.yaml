@@ -1,9 +1,9 @@
-# Default values for macaron-platform
+# Default values for architekt-platform (Wave E — container package architekt_platform)
 replicaCount: 1
 
 image:
-  repository: ghcr.io/macaron-software/platform
-  tag: "1.1.0"
+  repository: ghcr.io/ede-bzh/architekt-factory-platform
+  tag: "2.3.0"
   pullPolicy: IfNotPresent
 
 service:
@@ -16,7 +16,7 @@ ingress:
   className: nginx
   annotations: {}
   hosts:
-    - host: macaron.local
+    - host: architekt.local
       paths:
         - path: /
           pathType: Prefix
@@ -30,15 +30,20 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+# Matches platform/deploy/Dockerfile (architekt_platform on port 8090)
 env:
   PLATFORM_LLM_PROVIDER: demo
   LOG_LEVEL: warning
   API_RATE_LIMIT: "120"
+  PYTHONPATH: /app
+  OTEL_SERVICE_NAME: architekt-platform
+  PG_DB: architekt_platform
 
 # Mount API keys from existing secret
 envFromSecret: ""
-# Example: create secret first, then set envFromSecret: macaron-secrets
-# kubectl create secret generic macaron-secrets \
+# Example: create secret first, then set envFromSecret: architekt-secrets
+# kubectl create secret generic architekt-secrets \
+#   --from-literal=ARCHITEKT_API_KEY=... \
 #   --from-literal=AZURE_OPENAI_API_KEY=sk-... \
 #   --from-literal=GITHUB_WEBHOOK_SECRET=whsec_...
 

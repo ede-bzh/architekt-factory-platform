@@ -549,7 +549,7 @@ async def get_tracing_services() -> dict[str, Any]:
 
 @router.get("/api/analytics/tracing/traces")
 async def get_tracing_traces(
-    service: str = "macaron-prod",
+    service: str = "architekt-prod",
     limit: int = 20,
     lookback: str = "1h",
 ) -> dict[str, Any]:
@@ -594,7 +594,7 @@ async def get_tracing_traces(
 
 @router.get("/api/analytics/tracing/stats")
 async def get_tracing_stats(
-    service: str = "macaron-prod", lookback: str = "1h"
+    service: str = "architekt-prod", lookback: str = "1h"
 ) -> dict[str, Any]:
     """Compute latency stats (p50/p95/p99, throughput, errors) from Jaeger traces."""
     endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "")

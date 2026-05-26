@@ -742,11 +742,19 @@ async def monitoring_live(request: Request, hours: int = 24):
                 }
 
             # Platform repo candidates
-            for candidate, lbl in [
-                ("/app", "platform"),
-                ("/opt/macaron", "platform"),
-                (os.getcwd(), "platform"),
-            ]:
+            from ....runtime import container_code_dir
+
+            _code_candidates: list[tuple[str, str]] = [("/app", "platform")]
+            _code_dir = container_code_dir()
+            if _code_dir is not None:
+                _code_candidates.insert(0, (str(_code_dir), "platform"))
+            _code_candidates.extend(
+                [
+                    ("/opt/architekt", "platform"),
+                    (os.getcwd(), "platform"),
+                ]
+            )
+            for candidate, lbl in _code_candidates:
                 info = _git_repo_info(candidate, lbl)
                 if info:
                     git_info.append(info)
@@ -759,7 +767,7 @@ async def monitoring_live(request: Request, hours: int = 24):
                 for proj in get_project_store().list_all():
                     if not proj.path or proj.path in (
                         "/app",
-                        "/opt/macaron",
+                        "/opt/architekt",
                         os.getcwd(),
                     ):
                         continue
@@ -821,9 +829,9 @@ async def monitoring_live(request: Request, hours: int = 24):
     azure_infra = {"vm": {}, "backup": {}, "costs": {}, "servers": []}
     try:
         azure_infra["vm"] = {
-            "name": "vm-macaron",
+            "name": "vm-architekt",
             "ip": "4.233.64.30",
-            "rg": "RG-MACARON",
+            "rg": "RG-ARCHITEKT",
             "region": "francecentral",
             "size": "Standard_B2ms",
             "os": "Ubuntu 24.04",
@@ -831,7 +839,7 @@ async def monitoring_live(request: Request, hours: int = 24):
         }
         # Backup info from config
         azure_infra["backup"] = {
-            "storage_account": "macaronbackups",
+            "storage_account": "architektbackups",
             "replication": "GRS (francesouth)",
             "containers": ["db-backups", "pg-dumps", "secrets"],
             "sqlite_dbs": 7,
@@ -889,7 +897,7 @@ async def monitoring_live(request: Request, hours: int = 24):
         if hasattr(request, "state")
         else False
     )
-    if not is_authed and os.getenv("MACARON_API_KEY"):
+    if not is_authed and os.getenv("ARCHITEKT_API_KEY"):
         # Strip container IDs, kernel, server version, git branch, Azure details
         for d in docker_info:
             d.pop("id", None)

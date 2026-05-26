@@ -33,15 +33,16 @@ jobs:
             --exclude 'data/' \
             --exclude 'workspaces/' \
             platform cli skills dashboard mcp_lrm \
-            azureadmin@${{ secrets.AZURE_IP }}:/home/azureadmin/macaron_update/
+            azureadmin@${{ secrets.AZURE_IP }}:/home/azureadmin/architekt_update/
 
       - name: Deploy into container
         run: |
           ssh azureadmin@${{ secrets.AZURE_IP }} '
             CONTAINER=$(docker ps --format "{{.Names}}" | grep -E "platform-platform" | head -1)
             [ -z "$CONTAINER" ] && echo "ERROR: no container" && exit 1
-            docker cp /home/azureadmin/macaron_update/platform/. $CONTAINER:/app/macaron_platform/
-            docker exec $CONTAINER find /app/macaron_platform -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+            PKG_DIR=architekt_platform
+            docker cp /home/azureadmin/architekt_update/platform/. $CONTAINER:/app/$PKG_DIR/
+            docker exec $CONTAINER find /app/$PKG_DIR -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
             docker stop $CONTAINER && sleep 3 && docker start $CONTAINER
             sleep 8
             docker exec $CONTAINER curl -sf http://localhost:8099/api/health | grep -q "\"status\":\"ok\""

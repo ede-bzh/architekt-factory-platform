@@ -32,7 +32,7 @@ case "${TARGET}" in
     MIN_SCORE="${MUTATION_MIN_API_KEY:-10}"
     RUNNER=("${PYTEST_BASE[@]}" \
       tests/test_api_key_alias.py::test_get_platform_api_key_prefers_architekt \
-      tests/test_api_key_alias.py::test_get_platform_api_key_falls_back_to_macaron \
+      tests/test_api_key_alias.py::test_get_platform_api_key_from_env \
       -q)
     ;;
   *)

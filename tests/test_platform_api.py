@@ -34,7 +34,7 @@ class TestHealth:
         r = client.get("/api/metrics/prometheus")
         assert r.status_code == 200
         text = r.text
-        assert "macaron_uptime_seconds" in text
+        assert "architekt_uptime_seconds" in text
 
     def test_monitoring_live(self, client):
         r = client.get("/api/monitoring/live")
@@ -227,6 +227,14 @@ class TestSecurity:
         csp = r.headers.get("Content-Security-Policy", "")
         assert "unsafe-eval" not in csp
         assert "frame-ancestors 'none'" in csp
+        assert "https://unpkg.com" in csp
+
+    def test_csp_workspace_policy_allows_unsafe_eval(self):
+        from platform.server import content_security_policy
+
+        csp = content_security_policy("/projects/p1/workspace")
+        assert "unsafe-eval" in csp
+        assert "frame-src" in csp
 
     def test_security_headers(self, client):
         r = client.get("/api/health")

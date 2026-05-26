@@ -6,7 +6,7 @@ set -e
 
 VPS_IP="YOUR_VPS_IP"
 VPS_USER="root"  # Change to your SSH user
-DOMAIN="sf.macaron-software.com"
+DOMAIN="sf.architekt.ai"
 DEPLOY_DIR="/opt/software-factory"
 
 echo "🚀 Deploying Software Factory to ${DOMAIN} (${VPS_IP})"

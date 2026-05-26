@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ request.state.lang|default('en') }}" data-theme="dark">
 <head>
-    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('architekt_theme') || localStorage.getItem('macaron_theme') || 'dark')</script>
+    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('architekt_theme') || localStorage.getItem('architekt_theme') || 'dark')</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>{{ page_title }} — Architekt</title>
@@ -332,7 +332,7 @@
     /* Theme toggle (light/dark) — persists in localStorage */
     (function(){
       const html = document.documentElement;
-      const saved = localStorage.getItem('architekt_theme') || localStorage.getItem('macaron_theme') || 'dark';
+      const saved = localStorage.getItem('architekt_theme') || localStorage.getItem('architekt_theme') || 'dark';
       html.setAttribute('data-theme', saved);
 
       document.getElementById('themeToggle')?.addEventListener('click', function(){

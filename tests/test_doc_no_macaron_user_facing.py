@@ -1,4 +1,4 @@
-"""User-facing doc surfaces must not expose Macaron / La Poste legacy branding."""
+"""User-facing doc surfaces must not expose Architekt / La Poste legacy branding."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ USER_FACING_DOCS = (
 )
 
 _FORBIDDEN_PARTS = (
-    r"macaron-software",
+    r"architekt.ai",
     r"Macaron\s+Software\s+Factory",
     r"innovation-laposte",
     r"gitlab\.azure\.[^\s\)>]+laposte",
@@ -45,6 +45,6 @@ def test_no_macaron_or_laposte_in_user_facing_docs(path: Path):
     assert path.is_file(), f"missing user-facing doc: {path.relative_to(ROOT)}"
     hits = _scan(path)
     assert not hits, (
-        "Legacy Macaron / La Poste branding in user-facing docs:\n"
+        "Legacy Architekt / La Poste branding in user-facing docs:\n"
         + "\n".join(hits[:40])
     )

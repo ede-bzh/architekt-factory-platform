@@ -56,7 +56,7 @@ _LOCAL_PROJECTS: list[dict] = [
      "domains": ["rust"], "description": "Parcel routing and distribution"},
     {"id": "popinz", "name": "Popinz SaaS", "path": "", "factory_type": "sf",
      "domains": ["rust", "svelte", "swift", "kotlin"], "description": "Event discovery SaaS platform"},
-    {"id": "psy", "name": "Macaron-Software PSY Platform", "path": "", "factory_type": "sf",
+    {"id": "psy", "name": "Architekt PSY Platform", "path": "", "factory_type": "sf",
      "domains": ["rust", "svelte"], "description": "PSY consultation platform"},
     {"id": "sharelook", "name": "Sharelook Platform", "path": "", "factory_type": "sf",
      "domains": ["java", "angular"], "description": "Video collaboration platform"},
@@ -106,10 +106,10 @@ class ProjectRegistry:
 
     def __init__(self, sf_root: Optional[str] = None, mf_root: Optional[str] = None):
         self._sf_root = sf_root or os.environ.get(
-            "SF_ROOT", "/Users/sylvain/_MACARON-SOFTWARE/_SOFTWARE_FACTORY"
+            "SF_ROOT", "/Users/sylvain/_ARCHITEKT_FACTORY/_SOFTWARE_FACTORY"
         )
         self._mf_root = mf_root or os.environ.get(
-            "MF_ROOT", "/Users/sylvain/_MACARON-SOFTWARE/_MIGRATION_FACTORY"
+            "MF_ROOT", "/Users/sylvain/_ARCHITEKT_FACTORY/_MIGRATION_FACTORY"
         )
         self._projects: dict[str, ProjectInfo] = {}
         self._loaded = False

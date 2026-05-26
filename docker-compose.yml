@@ -2,14 +2,14 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: ${PG_DB:-macaron_platform}
-      POSTGRES_USER: ${PG_USER:-macaron}
-      POSTGRES_PASSWORD: ${PG_PASSWORD:-macaron_pg}
+      POSTGRES_DB: ${PG_DB:-architekt_platform}
+      POSTGRES_USER: ${PG_USER:-architekt}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-architekt_pg}
     volumes:
       - pg-data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-macaron} -d ${PG_DB:-macaron_platform}"]
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-architekt} -d ${PG_DB:-architekt_platform}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,7 +25,7 @@ services:
     environment:
       - PLATFORM_LLM_PROVIDER=${PLATFORM_LLM_PROVIDER:-minimax}
       - PLATFORM_LLM_MODEL=${PLATFORM_LLM_MODEL:-}
-      - DATABASE_URL=postgresql://${PG_USER:-macaron}:${PG_PASSWORD:-macaron_pg}@postgres:5432/${PG_DB:-macaron_platform}
+      - DATABASE_URL=postgresql://${PG_USER:-architekt}:${PG_PASSWORD:-architekt_pg}@postgres:5432/${PG_DB:-architekt_platform}
       - DBGATE_URL=http://dbgate:3000
       - DBGATE_PASSWORD=dbgate2024
     volumes:

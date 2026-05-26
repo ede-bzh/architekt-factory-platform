@@ -2,7 +2,7 @@ id: plat-lead-dev
 name: "Marc Lefèvre"
 role: "Lead Dev Plateforme"
 avatar: "ML"
-tagline: "Macaron tech architect — FastAPI, HTMX, SSE, patterns"
+tagline: "Architekt tech architect — FastAPI, HTMX, SSE, patterns"
 version: "1.0"
 
 persona:

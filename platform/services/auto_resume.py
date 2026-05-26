@@ -875,7 +875,7 @@ async def _cleanup_disk() -> None:
 
 
 async def _cleanup_workspace_containers() -> None:
-    """Kill stale proj-* and macaron-app-* containers that accumulate from past missions."""
+    """Kill stale proj-* and architekt-app-* containers that accumulate from past missions."""
     import subprocess
 
     try:
@@ -892,8 +892,8 @@ async def _cleanup_workspace_containers() -> None:
         if len(parts) != 2:
             continue
         name, status = parts
-        # Kill stopped/exited workspace containers (proj-* and macaron-app-*)
-        if (name.startswith("proj-") or name.startswith("macaron-app-")) and (
+        # Kill stopped/exited workspace containers (proj-* and architekt-app-*)
+        if (name.startswith("proj-") or name.startswith("architekt-app-")) and (
             "Exited" in status or "Created" in status
         ):
             try:
@@ -907,7 +907,7 @@ async def _cleanup_workspace_containers() -> None:
 
 
 async def _enforce_container_ttl_and_slots() -> None:
-    """Stop deployed app containers (macaron-app-*) that are too old or exceed the active-project slot limit.
+    """Stop deployed app containers (architekt-app-*) that are too old or exceed the active-project slot limit.
 
     Reads config.orchestrator.max_active_projects and deployed_container_ttl_hours.
     Called every watchdog cycle.
@@ -944,7 +944,7 @@ async def _enforce_container_ttl_and_slots() -> None:
         if len(parts) != 2:
             continue
         name, created_str = parts
-        if not (name.startswith("macaron-app-") or name.startswith("proj-")):
+        if not (name.startswith("architekt-app-") or name.startswith("proj-")):
             continue
         try:
             # Docker format: "2026-01-15 10:23:45 +0000 UTC" or "2026-01-15T10:23:45Z"

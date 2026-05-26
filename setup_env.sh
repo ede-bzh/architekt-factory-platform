@@ -3,7 +3,7 @@
 # Source this file before running factory commands
 
 # Add parent directory to PYTHONPATH so we can import _FACTORY_CORE
-export PYTHONPATH="/Users/sylvain/_MACARON-SOFTWARE:$PYTHONPATH"
+export PYTHONPATH="/Users/sylvain/_ARCHITEKT_FACTORY:$PYTHONPATH"
 
 echo "✅ Environment configured"
 echo "PYTHONPATH: $PYTHONPATH"

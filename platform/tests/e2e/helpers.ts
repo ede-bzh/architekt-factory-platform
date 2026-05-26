@@ -91,3 +91,12 @@ export async function safeGoto(page: Page, path: string) {
   // Give page JS time to render
   await page.waitForTimeout(1_000);
 }
+
+/** Demo auth + onboarding cookie — required for authenticated page smoke tests. */
+export async function setupDemoSession(page: Page): Promise<void> {
+  const hostname = new URL(BASE_URL).hostname;
+  await page.request.post(`${BASE_URL}/api/auth/demo`);
+  await page.context().addCookies([
+    { name: "onboarding_done", value: "1", domain: hostname, path: "/" },
+  ]);
+}

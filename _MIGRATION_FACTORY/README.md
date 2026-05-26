@@ -234,7 +234,7 @@ migrate <project> deploy --prod
 ```bash
 # 1. Setup
 cd _MIGRATION_FACTORY
-export PYTHONPATH="/Users/sylvain/_MACARON-SOFTWARE:$PYTHONPATH"
+export PYTHONPATH="/Users/sylvain/_ARCHITEKT_FACTORY:$PYTHONPATH"
 
 # 2. Analyze (generates MIGRATION_PLAN.md + 127 tasks)
 python3 cli/migrate.py sharelook analyze

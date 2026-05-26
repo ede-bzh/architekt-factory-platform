@@ -43,7 +43,7 @@ Ce Code de Conduite s'applique dans tous les espaces communautaires et s'appliqu
 
 ## Application
 
-Les cas de comportement abusif, harcelant ou autrement inacceptable peuvent etre signales aux dirigeants de la communaute a **conduct@macaron-software.com**.
+Les cas de comportement abusif, harcelant ou autrement inacceptable peuvent etre signales aux dirigeants de la communaute a **conduct@architekt.ai**.
 
 Toutes les plaintes seront examinees et investiguees rapidement et equitablement.
 

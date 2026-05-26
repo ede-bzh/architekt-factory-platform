@@ -156,7 +156,7 @@ Token CSS --purple → --brand-primary (placeholder valeur identique)." \
 "Phase 0 — Foundation & Rebrand"
 
   create_issue "[P0] config — variables env ARCHITEKT_*" \
-"Introduire ARCHITEKT_API_KEY (alias rétro-compatible MACARON_API_KEY).
+"Introduire ARCHITEKT_API_KEY (alias rétro-compatible ARCHITEKT_API_KEY).
 Adapter platform/security.py + .env.example + Makefile + scripts.
 Documenter dépréciation 6 mois." \
 "type:chore,phase:0-foundation,area:platform,priority:must" \

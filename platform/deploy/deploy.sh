@@ -1,7 +1,7 @@
 #!/bin/bash
 # Zero-downtime deploy: build image FIRST, then swap container
 set -e
-cd /opt/macaron
+cd /opt/architekt
 
 COMPOSE="docker compose --env-file .env -f platform/deploy/docker-compose-vm.yml"
 

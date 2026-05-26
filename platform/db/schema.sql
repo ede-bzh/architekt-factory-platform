@@ -1,4 +1,4 @@
--- Macaron Agent Platform - Database Schema v3
+-- Architekt Agent Platform - Database Schema v3
 -- SQLite with FTS5 for full-text search
 
 -- ============================================================================

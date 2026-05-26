@@ -28,7 +28,7 @@ else:
     candidates = [
         REPO_ROOT / "data" / "platform.db",
         Path("/app/data/platform.db"),
-        Path("/app/macaron_platform/data/platform.db"),
+        Path("/app/architekt_platform/data/platform.db"),
     ]
     SQLITE_PATH = next((p for p in candidates if p.exists()), candidates[0])
 

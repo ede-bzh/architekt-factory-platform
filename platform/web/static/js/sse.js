@@ -1,8 +1,8 @@
 /**
- * SSE client utilities for Macaron Agent Platform.
+ * SSE client utilities for Architekt Agent Platform.
  * Handles reconnection and message parsing for real-time updates.
  */
-class MacaronSSE {
+class ArchitektSSE {
   constructor(url, options = {}) {
     this.url = url;
     this.onMessage = options.onMessage || (() => {});
@@ -52,4 +52,4 @@ class MacaronSSE {
 }
 
 // Global SSE connections
-window.MacaronSSE = MacaronSSE;
+window.ArchitektSSE = ArchitektSSE;

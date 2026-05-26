@@ -25,7 +25,7 @@ Pour le pilote (Phase 3), il faut deux choses qui tournent :
 | Déploiement | Docker compose (réutilise `deploy/docker-compose-vm.yml` adapté) |
 
 **Pourquoi pas Azure existant ?**
-- Azure prod actuel = marque Macaron, partagé avec ancien projet
+- Azure prod actuel = ancienne marque, partagé avec ancien projet
 - Repartir propre = pas de confusion clients, pas de risque casser l'existant
 
 **Pourquoi pas Mac local ?**
@@ -65,7 +65,7 @@ Pour le pilote (Phase 3), il faut deux choses qui tournent :
 ### Positives
 - 5 €/mois total → quasi gratuit
 - Indépendance vendor cloud
-- Setup propre, séparé de l'existant Macaron
+- Setup propre, séparé de l'existant historique
 
 ### Négatives
 - VM unique → pas de HA (acceptable phase pilote)

@@ -153,7 +153,7 @@ class OrchestratorConfig:
     ram_red: float = 85.0  # RAM % above → skip this cycle
     # Deployed-app container lifecycle
     max_active_projects: int = 3          # max projects with live deploy containers; 0 = unlimited
-    deployed_container_ttl_hours: float = 4.0  # stop macaron-app-* containers after N hours idle
+    deployed_container_ttl_hours: float = 4.0  # stop architekt-app-* containers after N hours idle
     # Worker nodes for multi-server dispatch (list of base URLs)
     worker_nodes: list = field(default_factory=list)
 

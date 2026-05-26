@@ -1,19 +1,19 @@
-# Macaron Platform — Disaster Recovery Runbook
+# Architekt Platform — Disaster Recovery Runbook
 
 ## Architecture Overview
 
 ```
 ┌─ Azure francecentral ──────────────────────────┐
-│  VM: vm-macaron (D4as_v5, 4vCPU, 16GB)        │
+│  VM: vm-architekt (D4as_v5, 4vCPU, 16GB)        │
 │    └─ Docker: platform + nginx + certbot       │
-│  PG: macaron-platform-pg (B1ms, PG17+pgvector) │
-│  Blob: macaronbackups (GRS → francesouth)      │
-│  Snapshots: vm-macaron-snap-* (incremental)    │
+│  PG: architekt-platform-pg (B1ms, PG17+pgvector) │
+│  Blob: architektbackups (GRS → francesouth)      │
+│  Snapshots: vm-architekt-snap-* (incremental)    │
 └─────────────────────────────────────────────────┘
 ┌─ Local Mac ────────────────────────────────────┐
 │  SQLite DBs: data/*.db (7 files, ~90MB)        │
 │  API keys: ~/.config/factory/*.key             │
-│  Source: git repo (_MACARON-SOFTWARE)           │
+│  Source: git repo (_ARCHITEKT_FACTORY)           │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -33,10 +33,10 @@
 
 ```bash
 # Cron on local Mac (3AM UTC daily)
-0 3 * * * /path/to/_SOFTWARE_FACTORY/platform/ops/run_backup.sh >> /var/log/macaron-backup.log 2>&1
+0 3 * * * /path/to/_SOFTWARE_FACTORY/platform/ops/run_backup.sh >> /var/log/architekt-backup.log 2>&1
 
 # Cron weekly (Sunday 2AM) — includes VM snapshot
-0 2 * * 0 /path/to/_SOFTWARE_FACTORY/platform/ops/run_backup.sh --tier weekly >> /var/log/macaron-backup.log 2>&1
+0 2 * * 0 /path/to/_SOFTWARE_FACTORY/platform/ops/run_backup.sh --tier weekly >> /var/log/architekt-backup.log 2>&1
 ```
 
 ### What gets backed up
@@ -72,9 +72,9 @@ python3 platform/ops/run_health.py
 
 # 2. Try Azure PITR first (last 7 days, fastest)
 az postgres flexible-server restore \
-  --resource-group RG-MACARON \
-  --name macaron-platform-pg-restored \
-  --source-server macaron-platform-pg \
+  --resource-group RG-ARCHITEKT \
+  --name architekt-platform-pg-restored \
+  --source-server architekt-platform-pg \
   --restore-point-in-time "2026-02-20T10:00:00Z"
 
 # 3. Or restore from our dump
@@ -105,16 +105,16 @@ python3 platform/ops/run_restore.py --sqlite-only --date 20260220
 
 ```bash
 # 1. Create new disk from latest snapshot
-az disk create -n vm-macaron-restored \
-  -g RG-MACARON \
-  --source vm-macaron-snap-20260221
+az disk create -n vm-architekt-restored \
+  -g RG-ARCHITEKT \
+  --source vm-architekt-snap-20260221
 
 # 2. Create new VM from disk
-az vm create -n vm-macaron-new -g RG-MACARON \
-  --attach-os-disk vm-macaron-restored \
+az vm create -n vm-architekt-new -g RG-ARCHITEKT \
+  --attach-os-disk vm-architekt-restored \
   --os-type Linux --size Standard_D4as_v5 \
-  --public-ip-address vm-macaron-ip \
-  --nsg vm-macaron-nsg
+  --public-ip-address vm-architekt-ip \
+  --nsg vm-architekt-nsg
 
 # 3. Or redeploy from scratch
 ssh azureadmin@<new-ip>
@@ -144,8 +144,8 @@ python3 platform/ops/run_restore.py --secrets-only --latest
 
 ```bash
 # 1. Git clone source code
-git clone <repo-url> _MACARON-SOFTWARE
-cd _MACARON-SOFTWARE/_SOFTWARE_FACTORY
+git clone <repo-url> _ARCHITEKT_FACTORY
+cd _ARCHITEKT_FACTORY/_SOFTWARE_FACTORY
 
 # 2. Restore secrets first (need Azure CLI auth)
 az login
@@ -160,7 +160,7 @@ python3 platform/ops/run_restore.py --sqlite-only --latest
 python3 platform/ops/run_restore.py --pg-only --latest
 
 # 5. VM from snapshot
-python3 platform/ops/run_restore.py --from-snapshot vm-macaron-snap-20260221
+python3 platform/ops/run_restore.py --from-snapshot vm-architekt-snap-20260221
 
 # 6. Verify everything
 python3 platform/ops/run_health.py
@@ -172,17 +172,17 @@ python3 platform/ops/run_health.py
 
 | Resource     | Name                | SKU               | Location                  |
 | ------------ | ------------------- | ----------------- | ------------------------- |
-| VM           | vm-macaron          | D4as_v5 (4c/16GB) | francecentral             |
-| PostgreSQL   | macaron-platform-pg | B1ms              | francecentral             |
-| Blob Storage | macaronbackups      | Standard_GRS      | francecentral→francesouth |
-| Snapshots    | vm-macaron-snap-\*  | Incremental       | francecentral             |
+| VM           | vm-architekt          | D4as_v5 (4c/16GB) | francecentral             |
+| PostgreSQL   | architekt-platform-pg | B1ms              | francecentral             |
+| Blob Storage | architektbackups      | Standard_GRS      | francecentral→francesouth |
+| Snapshots    | vm-architekt-snap-\*  | Incremental       | francecentral             |
 
 ### Credentials
 
 - Stored in `~/.config/factory/.env` (chmod 600) — NEVER hardcode in source
 - VM SSH: `<AZURE_ADMIN>@<AZURE_VM_IP>` / `$VM_PASS`
 - PG: `$DATABASE_URL`
-- Web: basic auth `macaron:macaron`
+- Web: basic auth `architekt:architekt`
 - LLM: Azure OpenAI `ascii-ui-openai` / gpt-5-mini / 100 req/min
 
 ## Monitoring

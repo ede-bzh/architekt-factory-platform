@@ -43,7 +43,7 @@ Este Codigo de Conducta aplica en todos los espacios comunitarios y tambien cuan
 
 ## Aplicacion
 
-Los casos de comportamiento abusivo, acosador o inaceptable pueden reportarse a **conduct@macaron-software.com**.
+Los casos de comportamiento abusivo, acosador o inaceptable pueden reportarse a **conduct@architekt.ai**.
 
 Todas las quejas seran revisadas e investigadas pronta y justamente.
 

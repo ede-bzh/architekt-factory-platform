@@ -21,7 +21,7 @@ Software Factory에 기여해 주셔서 감사합니다! 이 문서는 기여를
 
 ### 버그 보고
 
-1. 중복을 피하기 위해 [기존 Issue](https://github.com/macaron-software/software-factory/issues)를 확인하세요
+1. 중복을 피하기 위해 [기존 Issue](https://github.com/ede-bzh/architekt-factory-platform/issues)를 확인하세요
 2. [버그 보고서 템플릿](.github/ISSUE_TEMPLATE/bug_report.md)을 사용하세요
 3. 포함 사항: 재현 단계, 예상 동작 대 실제 동작, 환경 세부 정보
 
@@ -44,7 +44,7 @@ Software Factory에 기여해 주셔서 감사합니다! 이 문서는 기여를
 ## 개발 환경 설정
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
 cd software-factory
 cp .env.example .env
 python3 -m venv .venv && source .venv/bin/activate

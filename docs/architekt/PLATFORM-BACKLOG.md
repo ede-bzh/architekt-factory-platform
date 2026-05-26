@@ -25,7 +25,7 @@ Pas de site vitrine client en phase 0.
 - [x] Rebrand UI Architekt (`platform/branding.py`, templates Jinja)
 - [x] Provider LLM `demo` restauré
 - [x] Workflow CI initial + `pytest.ini`
-- [x] Alias `ARCHITEKT_API_KEY` / `MACARON_API_KEY` (`platform/auth/api_key.py`)
+- [x] Alias `ARCHITEKT_API_KEY` / `ARCHITEKT_API_KEY` (`platform/auth/api_key.py`)
 - [x] Skills doctrine Lot 5–6 (compliance + i18n specs)
 
 ---
@@ -72,7 +72,7 @@ Pas de site vitrine client en phase 0.
 > PR #7 — `cursor/architekt-roadmap-wave4-7576`.
 
 - [x] Adversarial **L2 déterministe** (`check_l2` — secrets, eval, CORS, SQL f-string ; tests `test_adversarial_l2`)
-- [x] Métriques Prometheus **`architekt_*`** (alias `macaron_*` + `architekt_finops_margin_pct`)
+- [x] Métriques Prometheus **`architekt_*`** (alias `architekt_*` + `architekt_finops_margin_pct`)
 - [x] FinOps marge studio — `PLATFORM_FINOPS_MARGIN_TARGET_PCT` (défaut 50 %), alertes `/finops`
 - [x] API `GET /api/finops/summary` + `GET /api/missions/{id}/case-study.md`
 - [x] Journal audit IA append-only (`ai_audit_logs` + hook `trace_call`)
@@ -116,7 +116,7 @@ Pas de site vitrine client en phase 0.
 
 ### Auth & sécurité baseline
 
-- [x] Auth fail-closed (`ARCHITEKT_API_KEY`) — alias `MACARON_API_KEY` 6 mois
+- [x] Auth fail-closed (`ARCHITEKT_API_KEY`) — alias `ARCHITEKT_API_KEY` 6 mois
 - [x] Rate limiting PG-backed sur mutations
 
 ---
@@ -125,10 +125,10 @@ Pas de site vitrine client en phase 0.
 
 ### Rebrand niveau 2 (ADR-001)
 
-- [x] `MACARON_API_KEY` → `ARCHITEKT_API_KEY` (alias 6 mois)
+- [x] `ARCHITEKT_API_KEY` → `ARCHITEKT_API_KEY` (alias 6 mois)
 - [x] CLI `sf` → `architekt` (alias `sf`)
 - [x] README EN/FR + wiki EN/FR embarqué (PR #15 ; pas d'autres locales)
-- [x] Métriques Prometheus : préfixe `architekt_*` (garder `macaron_*` en alias)
+- [x] Métriques Prometheus : préfixe `architekt_*` (garder `architekt_*` en alias)
 
 ### Skills & agents Architekt
 
@@ -243,8 +243,8 @@ Pas de site vitrine client en phase 0.
 
 ### P2 — Infra (vague E)
 
-- [ ] Runbook `macaron_platform` → `architekt_platform`
-- [ ] Helm chart cible Architekt
+- [x] Runbook `macaron_platform` → `architekt_platform` — [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md)
+- [x] Helm chart cible Architekt — `deploy/helm/architekt/`
 
 ### Critères de done Wave 8
 
@@ -295,7 +295,7 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 - [ ] **Multi-tenant** + isolation tenant (gate 10+ clients)
 - [ ] **Stripe** billing / usage LLM
 - [ ] **Pentest externe** (L3 regulated workflow)
-- [ ] **Docker rename** `architekt_platform` (alias `macaron_platform`)
+- [x] **Docker rename** `architekt_platform` (alias `architekt_platform` symlink 6 mois)
 - [ ] **Mutation testing** — seuil **50 %** modules critiques (mutmut CI)
 - [x] **Adversarial L2 LLM** — *done (wave 2)* (autres agents)
 - [x] **Dashboard `dashboard/`** rebrand — *done (wave 2)* (autres agents)

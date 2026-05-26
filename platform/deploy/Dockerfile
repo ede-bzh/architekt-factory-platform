@@ -23,7 +23,7 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/app/.playwright-browsers
 RUN pip install --no-cache-dir playwright && \
     playwright install --with-deps chromium
 
-COPY platform/ /app/macaron_platform/
+COPY platform/ /app/architekt_platform/
 COPY core/ /app/core/
 COPY skills/ /app/skills/
 COPY projects/ /app/projects/
@@ -38,15 +38,16 @@ RUN rm -f /app/projects/ppz.yaml /app/projects/psy.yaml \
 RUN echo "built $(date -u +%Y-%m-%dT%H:%M:%SZ)" > /app/VERSION
 
 # Create non-root user (docker group GID must match host's docker socket GID)
-RUN groupadd -r -g 988 docker-host && groupadd -r macaron \
-    && useradd -r -g macaron -G docker-host -d /app macaron \
+RUN groupadd -r -g 988 docker-host && groupadd -r architekt \
+    && useradd -r -g architekt -G docker-host -d /app architekt \
     && mkdir -p /app/data/logs \
-    && chown -R macaron:macaron /app
-USER macaron
+    && chown -R architekt:architekt /app
+USER architekt
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
 EXPOSE 8090
 
-CMD ["sh", "-c", "git config --global --add safe.directory '*' && uvicorn macaron_platform.server:app --host 0.0.0.0 --port 8090 --ws none"]
+ENV OTEL_SERVICE_NAME=architekt-platform
+CMD ["sh", "-c", "git config --global --add safe.directory '*' && uvicorn architekt_platform.server:app --host 0.0.0.0 --port 8090 --ws none"]

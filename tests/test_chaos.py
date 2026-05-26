@@ -128,7 +128,7 @@ class TestChaosDBPressure:
             try:
                 r = live_session.post("/api/missions", json={
                     "name": f"chaos-write-test-{i}",
-                    "project_id": "macaron-canvas",
+                    "project_id": "architekt-canvas",
                     "type": "task",
                 })
                 return r.status_code

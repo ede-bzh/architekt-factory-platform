@@ -34,11 +34,11 @@ COPY projects/ /app/projects/
 RUN mkdir -p /app/data /app/workspace
 
 # Create non-root user with docker group access
-RUN groupadd -r macaron && useradd -r -g macaron -d /app macaron \
-    && usermod -aG docker macaron 2>/dev/null || true \
-    && chown -R macaron:macaron /app \
-    && chown -R macaron:macaron $PLAYWRIGHT_BROWSERS_PATH
-USER macaron
+RUN groupadd -r architekt && useradd -r -g architekt -d /app architekt \
+    && usermod -aG docker architekt 2>/dev/null || true \
+    && chown -R architekt:architekt /app \
+    && chown -R architekt:architekt $PLAYWRIGHT_BROWSERS_PATH
+USER architekt
 
 # Env
 ENV PYTHONUNBUFFERED=1

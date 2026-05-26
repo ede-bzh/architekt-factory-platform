@@ -14,7 +14,7 @@ FORBIDDEN = re.compile(
     re.IGNORECASE,
 )
 ALLOWLIST_SUBSTR = (
-    "macaron_theme')",  # legacy localStorage fallback in JS
+    "macaron_theme')",  # migration read from old localStorage key only
 )
 
 

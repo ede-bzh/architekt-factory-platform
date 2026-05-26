@@ -1,0 +1,16 @@
+[Unit]
+Description=Architekt Agent Platform
+After=network.target
+
+[Service]
+Type=simple
+User=architekt
+WorkingDirectory=/opt/architekt
+ExecStart=/opt/architekt/venv/bin/uvicorn architekt_platform.server:app --host 0.0.0.0 --port 8090
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONPATH=/opt/architekt
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

@@ -146,7 +146,7 @@ class DockerDeployTool(BaseTool):
             return f"[FAIL] Workspace not found: {cwd}"
 
         mission_id = params.get("mission_id", os.path.basename(os.path.abspath(cwd)))
-        container_name = f"macaron-app-{mission_id[:12]}"
+        container_name = f"architekt-app-{mission_id[:12]}"
 
         steps = []
 
@@ -227,7 +227,7 @@ class DockerStopTool(BaseTool):
         if mission_id and mission_id in _running:
             container = _running[mission_id]["container"]
         elif not container:
-            container = f"macaron-app-{mission_id[:12]}"
+            container = f"architekt-app-{mission_id[:12]}"
 
         r = subprocess.run(["docker", "rm", "-f", container], capture_output=True, text=True, timeout=10)
         if mission_id in _running:
@@ -242,7 +242,7 @@ class DockerStatusTool(BaseTool):
 
     async def execute(self, params: dict, agent: AgentInstance = None) -> str:
         mission_id = params.get("mission_id", "")
-        container = f"macaron-app-{mission_id[:12]}" if mission_id else params.get("container", "")
+        container = f"architekt-app-{mission_id[:12]}" if mission_id else params.get("container", "")
         if not container:
             return "Error: mission_id or container required"
         r = subprocess.run(
