@@ -2,7 +2,25 @@
  * Shared E2E helpers — console/network error collectors.
  * Import in every spec to catch JS errors and failed requests.
  */
-import { type Page, expect } from "@playwright/test";
+import { test, type Page, expect } from "@playwright/test";
+
+/** Skip entire suite when PLAYWRIGHT_E2E=0 or BASE_URL is explicitly empty. */
+export const E2E_DISABLED =
+  process.env.PLAYWRIGHT_E2E === "0" || process.env.BASE_URL === "";
+
+export const BASE_URL = process.env.BASE_URL || "http://localhost:8090";
+
+/** Register in test.beforeEach to gate on env (PLAYWRIGHT_E2E / BASE_URL). */
+export function gateE2E(): void {
+  test.skip(
+    E2E_DISABLED,
+    E2E_DISABLED
+      ? process.env.PLAYWRIGHT_E2E === "0"
+        ? "PLAYWRIGHT_E2E=0"
+        : "BASE_URL not set"
+      : ""
+  );
+}
 
 export interface PageErrors {
   console: string[];

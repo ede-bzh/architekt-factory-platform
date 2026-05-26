@@ -1744,13 +1744,12 @@ async def analytics_page(request: Request):
     return RedirectResponse("/metrics?tab=analytics", status_code=302)
 
 
-@router.get("/proof", response_class=HTMLResponse)
-async def proof_page(request: Request):
-    """Proof-of-concept index — links to wave-2 experiments."""
-    return _templates(request).TemplateResponse(
-        "proof.html",
-        {"request": request, "page_title": "Proof of Concepts"},
-    )
+@router.get("/proof")
+async def proof_redirect():
+    """GA evolution proof — redirect to workflows evolution tab."""
+    from starlette.responses import RedirectResponse
+
+    return RedirectResponse("/workflows#evolution", status_code=302)
 
 
 @router.get("/finops", response_class=HTMLResponse)

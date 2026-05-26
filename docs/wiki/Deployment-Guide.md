@@ -1,6 +1,28 @@
 # Deployment Guide
 
-How to run the **Architekt** agent platform (Software Factory) across demo, production, and local environments.
+How to run the **Architekt** agent platform across demo, production, and local environments.
+
+## CI/CD deploy gates
+
+Production and demo deploys run **only after a successful CI workflow** on `main`:
+
+| Workflow | Trigger | Gate |
+|----------|---------|------|
+| `CI` | push/PR to `main`, tags `v*` | ruff, bandit (High), pip-audit, secret-scan, pytest |
+| `Deploy → OVH Demo` | `workflow_run` after CI | `conclusion == success` |
+| `Deploy → Azure Prod` | `workflow_run` after CI or manual dispatch | CI green (unless `workflow_dispatch`) |
+
+Release tags `v*` also trigger the CI SBOM artifact job. See `docs/architekt/RELEASE.md`.
+
+## Azure module name (`macaron_platform` — legacy)
+
+On Azure VM Docker, the Python package is imported as **`macaron_platform`**, not `platform`:
+
+- Container code path: `/app/macaron_platform/`
+- Dockerfile copies `platform/` → `macaron_platform/` at build time
+- Local dev uses `platform` directly (`python3 -m uvicorn platform.server:app`)
+
+Rebrand context (API keys, metrics): ADR-001 and `docs/architekt/PLATFORM-BACKLOG.md`.
 
 ## Environment comparison
 
@@ -84,10 +106,10 @@ export ARCHITEKT_API_KEY="architekt_dev_$(openssl rand -hex 16)"
 ## Docker quick start (laptop)
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
-cd software-factory
-make setup
-make run
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
+cd architekt-factory-platform
+make setup    # install deps, init DB
+make run      # start Docker containers
 # → http://localhost:8090
 ```
 

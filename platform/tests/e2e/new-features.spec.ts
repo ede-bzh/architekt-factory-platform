@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { collectErrors, assertNoErrors, safeGoto } from "./helpers";
+import {collectErrors, assertNoErrors, safeGoto, gateE2E} from "./helpers";
 
+test.beforeEach(gateE2E);
 /**
  * New Features E2E — validates all features added in session 2026-02-27:
  *  - Workspace: Timeline view, Search view, file icons, Launch Mission button
@@ -95,7 +96,7 @@ test.describe("API: Workspace new endpoints", () => {
 
   test("GET /api/projects/{id}/workspace/timeline returns events", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     const r = await page.request.get(`/api/projects/${pid}/workspace/timeline`);
     expect(r.ok()).toBeTruthy();
@@ -105,7 +106,7 @@ test.describe("API: Workspace new endpoints", () => {
 
   test("GET /api/projects/{id}/workspace/timeline filter=commit", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     const r = await page.request.get(`/api/projects/${pid}/workspace/timeline?filter=commit`);
     expect(r.ok()).toBeTruthy();
@@ -117,7 +118,7 @@ test.describe("API: Workspace new endpoints", () => {
 
   test("GET /api/projects/{id}/workspace/search returns matches", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     // Search for something likely to exist
     const r = await page.request.get(`/api/projects/${pid}/workspace/search?q=import`);
@@ -129,7 +130,7 @@ test.describe("API: Workspace new endpoints", () => {
 
   test("GET /api/projects/{id}/workspace/search empty query returns empty", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     const r = await page.request.get(`/api/projects/${pid}/workspace/search?q=`);
     expect(r.ok()).toBeTruthy();
@@ -183,7 +184,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("workspace page loads for a project", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     const errors = collectErrors(page);
     await safeGoto(page, `/projects/${pid}/workspace`);
@@ -201,7 +202,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("Timeline button (9th) is visible and clickable", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     await safeGoto(page, `/projects/${pid}/workspace`);
     await page.waitForLoadState("domcontentloaded");
@@ -218,7 +219,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("Timeline panel has filter dropdown", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     await safeGoto(page, `/projects/${pid}/workspace`);
     await page.waitForLoadState("domcontentloaded");
@@ -239,7 +240,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("Search button (10th) is visible and clickable", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     await safeGoto(page, `/projects/${pid}/workspace`);
     await page.waitForLoadState("domcontentloaded");
@@ -255,7 +256,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("Search panel has query input and glob filter", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     await safeGoto(page, `/projects/${pid}/workspace`);
     await page.waitForLoadState("domcontentloaded");
@@ -272,7 +273,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("Search executes and shows results", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     await safeGoto(page, `/projects/${pid}/workspace`);
     await page.waitForLoadState("domcontentloaded");
@@ -294,7 +295,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("Agents view has Launch Mission button", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     await safeGoto(page, `/projects/${pid}/workspace`);
     await page.waitForLoadState("domcontentloaded");
@@ -310,7 +311,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("Launch Mission panel opens with workflow selector", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     await safeGoto(page, `/projects/${pid}/workspace`);
     await page.waitForLoadState("domcontentloaded");
@@ -331,7 +332,7 @@ test.describe("Page: Workspace — new views", () => {
 
   test("File tree shows colored icons (wsFileIcon in page)", async ({ page }) => {
     const pid = await getProjectId(page);
-    if (!pid) { test.skip(); return; }
+    test.skip(!pid, "pid unavailable — server or seed data missing");
 
     // Check JS source in the HTTP response (more reliable than DOM content)
     const resp = await page.request.get(`/projects/${pid}/workspace`);

@@ -69,7 +69,6 @@ Primary path for demos and development. Full steps: **[docs/wiki/Deployment-Guid
 ```
 ede-bzh/architekt-factory-platform   ← GitHub (source of truth)
   platform/ cli/ dashboard/ ...     ← tracked application code
-  data/ (local)                    ← SQLite runtime — not committed
 ```
 
 Push : `git push origin main`
@@ -80,7 +79,7 @@ Push : `git push origin main`
 - SQLite WAL + FTS5 (~35 tables)
 - LLM per environment (see LLM ENVIRONMENTS below)
 - Rate limit: 15 rpm (token-limited ~10-16 calls/min in practice, 100K tokens/60s)
-- **163 agents** (104 YAML defs), 15 patterns, 41 workflows
+- **133+ agents** (95 YAML defs), 12 patterns, 19 workflows, 1271 skills
 
 ---
 
@@ -520,8 +519,8 @@ Three layers of adaptive intelligence optimize agent/workflow performance:
 
 ```
 Layer 1 (LIVE ✅)     Thompson Sampling     per-agent-slot runtime selection
-Layer 2 (PLANNED)     Genetic Algorithm     offline workflow template evolution
-Layer 3 (PLANNED)     Reinforcement Learning  mid-mission pattern adaptation
+Layer 2 (LIVE ✅)     Genetic Algorithm     offline workflow template evolution
+Layer 3 (LIVE ✅)     Reinforcement Learning  mid-mission pattern adaptation
 ```
 
 ---
@@ -553,7 +552,7 @@ agent = argmax(score_i for i in candidates)
 
 ---
 
-### Layer 2: Genetic Algorithm — Workflow Evolution (platform/agents/evolution.py)
+### Layer 2: Genetic Algorithm — Workflow Evolution (LIVE — platform/agents/evolution.py)
 
 **What**: Evolve workflow YAML templates offline using historical mission outcomes.
 

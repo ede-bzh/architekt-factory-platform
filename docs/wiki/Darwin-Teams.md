@@ -1,6 +1,6 @@
 # 🧬 Darwin Teams — Evolutionary Agent Selection
 
-Architekt Factory Platform uses **evolutionary selection** to find the best agent teams and LLM models for each context — automatically, without configuration.
+Software Factory uses **evolutionary selection** to find the best agent teams and LLM models for each context — automatically, without configuration.
 
 ## Two Levels of Evolution
 
@@ -161,6 +161,27 @@ Visit **Settings → LLM** or via API:
   "tasks_light": {"provider": "azure-openai", "model": "gpt-5-mini"}
 }
 ```
+
+---
+
+## Adaptive Intelligence — GA + RL (LIVE v2.3.0+)
+
+Beyond Team/LLM Darwin (Thompson Sampling on teams and models), Architekt runs two additional **LIVE** adaptive layers documented in [`platform/CLAUDE.md`](../../platform/CLAUDE.md#adaptive-intelligence--thompson-sampling--ga--rl):
+
+### Genetic Algorithm — workflow evolution (LIVE)
+
+- **Engine**: `platform/agents/evolution.py` (`GAEngine`)
+- **Scheduler**: `platform/agents/evolution_scheduler.py` — nightly at **02:00 UTC** (started from `platform/server.py` lifespan)
+- **Cold start**: `platform/agents/simulator.py` seeds synthetic mission outcomes
+- **API**: `GET /api/evolution/proposals`, `POST /api/evolution/proposals/{id}/approve|reject`, `POST /api/evolution/run/{wf_id}` (`platform/web/routes/evolution.py`)
+- **UI**: `/workflows` → Evolution tab
+
+### Reinforcement Learning — mid-mission adaptation (LIVE)
+
+- **Policy**: `platform/agents/rl_policy.py` (Q-learning, ε-greedy)
+- **Runtime hook**: `platform/agents/rl_hooks.py` → `apply_rl_pattern_override()` called from `platform/patterns/engine.py` at phase start when confidence > 0.7
+- **Training**: nightly batch on `rl_experience` table (same scheduler cycle as GA)
+- **Actions**: `keep | switch_parallel | switch_sequential | switch_hierarchical | add_agent | remove_agent`
 
 ---
 

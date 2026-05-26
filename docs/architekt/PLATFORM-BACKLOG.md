@@ -5,7 +5,7 @@ Pas de site vitrine client en phase 0.
 
 > **Alignement tiers** : P0 = Tier **S** · P1 = Tier **A** · P2 = Tier **B** · P3 = Tier **C**
 > Catalogue complet : `docs/ROADMAP.md` § Catalogue features plateforme.
-> **Wave en cours** : merger **PR #12 / #13 / #15** — voir `docs/ROADMAP.md` § Reste à faire.
+> **Wave en cours** : **#13** (L2 LLM, mutation, CSP) — voir `docs/ROADMAP.md`.
 
 ## Légende priorités
 
@@ -82,19 +82,20 @@ Pas de site vitrine client en phase 0.
 
 ## Wave 5 — livré (audit & durcissement)
 
-> Reste P1 avant pilot Phase 3 — voir aussi `docs/ROADMAP.md` § Phases 0–2.
+> PR #11 + #12 (merge `main`).
 
-- [x] **CI verte 100 %** sur `main` (gate merge — confirmer dernier run vert post-PR #7)
-- [x] **`run_guard` → L2** : appeler `check_l2` dans le pipeline (fonction livrée wave 4, câblage `run_guard` incomplet)
-- [x] **HITL gates** deploy + décisions IA sensibles (workflow + UI)
-- [ ] **`MAX_ARCHITEKT_SKILLS`** — relever le plafond d'injection (4 → 14 skills selon rôle)
-- [ ] **i18n EN/FR/ZH** baseline plateforme (catalogue + routes, pas seulement skills)
-- [ ] **4 DPA templates** par région (SG, UAE, EU, US)
-- [ ] **Dashboard `dashboard/`** rebrand Architekt + health unifié avec `/api/health`
-- [ ] **Adversarial L2 LLM** (revue architecture sémantique — distinct du L2 déterministe wave 4)
-- [ ] **Mutation testing** seuil 50 % sur modules critiques (job CI mutmut optionnel seulement)
-
----
+- [x] **CI verte 100 %** sur `main`
+- [x] **`run_guard` → L2** — pipeline L0→L2→L1
+- [x] **HITL deploy API** — `POST /api/missions/{id}/hitl/deploy` + `docs/architekt/HITL.md`
+- [x] **`MAX_ARCHITEKT_SKILLS`** — plafond par rôle (`skill_limits.py`, défaut 14)
+- [x] **i18n EN/FR** (ZH hors scope)
+- [x] **4 DPA templates** — `docs/compliance/dpa/` (SG, UAE, EU, US)
+- [x] **Dashboard legacy** documenté ; `monitoring.js` + `platform/metrics/live.py`
+- [x] **CI bandit + pip-audit bloquants**
+- [x] Wiki Darwin/Deployment enrichi ; Dependabot ; E2E `gateE2E`
+- [ ] **Adversarial L2 LLM** → **PR #13**
+- [ ] **Mutation testing** 50 % bloquant → **PR #13**
+- [ ] **Dashboard :8080** rebrand UI complet → **PR #13**
 
 ## P0 — Tier S (Phase 0–2)
 
@@ -110,7 +111,7 @@ Pas de site vitrine client en phase 0.
 
 ### CI & quality gates (Phase 2)
 
-- [ ] CI verte 100 % sur `main` (gate merge) → **Wave 5**
+- [x] CI verte 100 % sur `main` (gate merge) — **Wave 5 / PR #11**
 - [x] Quality gate CI : ruff + bandit sur `platform/`
 - [x] SAST + SCA + secret scan en CI (bandit, pip-audit, detect-secrets)
 - [x] SBOM CycloneDX par release CI (cyclonedx-py)
@@ -154,7 +155,8 @@ Pas de site vitrine client en phase 0.
 ### Global delivery
 
 - [x] i18n UI **EN/FR** uniquement (ZH hors scope)
-- [ ] 4 DPA templates par région (SG, UAE, EU, US) → **Wave 5**
+- [ ] 4 DPA templates par région (SG, UAE, EU, US)
+- [ ] Dashboard rebrand complet (UI legacy port 8080)
 - [x] Dashboard legacy documenté ; monitoring `/monitoring` + `/proof`
 
 ---
@@ -205,6 +207,57 @@ Pas de site vitrine client en phase 0.
 
 ---
 
+
+## Wave 6 — livré (doc + CI + releases + adaptive intelligence)
+
+> PR #11 + contenu #12.
+
+- [x] `platform/VERSION` 2.3.0 + `/api/health`
+- [x] CI bandit + pip-audit bloquants ; release sur tags `v*`
+- [x] Deploy demo/azure après CI (`workflow_run`)
+- [x] `CHANGELOG.md` + `docs/architekt/RELEASE.md`
+- [x] Monitoring live — `platform/metrics/live.py` (cache 20s)
+- [x] GA scheduler LIVE + RL hook (`evolution_scheduler`, `rl_hooks`)
+- [x] Compteurs : ~163 agents, 41 workflows, 104 skills
+
+---
+
+## Wave 7 — livré partiel (PR #12 mergé)
+
+- [x] PR #12 — wiki Darwin/Deployment, monitoring.js, DPA, Dependabot, E2E gate, `HITL.md`
+- [ ] PR #13 — L2 LLM, mutation gate (ADR-003), dashboard :8080, CSP
+
+---
+
+## Wave 8 — documentation & rebrand doc — **livré (`main`)**
+
+> Audit : `docs/architekt/REBRAND-DOC-AUDIT.md` (PR #14/#15).
+
+### P0 — Utilisateur (wiki + README)
+
+- [x] Wiki Home EN/FR, README EN/FR, API/Security/Patterns/Deployment
+- [x] 8 pages wiki `*‐FR` + navigation sidebar
+- [x] Footers EN↔FR uniquement
+
+### P1 — Développeur & gates
+
+- [x] `CLAUDE.md` racine + `platform/CLAUDE.md` (deploy legacy vs demo)
+- [x] `test_doc_no_macaron_user_facing`, `test_wiki_fr_pages`
+- [x] `docs/architekt/README.md`
+
+### P2 — Infra (vague E)
+
+- [ ] Runbook `macaron_platform` → `architekt_platform`
+- [ ] Helm chart cible Architekt
+
+### Critères de done Wave 8
+
+1. [x] P0 user-facing sans Macaron/La Poste
+2. [x] pytest doc gates verts
+3. [x] Pages sidebar « guide »
+4. [x] `docs/ROADMAP.md` synchronisé
+
+
 ## Explicitement hors scope (ne pas construire tôt)
 
 Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
@@ -218,59 +271,17 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 | Projets L3 régulés (HIPAA, banque) | Refus | ADR-041, R24 |
 
 
-## Wave 6 — fondations (doc + CI + releases) — livré
+## Wave 6 — livré (doc + CI + releases + adaptive intelligence)
 
-> PR #11 — release `v2.3.0` sur `main`.
+> PR #11 — `cursor/architekt-enrichment-pr-a-7576` (merge `main`).
 
 - [x] CI verte post-PR #10 (pytest, ruff, secret-scan, tests rebrand)
-- [x] `platform/VERSION` semver + `/api/health` version/timestamp
-- [x] CI bandit + pip-audit **bloquants**
-- [x] Deploy demo/azure après CI `workflow_run` (secrets deploy à configurer côté GitHub)
+- [x] `platform/VERSION` semver (2.3.0) + `/api/health` version/timestamp
+- [x] CI bandit + pip-audit **bloquants** (`bandit.yaml`, High-only gate)
+- [x] Deploy demo/azure **après CI** (`workflow_run` → `conclusion == success`)
 - [x] `CHANGELOG.md` + `docs/architekt/RELEASE.md`
-- [x] Compteurs : ~163 agents, 41 workflows, 104 skills YAML
-
----
-
-## Wave 7 — roadmap parallèle (PR #12 / #13) — en review
-
-> Ne pas dupliquer ici : merger puis cocher depuis les PR.
-
-- [ ] PR #12 — wiki Darwin/Deployment, monitoring.js, DPA régions, Dependabot, E2E gate, `HITL.md`
-- [ ] PR #13 — L2 LLM, mutation gate (ADR-003), dashboard :8080, CSP / Wave 7 doc
-
----
-
-## Wave 8 — documentation & rebrand 100 % — **livré (PR #15, merge pending)**
-
-> **Audit** : `docs/architekt/REBRAND-DOC-AUDIT.md` (2026-05-25).  
-> Objectif : doc/wiki/README **cohérents Architekt**, complétude des pages courtes, plus de Macaron/La Poste dans le périmètre utilisateur EN/FR.
-
-### P0 — Utilisateur (wiki + README)
-
-- [x] Wiki `Home.md` / `Home‐FR` — branding **Architekt Factory**, release **v2.3.0**, repo `ede-bzh/architekt-factory-platform`, retirer tableau GitLab La Poste
-- [x] README EN + FR — URLs demo/issues/clone studio ; compteurs alignés (163 / 41 / 104)
-- [x] `API-Reference.md` — documenter `ARCHITEKT_API_KEY` (+ alias `MACARON_API_KEY` 6 mois, ADR-001)
-- [x] `Security.md` — auth Architekt, HITL, L0–L2, CSP (lien doc CSP post-#13)
-- [x] `Deployment-Guide.md` — colonnes « demo Architekt » vs « prod legacy macaron_* »
-- [x] Compléter **`Patterns.md`** (cas d'usage, lien missions / adversarial)
-- [x] Archiver ou supprimer wiki **Home‐ES/DE/IT/PT/JA/ZH** (hors scope i18n EN/FR officiel)
-- [x] Pages FR manquantes référencées (`Security‐FR`, `Patterns‐FR`, etc.) — créer ou retirer les liens morts
-
-### P1 — Développeur & gates
-
-- [x] Réécrire `CLAUDE.md` racine pour le dépôt **Architekt** (retirer `_LAPOSTE`, `sync-to-laposte`, chemins `~/_MACARON-SOFTWARE`)
-- [x] Aligner `platform/CLAUDE.md` + `docs/AUDIT_REBRAND.md` avec cet audit
-- [x] Test gate doc : interdire `macaron-software` / « Macaron Software Factory » dans `docs/wiki/Home*.md` + README EN/FR (exceptions Deployment encart legacy)
-- [x] Index doc `docs/architekt/README.md` — liens phases, backlog, release, audit
-
-### P2 — Infra (lié vague E ROADMAP, pas bloquant Wave 8 doc)
-
-- [ ] Runbook renommage `macaron_platform` → `architekt_platform` (ADR-001 niveau 3)
-- [ ] Helm chart / compose : chemins cibles documentés sans supprimer alias prod tant que non migré
-
-### Critères de done Wave 8
-
-1. `rg -i 'macaron|laposte' docs/wiki/Home.md docs/wiki/Home‐FR.md README.md README.fr.md` → **0** (hors encarts « legacy infra » nommés)
-2. `pytest tests/test_no_legacy_external_refs.py tests/test_readme_en_fr.py tests/test_architekt_branding.py` → verts (+ nouveau test doc si ajouté)
-3. Chaque page du `_Sidebar.md` ≥ contenu « guide » (pas seulement tableaux vides)
-4. [x] `docs/ROADMAP.md` synchronisé (2026-05-25)
+- [x] Compteurs doc : ~163 agents, 41 workflows, 104 skills YAML (`platform/SPECS.md`)
+- [x] Monitoring live refactor — `platform/metrics/live.py` (cache 20s, param `sections`)
+- [x] **GA scheduler LIVE** — `evolution_scheduler.py` nightly 02:00 UTC (`server.py` lifespan)
+- [x] **RL hook** — `platform/agents/rl_hooks.py` + `patterns/engine.py` (`apply_rl_pattern_override`)
+- [x] Release job CI sur tags `v*` (SBOM artifact)

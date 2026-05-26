@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { collectErrors, assertNoErrors, safeGoto } from "./helpers";
+import {collectErrors, assertNoErrors, safeGoto, gateE2E} from "./helpers";
 
+test.beforeEach(gateE2E);
 /**
  * User Journey E2E — full user flows with real data, selectors, and error checks.
  * Headless Playwright against live server.
@@ -257,8 +258,7 @@ test.describe("Journey: Mission Control", () => {
       await safeGoto(page, "/");
       const epicLink = page.locator('a[href*="/missions/"]').first();
       if (!(await epicLink.isVisible({ timeout: 5_000 }))) {
-        test.skip();
-        return;
+        test.skip(true, "required UI/data not available");
       }
       await epicLink.click();
       await page.waitForLoadState("domcontentloaded");

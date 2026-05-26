@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { collectErrors, assertNoErrors, safeGoto } from "./helpers";
+import {collectErrors, assertNoErrors, safeGoto, gateE2E} from "./helpers";
 
+test.beforeEach(gateE2E);
 /**
  * Smoke E2E — every major page loads, has content, zero console/network errors.
  * Real selectors from actual templates, real data assertions.

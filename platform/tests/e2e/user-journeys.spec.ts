@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { collectErrors, assertNoErrors, safeGoto } from "./helpers";
+import {collectErrors, assertNoErrors, safeGoto, gateE2E} from "./helpers";
 
+test.beforeEach(gateE2E);
 /**
  * User Journey E2E — full IHM flows for features added in 2026-02-27 session:
  *
@@ -49,7 +50,7 @@ test.describe("API: /api/monitoring/live — new fields", () => {
   test("database.schema_version is present and >= 1", async ({ page }) => {
     const resp = await page.request.get("/api/monitoring/live");
     const d = await tryJson(resp);
-    if (!d) { test.skip(); return; }
+    test.skip(!d, "d unavailable — server or seed data missing");
 
     expect(d.database).toBeDefined();
     expect(typeof d.database.schema_version).toBe("number");
@@ -59,7 +60,7 @@ test.describe("API: /api/monitoring/live — new fields", () => {
   test("rtk block is present with expected fields", async ({ page }) => {
     const resp = await page.request.get("/api/monitoring/live");
     const d = await tryJson(resp);
-    if (!d) { test.skip(); return; }
+    test.skip(!d, "d unavailable — server or seed data missing");
 
     expect(d.rtk).toBeDefined();
     expect(typeof d.rtk.calls).toBe("number");
@@ -71,7 +72,7 @@ test.describe("API: /api/monitoring/live — new fields", () => {
   test("database block has all expected fields", async ({ page }) => {
     const resp = await page.request.get("/api/monitoring/live");
     const d = await tryJson(resp);
-    if (!d) { test.skip(); return; }
+    test.skip(!d, "d unavailable — server or seed data missing");
 
     const db = d.database;
     expect(typeof db.size_mb).toBe("number");
@@ -91,7 +92,7 @@ test.describe("API: /api/agents — Uruk capability_grade", () => {
   test("every agent has capability_grade = organizer | executor", async ({ page }) => {
     const resp = await page.request.get("/api/agents");
     const agents = await tryJson(resp);
-    if (!agents || !Array.isArray(agents)) { test.skip(); return; }
+    test.skip(!agents || !Array.isArray(agents), "agents list unavailable");
 
     expect(agents.length).toBeGreaterThan(0);
     for (const agent of agents) {
@@ -105,7 +106,7 @@ test.describe("API: /api/agents — Uruk capability_grade", () => {
   test("organizer agents have grade=organizer", async ({ page }) => {
     const resp = await page.request.get("/api/agents");
     const agents = await tryJson(resp);
-    if (!agents || !Array.isArray(agents)) { test.skip(); return; }
+    test.skip(!agents || !Array.isArray(agents), "agents list unavailable");
 
     const organizerIds = ["strat-cto", "scrum_master", "enterprise_architect", "product_manager"];
     for (const id of organizerIds) {
@@ -118,7 +119,7 @@ test.describe("API: /api/agents — Uruk capability_grade", () => {
   test("majority of agents are executors", async ({ page }) => {
     const resp = await page.request.get("/api/agents");
     const agents = await tryJson(resp);
-    if (!agents || !Array.isArray(agents)) { test.skip(); return; }
+    test.skip(!agents || !Array.isArray(agents), "agents list unavailable");
 
     const executors = agents.filter((a: any) => a.capability_grade === "executor");
     const organizers = agents.filter((a: any) => a.capability_grade === "organizer");
@@ -140,7 +141,7 @@ test.describe("API: sessions checkpoints endpoint", () => {
     });
     const created = await tryJson(createResp);
     const sessionId = created?.id || created?.session_id;
-    if (!sessionId) { test.skip(); return; }
+    test.skip(!sessionId, "sessionId unavailable — server or seed data missing");
 
     const resp = await page.request.get(`/api/sessions/${sessionId}/checkpoints`);
     expect(resp.ok()).toBeTruthy();
@@ -157,7 +158,7 @@ test.describe("API: sessions checkpoints endpoint", () => {
     });
     const created = await tryJson(createResp);
     const sessionId = created?.id || created?.session_id;
-    if (!sessionId) { test.skip(); return; }
+    test.skip(!sessionId, "sessionId unavailable — server or seed data missing");
 
     const resp = await page.request.get(`/api/sessions/${sessionId}/checkpoints`, {
       headers: { "HX-Request": "true" },
@@ -199,9 +200,9 @@ test.describe("API: PM lifecycle tools in tool registry", () => {
     ];
 
     const resp = await page.request.get("/api/tools?role=cdp");
-    if (!resp.ok()) { test.skip(); return; }
+    test.skip(!resp.ok(), "API request failed");
     const d = await tryJson(resp);
-    if (!d) { test.skip(); return; }
+    test.skip(!d, "d unavailable — server or seed data missing");
 
     const toolNames = (d.tools || d || []).map((t: any) => t.function?.name || t.name || t);
     const found = pmToolNames.filter((name) => toolNames.includes(name));
@@ -332,7 +333,7 @@ test.describe("Journey: Session conversation with live checkpoints panel", () =>
     // 303 redirect is expected — follow to get session URL from Location header
     const location = createResp.headers()["location"] || "";
     const sessionId = location.split("/sessions/")[1]?.split("?")[0]?.trim();
-    if (!sessionId) { test.skip(); return; }
+    test.skip(!sessionId, "sessionId unavailable — server or seed data missing");
 
     // Navigate to the conversation page
     await safeGoto(page, `/sessions/${sessionId}`);
@@ -365,7 +366,7 @@ test.describe("Journey: Session conversation with live checkpoints panel", () =>
     });
     const created = await tryJson(createResp);
     const sessionId = created?.id || created?.session_id;
-    if (!sessionId) { test.skip(); return; }
+    test.skip(!sessionId, "sessionId unavailable — server or seed data missing");
 
     await safeGoto(page, `/sessions/${sessionId}`);
 
@@ -466,7 +467,7 @@ test.describe("Journey: Mission → checkpoints written on run", () => {
     });
     const created = await tryJson(createResp);
     const sessionId = created?.id || created?.session_id;
-    if (!sessionId) { test.skip(); return; }
+    test.skip(!sessionId, "sessionId unavailable — server or seed data missing");
 
     // Poll checkpoints immediately (should be empty but valid)
     const cpResp = await page.request.get(`/api/sessions/${sessionId}/checkpoints`);
@@ -490,12 +491,12 @@ test.describe("API: Tool schemas — 6 categories all present", () => {
 
   test("GET /api/tools returns >= 90 tools with all categories", async ({ page }) => {
     const resp = await page.request.get("/api/tools");
-    if (!resp.ok()) { test.skip(); return; }
+    test.skip(!resp.ok(), "API request failed");
     const d = await tryJson(resp);
-    if (!d) { test.skip(); return; }
+    test.skip(!d, "d unavailable — server or seed data missing");
 
     const tools = d.tools || d;
-    if (!Array.isArray(tools)) { test.skip(); return; }
+    test.skip(!Array.isArray(tools), "tools not an array");
 
     expect(tools.length, "Should have at least 90 tool schemas").toBeGreaterThanOrEqual(90);
 
@@ -528,7 +529,7 @@ test.describe("API: DB schema version", () => {
   test("schema_version in monitoring/live matches expected version >= 2", async ({ page }) => {
     const resp = await page.request.get("/api/monitoring/live");
     const d = await tryJson(resp);
-    if (!d) { test.skip(); return; }
+    test.skip(!d, "d unavailable — server or seed data missing");
 
     expect(d.database.schema_version).toBeGreaterThanOrEqual(2);
   });
@@ -538,7 +539,7 @@ test.describe("API: DB schema version", () => {
     const r2 = await page.request.get("/api/monitoring/live");
     const d1 = await tryJson(r1);
     const d2 = await tryJson(r2);
-    if (!d1 || !d2) { test.skip(); return; }
+    test.skip(!d1 || !d2, "required API data missing");
 
     expect(d1.database.schema_version).toBe(d2.database.schema_version);
   });

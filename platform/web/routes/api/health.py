@@ -33,37 +33,33 @@ def import_time():
     return time.time()
 
 
+def _health_version() -> str:
+    from pathlib import Path
+
+    ver_file = Path(__file__).resolve().parents[3] / "VERSION"
+    if ver_file.exists():
+        return ver_file.read_text().strip().split(":")[0]
+    return "dev"
+
+
 @router.get("/api/health", responses={200: {"model": HealthResponse}})
 async def health_check():
     """Liveness/readiness probe for Docker healthcheck."""
-    from datetime import datetime, timezone
+    from datetime import timezone
 
     from ....db.migrations import get_db
-    from ....version import get_platform_version
 
-    version = get_platform_version()
-    timestamp = (
-        datetime.now(timezone.utc)
-        .replace(microsecond=0)
-        .isoformat()
-        .replace("+00:00", "Z")
-    )
+    payload = {
+        "status": "ok",
+        "version": _health_version(),
+        "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
     try:
         db = get_db()
         db.execute("SELECT 1")
-        return JSONResponse(
-            {"status": "ok", "version": version, "timestamp": timestamp}
-        )
+        return JSONResponse(payload)
     except Exception as e:
-        return JSONResponse(
-            {
-                "status": "error",
-                "detail": str(e),
-                "version": version,
-                "timestamp": timestamp,
-            },
-            status_code=503,
-        )
+        return JSONResponse({"status": "error", "detail": str(e)}, status_code=503)
 
 
 @router.get("/api/metrics/load")

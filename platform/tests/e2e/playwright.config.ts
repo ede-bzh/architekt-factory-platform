@@ -1,5 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
+/** Set PLAYWRIGHT_E2E=0 to skip browser E2E; BASE_URL targets live server (default localhost:8090). */
 export default defineConfig({
   testDir: ".",
   testMatch: "*.spec.ts",

@@ -9,7 +9,7 @@
 | Section | Description |
 |---------|-------------|
 | [Architecture](Architecture) | Platform architecture, components, data flow |
-| [Deployment Guide](Deployment-Guide) | 3 environments: Azure, OVH, Local |
+| [Deployment Guide](Deployment-Guide) | Architekt demo (OVH/local) and legacy Azure production |
 | [API Reference](API-Reference) | REST API endpoints, authentication |
 | [Agents](Agents) | ~163 agents across 9 domains |
 | [Workflows](Workflows) | 41 built-in workflows |

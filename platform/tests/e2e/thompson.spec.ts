@@ -1,4 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { gateE2E } from "./helpers";
+
+test.beforeEach(gateE2E);
 
 test.describe("Thompson Sampling", () => {
   test("API /api/analytics/agents/scores returns valid structure", async ({
