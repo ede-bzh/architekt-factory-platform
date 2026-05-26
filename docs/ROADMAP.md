@@ -100,6 +100,7 @@ Détail : [`docs/architekt/phase-0-rebrand.md`](architekt/phase-0-rebrand.md) �
 
 - [x] `platform/runtime.py` + image Docker `architekt_platform` (symlink `macaron_platform` 6 mois)
 - [x] Runbook [`architekt/WAVE-E-RUNBOOK.md`](architekt/WAVE-E-RUNBOOK.md) + Helm `deploy/helm/architekt/`
+- [x] Wiki Deployment EN/FR — cible `architekt_platform` + encart infra legacy
 - [ ] Rebuild prod Azure + validation OTEL / hotpatch CI
 - [ ] Fin de vie alias `macaron_platform` (+6 mois)
 - [x] Chemins legacy documentés (wiki, `platform/CLAUDE.md`)

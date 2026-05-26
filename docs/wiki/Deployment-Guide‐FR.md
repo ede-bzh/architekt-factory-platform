@@ -2,24 +2,53 @@
 
 Comment exécuter la plateforme d'agents **Architekt** (Architekt Factory) en démo, production et développement local.
 
+## Portes CI/CD de déploiement
+
+Les déploiements démo et production ne partent **qu'après un workflow CI réussi** sur `main` :
+
+| Workflow | Déclencheur | Condition |
+|----------|-------------|-----------|
+| `CI` | push/PR sur `main`, tags `v*` | ruff, bandit (High), pip-audit, secret-scan, pytest |
+| `Deploy → OVH Demo` | `workflow_run` après CI | `conclusion == success` |
+| `Deploy → Azure Prod` | `workflow_run` après CI ou `workflow_dispatch` | CI verte (sauf dispatch manuel) |
+
+Les tags `v*` déclenchent aussi le job SBOM CI. Voir `docs/architekt/RELEASE.md`.
+
+## Noms de package runtime (vague E)
+
+Le dépôt utilise toujours le répertoire **`platform/`**. L'image Docker prod (`platform/deploy/Dockerfile`) installe le code sous **`architekt_platform`** (ADR-001 niveau 3).
+
+| Contexte | Import Python | Chemin conteneur |
+|----------|---------------|------------------|
+| Dev local | `platform` | `platform/` à la racine du dépôt |
+| **Docker cible** (post-rebuild) | `architekt_platform` | `/app/architekt_platform/` |
+| Alias legacy (6 mois) | `macaron_platform` | Symlink → `architekt_platform` |
+| Image non reconstruite | `macaron_platform` | `/app/macaron_platform/` (répertoire réel) |
+
+Détection dans le code : `platform/runtime.py` (`runtime_package_name()`, `container_code_dir()`).
+
+**Runbook opérationnel (rebuild, rollback, `.env` PG) :** [`docs/architekt/WAVE-E-RUNBOOK.md`](../architekt/WAVE-E-RUNBOOK.md).
+
+> Les **noms d'infra Azure** restent legacy tant qu'une migration dédiée n'est pas faite : arborescence VM `/opt/macaron`, hôte PG `macaron-platform-pg...`, base `macaron_platform` si `PG_DB` est défini dans `.env`. Seul le **package Python dans le conteneur** est rebrandé.
+
 ## Comparaison des environnements
 
-| | **Démo Architekt (OVH)** | **Production Azure (legacy)** |
-|---|--------------------------|-------------------------------|
+| | **Démo Architekt (OVH)** | **Production Azure** |
+|---|--------------------------|----------------------|
 | **Objectif** | Démo publique, sans clés LLM | Production client, Azure OpenAI |
 | **Hôte** | VPS OVH (`<OVH_IP>`) | VM Azure (`<AZURE_VM_IP>`, francecentral) |
-| **Utilisateur SSH** | `debian@<OVH_IP>` | `azureadmin@<AZURE_VM_IP>` (ou legacy `macaron@`) |
+| **Utilisateur SSH** | `debian@<OVH_IP>` | `azureadmin@<AZURE_VM_IP>` |
 | **URL** | `http://<OVH_IP>` | `http://<AZURE_VM_IP>` (+ auth basique nginx) |
 | **LLM** | `PLATFORM_LLM_PROVIDER=demo` (mock) | Azure OpenAI `gpt-5-mini` |
-| **Package Python** | `platform` (layout dépôt) | `macaron_platform` (alias d'import dans le conteneur) |
+| **Package Python** | `platform` (layout dépôt) | `architekt_platform` dans le conteneur (cible) |
 | **Conteneur** | `software-factory-platform-1` | `deploy-platform-1` |
-| **Code sur la VM** | `/opt/software-factory/` | `/opt/macaron/platform/` |
+| **Code sur la VM** | `/opt/software-factory/` | `/opt/macaron/platform/` (chemin hôte inchangé) |
 | **Fichier Compose** | `/opt/software-factory/platform/docker-compose.yml` | `/opt/macaron/platform/deploy/docker-compose-vm.yml` |
-| **Base de données** | SQLite | PostgreSQL + adaptateur SQLite |
-| **Tracing** | Optionnel | OTEL → Jaeger `:16686` |
+| **Base de données** | SQLite | PostgreSQL (`PG_DB` via `.env`, souvent `macaron_platform`) |
+| **Tracing** | Optionnel | OTEL `architekt-platform` → Jaeger `:16686` |
 | **Clé API (env)** | `ARCHITEKT_API_KEY` (recommandé) | `ARCHITEKT_API_KEY` ou legacy `MACARON_API_KEY` |
 
-Les nouvelles intégrations doivent cibler les chemins **démo OVH** et le module `platform`. Les lignes Azure sont **legacy** jusqu'à la fin de la migration.
+Les nouvelles intégrations ciblent la **démo OVH** et le module `platform`. Les chemins **hôte** Azure restent sous `/opt/macaron` jusqu'à migration infra.
 
 ---
 
@@ -91,6 +120,8 @@ make run
 # → http://localhost:8090
 ```
 
+Le `Dockerfile` racine (poste local) utilise encore `platform` sur le port **8099**. L'image VM prod utilise `platform/deploy/Dockerfile` → `architekt_platform` sur le port **8090**.
+
 Démo sans clés LLM :
 
 ```bash
@@ -99,9 +130,9 @@ PLATFORM_LLM_PROVIDER=demo make run
 
 ---
 
-## Production Azure (legacy)
+## Production Azure (VM `/opt/macaron`)
 
-> **Legacy uniquement.** Le conteneur importe `macaron_platform`, pas `platform`. N'utilisez pas ces chemins pour de nouveaux déploiements Architekt sauf si vous opérez cette stack.
+> **Arborescence hôte legacy** (`/opt/macaron`, hôte PG `macaron-platform-pg`). **Runtime conteneur** : vague E → import `architekt_platform` après rebuild d'image.
 
 | Propriété | Valeur |
 |-----------|--------|
@@ -109,37 +140,60 @@ PLATFORM_LLM_PROVIDER=demo make run
 | Web | `http://<AZURE_VM_IP>` (auth basique nginx) |
 | LLM | Azure OpenAI / gpt-5-mini |
 | Conteneur | `deploy-platform-1` |
-| **Code dans le conteneur** | `/app/macaron_platform/` |
+| **Code conteneur (cible)** | `/app/architekt_platform/` |
+| **Symlink / ancienne image** | `/app/macaron_platform/` |
 | Compose sur la VM | `/opt/macaron/platform/deploy/docker-compose-vm.yml` |
 | Contexte de build | `/opt/macaron` |
-| Répertoire patches | `/opt/macaron/patches/` (appliqués au démarrage du conteneur) |
-| DB | PostgreSQL Azure (`macaron-platform-pg...`) + adaptateur dual |
+| Répertoire patches | `/opt/macaron/patches/` |
+| DB | PostgreSQL Azure + adaptateur dual ; garder `PG_DB=macaron_platform` dans `.env` jusqu'au renommage DB |
 
-### Processus de déploiement legacy
+### Rebuild complet (image vague E)
 
 ```bash
-# 1. rsync depuis l'artefact de build vers la VM
-rsync -avz /tmp/gh_push_ops/software-factory/{platform,cli,skills,dashboard,mcp_lrm,projects}/ \
-  <AZURE_VM_IP>:/home/macaron/
-
-# 2. Hot-patch de fichiers (optionnel)
-ssh <AZURE_VM_IP> "sudo cp /home/macaron/platform/web/routes/*.py /opt/macaron/patches/"
-
-# 3. Redémarrage du conteneur legacy
-ssh <AZURE_VM_IP> "sudo docker restart deploy-platform-1"
+cd /opt/macaron
+docker compose --env-file .env -f platform/deploy/docker-compose-vm.yml up -d --build --no-deps platform
 ```
 
-Reconstruction complète :
+Vérification dans le conteneur :
 
 ```bash
-ssh <AZURE_VM_IP> "cd /opt/macaron && docker compose -f platform/deploy/docker-compose-vm.yml up -d --build"
+docker exec deploy-platform-1 python3 -c "from architekt_platform.runtime import runtime_package_name; print(runtime_package_name())"
+# Attendu : architekt_platform
+```
+
+### Déploiement à chaud (CI ou manuel, sans rebuild)
+
+GitHub Actions (`.github/workflows/deploy-azure.yml`) copie vers `architekt_platform` ou `macaron_platform` selon l'image en cours.
+
+Rsync + redémarrage manuel :
+
+```bash
+rsync -avz platform/ azureadmin@<AZURE_VM_IP>:/home/azureadmin/macaron_update/platform/
+ssh azureadmin@<AZURE_VM_IP> '
+  CONTAINER=$(docker ps --format "{{.Names}}" | grep -E "platform" | head -1)
+  PKG=$(docker exec $CONTAINER bash -c "[ -d /app/architekt_platform ] && echo architekt_platform || echo macaron_platform")
+  docker cp ~/macaron_update/platform/. $CONTAINER:/app/$PKG/
+  docker restart $CONTAINER
+'
+```
+
+### Répertoire patches (optionnel)
+
+```bash
+ssh <AZURE_VM_IP> "sudo cp /home/azureadmin/platform/web/routes/*.py /opt/macaron/patches/"
 ```
 
 GitLab CI : `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE_USER`.
 
-### Note hotpatch legacy
+### Note hotpatch
 
-`docker cp` vers `deploy-platform-1:/app/macaron_platform/` survit au redémarrage mais est **perdu** sur `docker compose --build` — rsync vers la VM avant reconstruction.
+`docker cp` survit au redémarrage du conteneur mais est **perdu** sur `docker compose --build` — rsync vers la VM avant reconstruction.
+
+---
+
+## Helm (Kubernetes)
+
+Chart : `deploy/helm/architekt/` (`architekt-platform`). Le chart `deploy/helm/macaron/` reste en référence jusqu'à suppression.
 
 ---
 
@@ -148,7 +202,7 @@ GitLab CI : `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZUR
 | Environnement | Secret | Emplacement |
 |---------------|--------|-------------|
 | Démo OVH | `OVH_SSH_KEY`, `OVH_IP` | GitHub Actions |
-| Azure legacy | `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE_USER` | GitLab CI/CD |
+| Azure | `AZURE_SSH_KEY`, `AZURE_VM_IP` (ou `AZURE_IP`) | GitHub / GitLab CI/CD |
 | Toute prod | `ARCHITEKT_API_KEY` | `.env` VM / secrets orchestrateur |
 | LLM | Clés fournisseur dans `~/.config/factory/*.key` | Jamais `*_API_KEY=dummy` |
 
@@ -159,5 +213,6 @@ GitLab CI : `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZUR
 - [Référence API](API-Reference) — en-tête d'auth pour les hôtes déployés
 - [Sécurité](Security) — nginx, CSP, portes HITL
 - [Configuration LLM](LLM-Configuration) — fournisseur par environnement
+- [Runbook vague E](../architekt/WAVE-E-RUNBOOK.md) — renommage conteneur, rollback, `.env` PG
 
 [English](Deployment-Guide)
