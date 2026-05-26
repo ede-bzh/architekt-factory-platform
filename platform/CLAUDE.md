@@ -35,7 +35,7 @@ KILL:   lsof -ti:8099 | xargs kill -9
 
 ## DEPLOY — prod legacy (Azure)
 
-> **Legacy production alias** (ADR-001 vague E): VM layout and Docker package name from the former Macaron stack. Repo source remains `platform/`; the running container imports **`macaron_platform`**, host tree **`/opt/macaron`**, SSH key **`RG-MACARON-vm-macaron`**. Keep these commands if you operate the Azure VM (`4.233.64.30`).
+> **Production Azure** (ADR-001 vague E): repo source `platform/`; **new images** install `/app/architekt_platform/` (symlink `macaron_platform` 6 mois). VM host tree **`/opt/macaron`** unchanged. See [`docs/architekt/WAVE-E-RUNBOOK.md`](../docs/architekt/WAVE-E-RUNBOOK.md).
 
 ```bash
 SSH_KEY="$HOME/.ssh/az_ssh_config/RG-MACARON-vm-macaron/id_rsa"
@@ -46,9 +46,9 @@ ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "cd /opt/macaron && docker compose --en
 # FAST hotpatch (no rebuild, preserves container state):
 tar cf /tmp/update.tar <files...>
 scp -i "$SSH_KEY" /tmp/update.tar azureadmin@4.233.64.30:/tmp/
-ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platform-1:/tmp/ && docker exec deploy-platform-1 bash -c 'cd /app/macaron_platform && tar xf /tmp/update.tar' && docker restart deploy-platform-1"
+ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platform-1:/tmp/ && docker exec deploy-platform-1 bash -c 'cd /app/architekt_platform 2>/dev/null || cd /app/macaron_platform; tar xf /tmp/update.tar' && docker restart deploy-platform-1"
 # ⚠️ Hotpatch is LOST on docker compose --build → always rsync BEFORE rebuild
-# Container code path: /app/macaron_platform/ (legacy alias — NOT /app/platform/)
+# Container code path: /app/architekt_platform/ (post-rebuild) or /app/macaron_platform/ (pre-rebuild)
 # Prod LLM: Azure OpenAI gpt-5-mini only (AZURE_DEPLOY=1, NO minimax fallback)
 # Legacy domain (nginx): sf.macaron-software.com → 4.233.64.30:80
 # UID mismatch: /opt/macaron owned by 501 (macOS), azureadmin=1001 → use docker cp
@@ -479,7 +479,7 @@ platform/
 - HTTP 400 tool message ordering: `messages with role 'tool' must follow 'tool_calls'` — executor bug, non-fatal
 - UID mismatch on Azure: /opt/macaron owned by 501, azureadmin=1001 → docker cp workaround
 - `_mission_semaphore = Semaphore(1)` — only 1 mission runs at a time, others queue
-- Container path: `/app/macaron_platform/` (Dockerfile copies `platform/` as `macaron_platform/`)
+- Container path: `/app/architekt_platform/` (Dockerfile; legacy symlink `macaron_platform`)
 - curl inside container: use docker network IP, NOT localhost (nginx proxies port 80→8090)
 
 ## CI/CD SECRETS

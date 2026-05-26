@@ -30,6 +30,11 @@ import tempfile
 from pathlib import Path
 
 STORAGE_ACCOUNT = "macaronbackups"
+
+
+def _pg_dump_slug() -> str:
+    """Blob filename prefix for PG dumps (respects prod PG_DB in .env)."""
+    return os.environ.get("PG_DB", "architekt_platform").replace("-", "_")
 VM_HOST = os.getenv("AZURE_VM_IP", "localhost")
 VM_USER = "azureadmin"
 
@@ -163,7 +168,8 @@ def backup_postgresql(tier: str = "daily") -> bool:
         conn = psycopg.connect(pg_url)
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            dump_path = Path(tmpdir) / f"macaron_platform_{ts}.sql"
+            db_slug = _pg_dump_slug()
+            dump_path = Path(tmpdir) / f"{db_slug}_{ts}.sql"
 
             # Get all tables
             cur = conn.execute(
@@ -219,7 +225,7 @@ def backup_postgresql(tier: str = "daily") -> bool:
             with open(dump_path, "rb") as f_in, gzip.open(gz_path, "wb") as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
-            blob_name = f"{prefix}macaron_platform_{ts}.sql.gz"
+            blob_name = f"{prefix}{db_slug}_{ts}.sql.gz"
             if _az_upload(gz_path, "pg-dumps", blob_name):
                 size_mb = os.path.getsize(gz_path) / (1024 * 1024)
                 print(
