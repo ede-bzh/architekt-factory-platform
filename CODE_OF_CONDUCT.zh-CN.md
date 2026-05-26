@@ -43,7 +43,7 @@
 
 ## 执行
 
-滥用、骚扰或其他不可接受行为的实例可以向 **conduct@macaron-software.com** 报告。
+滥用、骚扰或其他不可接受行为的实例可以向 **conduct@architekt.ai** 报告。
 
 所有投诉都将被及时、公正地审查和调查。
 

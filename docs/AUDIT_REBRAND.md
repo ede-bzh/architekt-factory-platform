@@ -34,11 +34,11 @@ pytest tests/test_i18n_en_fr.py tests/test_architekt_branding.py tests/test_api_
 
 ## Écarts connus (hors périmètre UI strict)
 
-Ces éléments peuvent encore mentionner Macaron / Software Factory sans casser les tests UI :
+Ces éléments peuvent encore mentionner Architekt / Software Factory sans casser les tests UI :
 
-- Commentaires en tête de `platform/web/static/css/*.css`, `js/*.js` (ex. `MacaronSSE`)
-- Routes backend / CLI (`cli/sf.py`, messages d’intégration Jira « Macaron »)
-- `platform/CLAUDE.md`, workflows YAML historiques, infra Docker `macaron_platform`
+- Commentaires en tête de `platform/web/static/css/*.css`, `js/*.js` (ex. `ArchitektSSE`)
+- Routes backend / CLI (`cli/sf.py`, messages d’intégration Jira « Architekt »)
+- `platform/CLAUDE.md`, workflows YAML historiques, infra Docker `architekt_platform`
 - README multilingues supprimés (`README.de.md`, etc.) — seuls `README.md` + `README.fr.md` (+ `README_SECURITY_SCAN.md`)
 
 ## Compteurs catalogue (mesurés)
@@ -61,4 +61,4 @@ Audit dédié et backlog d'exécution :
 - **`docs/architekt/REBRAND-DOC-AUDIT.md`** — inventaire P0–P2, pages incomplètes, plan de complétude
 - **`docs/architekt/PLATFORM-BACKLOG.md`** § Wave 8 — checkboxes de livraison
 
-État constaté (2026-05-25) : wiki `Home` / `Home‐FR` et README pointent encore vers `macaron-software/software-factory` ; `API-Reference` et `Security` documentent surtout `MACARON_API_KEY` ; pages wiki ES/IT/PT/DE/JA/ZH encore présentes hors scope i18n EN/FR.
+État constaté (2026-05-25) : wiki `Home` / `Home‐FR` et README pointent encore vers `ede-bzh/architekt-factory-platform` ; `API-Reference` et `Security` documentent surtout `ARCHITEKT_API_KEY` ; pages wiki ES/IT/PT/DE/JA/ZH encore présentes hors scope i18n EN/FR.

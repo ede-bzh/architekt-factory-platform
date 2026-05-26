@@ -10,7 +10,7 @@ Used when a phase gate is `checkpoint` or pattern is `human-in-the-loop`. The or
 |--------|------|------|----------|
 | POST | `/api/missions/{mission_id}/validate` | `{ "decision": "GO" \| "NOGO" \| "PIVOT" }` | `{ "decision", "phase" }` |
 
-- **Auth**: Bearer token required for mutations (`MACARON_API_KEY`).
+- **Auth**: Bearer token required for mutations (`ARCHITEKT_API_KEY`).
 - **404**: Unknown `mission_id`.
 - **Side effects**: Updates current phase status (`done` on GO, `failed` otherwise), posts `DECISION: …` to mission session + A2A bus.
 
@@ -18,7 +18,7 @@ Used when a phase gate is `checkpoint` or pattern is `human-in-the-loop`. The or
 
 ```bash
 curl -X POST "$BASE/api/missions/run-abc123/validate" \
-  -H "Authorization: Bearer $MACARON_API_KEY" \
+  -H "Authorization: Bearer $ARCHITEKT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"decision":"GO"}'
 ```

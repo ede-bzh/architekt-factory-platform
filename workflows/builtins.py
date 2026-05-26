@@ -2236,7 +2236,7 @@ def get_builtin_workflows() -> list[WorkflowDef]:
         WorkflowDef(
             id="dsi-platform-features",
             name="DSI Platform — New Features",
-            description="Pipeline complet pour les nouvelles fonctionnalités de la plateforme Macaron. "
+            description="Pipeline complet pour les nouvelles fonctionnalités de la plateforme Architekt. "
             "Discovery réseau → Comité stratégique GO/NOGO → Architecture → Sprint Dev (6 devs spécialisés) "
             "→ CI/CD → QA parallèle → Deploy staging/prod → Rétrospective.",
             icon="star",
@@ -2544,7 +2544,7 @@ def get_builtin_workflows() -> list[WorkflowDef]:
         WorkflowDef(
             id="dsi-platform-tma",
             name="DSI Plateforme — TMA Maintenance",
-            description="Pipeline réactif de maintenance applicative pour la plateforme Macaron. "
+            description="Pipeline réactif de maintenance applicative pour la plateforme Architekt. "
             "Détection d'incidents (auto + manuel) → Triage P0-P4 → Diagnostic root cause parallèle "
             "→ Fix TDD itératif → Non-régression complète → Deploy hotfix.",
             icon="tool",

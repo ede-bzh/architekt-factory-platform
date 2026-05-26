@@ -1,6 +1,6 @@
 # Software Factory - VPS Deployment
 
-Deploy Software Factory demo on **sf.macaron-software.com**
+Deploy Software Factory demo on **sf.architekt.ai**
 
 ## Setup
 
@@ -28,7 +28,7 @@ nano deploy/deploy-vps.sh     # Add VPS IP and SSH user
 
 ## What it does
 
-1. **DNS**: Creates `sf.macaron-software.com` → VPS IP
+1. **DNS**: Creates `sf.architekt.ai` → VPS IP
 2. **Docker**: Installs Docker + Docker Compose on VPS
 3. **Build**: Creates Docker image with Python 3.11 + FastAPI
 4. **Nginx**: Reverse proxy on port 80
@@ -80,14 +80,14 @@ docker-compose up -d --build
 
 ## URLs (after deployment)
 
-- **Demo**: https://sf.macaron-software.com
-- **API**: https://sf.macaron-software.com/docs
-- **Health**: https://sf.macaron-software.com/health
+- **Demo**: https://sf.architekt.ai
+- **API**: https://sf.architekt.ai/docs
+- **Health**: https://sf.architekt.ai/health
 
 ## Configuration
 
 - **Port**: 8099 (internal), 80/443 (public via nginx)
-- **Domain**: sf.macaron-software.com
+- **Domain**: sf.architekt.ai
 - **Deploy dir**: /opt/software-factory
 - **SSL**: Let's Encrypt (auto-renewed)
 

@@ -20,7 +20,7 @@ def _get_missions(session):
 # ─── TestProjectLifecycle ───────────────────────────────────────────
 
 class TestProjectLifecycle:
-    """Create macaron-canvas project and verify initial setup."""
+    """Create architekt-canvas project and verify initial setup."""
 
     def test_create_canvas_project(self, live_session, canvas_project_id):
         """Project exists and is accessible."""

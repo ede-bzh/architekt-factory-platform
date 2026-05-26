@@ -24,7 +24,7 @@
 If you discover a security vulnerability, please report it responsibly:
 
 1. **Do not** open a public GitHub issue
-2. Send an email to **security@macaron-software.com**
+2. Send an email to **security@architekt.ai**
 3. Include:
    - Description of the vulnerability
    - Steps to reproduce

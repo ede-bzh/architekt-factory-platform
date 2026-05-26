@@ -91,18 +91,18 @@ Détail : [`docs/architekt/phase-0-rebrand.md`](architekt/phase-0-rebrand.md) �
 
 | Vague | Contenu |
 |-------|---------|
-| **A** | Rebrand UI, tests anti-Macaron |
+| **A** | Rebrand UI, tests anti-Architekt |
 | **B** | Roadmap, wiki EN/FR, screenshots |
 | **C** | Compteurs catalogue |
 | **D** | Sync legacy retiré |
 
 ### Vague E 🔄 (infra legacy — engagé)
 
-- [x] `platform/runtime.py` + image Docker `architekt_platform` (symlink `macaron_platform` 6 mois)
+- [x] `platform/runtime.py` + image Docker `architekt_platform` (symlink `architekt_platform` 6 mois)
 - [x] Runbook [`architekt/WAVE-E-RUNBOOK.md`](architekt/WAVE-E-RUNBOOK.md) + Helm `deploy/helm/architekt/`
 - [x] Wiki Deployment EN/FR — cible `architekt_platform` + encart infra legacy
 - [ ] Rebuild prod Azure + validation OTEL / hotpatch CI
-- [ ] Fin de vie alias `macaron_platform` (+6 mois)
+- [ ] Fin de vie alias `architekt_platform` (+6 mois)
 - [x] Chemins legacy documentés (wiki, `platform/CLAUDE.md`)
 
 ### Waves 0–4 ✅
@@ -218,7 +218,7 @@ Cf. [`PROJECTS.md`](PROJECTS.md), [`STACK-MATRIX.md`](STACK-MATRIX.md).
 
 ### Vague E infra
 
-- [ ] Renommage `macaron_platform` / Helm / alias API fin de vie
+- [ ] Renommage `architekt_platform` / Helm / alias API fin de vie
 
 ---
 

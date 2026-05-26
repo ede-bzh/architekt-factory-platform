@@ -21,6 +21,6 @@ def test_prometheus_has_architekt_uptime(client):
     r = client.get("/api/metrics/prometheus")
     assert r.status_code == 200
     text = r.text
-    assert "macaron_uptime_seconds" in text
     assert "architekt_uptime_seconds" in text
+    assert "macaron_uptime_seconds" not in text
     assert "architekt_finops_margin_pct" in text

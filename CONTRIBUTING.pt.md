@@ -21,7 +21,7 @@ Ao participar, voce concorda em respeitar nosso [Codigo de Conduta](CODE_OF_COND
 
 ### Reportar Bugs
 
-1. Verifique as [issues existentes](https://github.com/macaron-software/software-factory/issues) para evitar duplicatas
+1. Verifique as [issues existentes](https://github.com/ede-bzh/architekt-factory-platform/issues) para evitar duplicatas
 2. Use o [modelo de relatorio de bug](.github/ISSUE_TEMPLATE/bug_report.md)
 3. Inclua: passos para reproduzir, comportamento esperado vs real, detalhes do ambiente
 
@@ -44,7 +44,7 @@ Ao participar, voce concorda em respeitar nosso [Codigo de Conduta](CODE_OF_COND
 ## Configuracao de Desenvolvimento
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
 cd software-factory
 cp .env.example .env
 python3 -m venv .venv && source .venv/bin/activate

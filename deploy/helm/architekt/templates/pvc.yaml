@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "macaron.fullname" . }}-data
+  name: {{ include "architekt.fullname" . }}-data
 spec:
   accessModes:
     - ReadWriteOnce

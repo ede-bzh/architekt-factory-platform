@@ -43,7 +43,7 @@ Dieser Verhaltenskodex gilt in allen Gemeinschaftsraeumen und gilt auch, wenn ei
 
 ## Durchsetzung
 
-Faelle von missbräuchlichem, belaestigendem oder anderweitig inakzeptablem Verhalten koennen unter **conduct@macaron-software.com** gemeldet werden.
+Faelle von missbräuchlichem, belaestigendem oder anderweitig inakzeptablem Verhalten koennen unter **conduct@architekt.ai** gemeldet werden.
 
 Alle Beschwerden werden zeitnah und fair geprueft und untersucht.
 

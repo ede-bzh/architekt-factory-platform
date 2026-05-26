@@ -66,7 +66,7 @@ def log(msg: str, level: str = "INFO"):
 # ---------------------------------------------------------------------------
 _stores: dict = {}
 
-# Detect container layout (architekt_platform + legacy macaron_platform symlink)
+# Detect container layout (architekt_platform + legacy architekt_platform symlink)
 from ..runtime import runtime_package_name
 
 _PKG = runtime_package_name()

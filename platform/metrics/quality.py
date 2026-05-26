@@ -357,7 +357,7 @@ class QualityScanner:
         """Unit test coverage via coverage.py (Python) or nyc (JS)."""
         stack = kw.get("stack") or _detect_stack(workspace)
         details: dict = {}
-        tmpdir = tempfile.mkdtemp(prefix="macaron_cov_")
+        tmpdir = tempfile.mkdtemp(prefix="architekt_cov_")
 
         try:
             if stack.get("python"):
@@ -749,7 +749,7 @@ class QualityScanner:
         stack = kw.get("stack") or _detect_stack(workspace)
         issues = {"circular_deps": 0, "duplicates": 0, "type_errors": 0}
         tools_used = []
-        tmpdir = tempfile.mkdtemp(prefix="macaron_arch_")
+        tmpdir = tempfile.mkdtemp(prefix="architekt_arch_")
 
         try:
             if stack.get("javascript") or stack.get("typescript"):

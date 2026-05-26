@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Optional
 
 
-FACTORY_DB = "/Users/sylvain/_MACARON-SOFTWARE/_SOFTWARE_FACTORY/data/factory.db"
+FACTORY_DB = "/Users/sylvain/_ARCHITEKT_FACTORY/_SOFTWARE_FACTORY/data/factory.db"
 
 
 @dataclass

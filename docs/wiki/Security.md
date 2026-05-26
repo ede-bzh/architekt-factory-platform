@@ -9,7 +9,7 @@ Security model for the **Architekt** agent platform: API authentication, HTTP ha
 | Variable | Role |
 |----------|------|
 | `ARCHITEKT_API_KEY` | **Primary** — use for all new deployments |
-| `MACARON_API_KEY` | **6-month alias** — same secret; supported for backward compatibility |
+| `ARCHITEKT_API_KEY` | **6-month alias** — same secret; supported for backward compatibility |
 
 `AuthMiddleware` (`platform/security.py`) validates Bearer tokens with SHA-256 comparison. Mutations (`POST`, `PATCH`, `DELETE` on `/api/*`) require a valid key when either variable is set.
 

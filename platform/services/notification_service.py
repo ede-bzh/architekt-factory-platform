@@ -69,7 +69,7 @@ class NotificationService:
         # Browser Web Push (VAPID)
         self.vapid_public = os.environ.get("NOTIFY_VAPID_PUBLIC_KEY", "")
         self.vapid_private = os.environ.get("NOTIFY_VAPID_PRIVATE_KEY", "")
-        self.vapid_email = os.environ.get("NOTIFY_VAPID_EMAIL", "admin@macaron-software.com")
+        self.vapid_email = os.environ.get("NOTIFY_VAPID_EMAIL", "admin@architekt.ai")
         # In-memory push subscriptions (persisted to SQLite separately)
         self._push_subscriptions: list[dict] = []
 
@@ -157,7 +157,7 @@ class NotificationService:
     async def _send_email(self, payload: NotificationPayload):
         """Send email via SMTP (runs in thread to avoid blocking)."""
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"[Macaron] {payload.title}"
+        msg["Subject"] = f"[[Architekt] {payload.title}"
         msg["From"] = self.email_from
         msg["To"] = self.email_to
 
@@ -170,7 +170,7 @@ class NotificationService:
         <tr><td style="color:#888">Project</td><td>{payload.project_id or '—'}</td></tr>
         <tr><td style="color:#888">Mission</td><td>{payload.mission_id or '—'}</td></tr>
         </table>
-        {f'<p><a href="{payload.url}" style="color:#7c3aed">View in Macaron</a></p>' if payload.url else ''}
+        {f'<p><a href="{payload.url}" style="color:#7c3aed">View in Architekt</a></p>' if payload.url else ''}
         <hr style="margin-top:20px;border:none;border-top:1px solid #eee">
         <p style="color:#aaa;font-size:12px">Software Factory</p>
         </div>"""

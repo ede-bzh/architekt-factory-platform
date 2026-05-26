@@ -11,13 +11,13 @@ WIKI_PAGES = [
         "content": """\
 # Getting Started
 
-Welcome to the **Macaron Architekt** — a multi-agent collaborative platform for software engineering.
+Welcome to the **Architekt** — a multi-agent collaborative platform for software engineering.
 
 ## Quick Start
 
 ```bash
 # Clone & install
-git clone https://github.com/macaron-software/software-factory.git
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
 cd software-factory/platform
 pip install -r requirements.txt
 
@@ -30,7 +30,7 @@ python -m uvicorn platform.server:app --port 8090 --ws none
 ## Docker
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
 cd software-factory
 make setup    # builds Docker image
 make run      # starts platform on port 8090
@@ -546,7 +546,7 @@ Cost of Delay = User Value + Time Criticality + Risk Reduction
 ## Docker (Recommended)
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
 cd software-factory
 docker compose up -d
 # → http://localhost:8090
@@ -556,7 +556,7 @@ docker compose up -d
 
 ```bash
 # nginx reverse proxy → Docker container (port 8090)
-# Patches: /opt/macaron/patches → /patches in container
+# Patches: /opt/architekt/patches → /patches in container
 # Backup: docker exec platform cp /app/data/platform.db /app/data/backup.db
 ```
 

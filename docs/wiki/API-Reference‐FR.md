@@ -11,7 +11,7 @@ Selon **ADR-001** (rebrand plateforme), utilisez la variable d'environnement can
 | Variable | Statut | Notes |
 |----------|--------|-------|
 | `ARCHITEKT_API_KEY` | **Principale** | À définir en production et pour les nouvelles intégrations |
-| `MACARON_API_KEY` | **Alias (6 mois)** | Acceptée jusqu'à fin de l'alias ; même valeur que `ARCHITEKT_API_KEY` |
+| `ARCHITEKT_API_KEY` | **Alias (6 mois)** | Acceptée jusqu'à fin de l'alias ; même valeur que `ARCHITEKT_API_KEY` |
 
 Lorsque l'une des variables est définie, `AuthMiddleware` protège les mutations API. Si aucune n'est définie, l'authentification est désactivée (développement uniquement).
 
@@ -34,7 +34,7 @@ curl -s -X POST "http://localhost:8099/api/missions" \
   -d '{"name":"Mon Epic","workflow_id":"product-lifecycle"}'
 ```
 
-Les déploiements hérités peuvent encore exporter `MACARON_API_KEY` ; le middleware traite les deux noms comme équivalents pendant la fenêtre d'alias de 6 mois.
+Les déploiements hérités peuvent encore exporter `ARCHITEKT_API_KEY` ; le middleware traite les deux noms comme équivalents pendant la fenêtre d'alias de 6 mois.
 
 ### Règles d'accès
 
@@ -117,7 +117,7 @@ Les clients SSE n'envoient pas la clé API sur la connexion EventSource ; les mu
 
 ## CLI (`sf`)
 
-Le CLI `sf` utilise le même jeton Bearer (depuis `ARCHITEKT_API_KEY` ou l'alias `MACARON_API_KEY`) :
+Le CLI `sf` utilise le même jeton Bearer (depuis `ARCHITEKT_API_KEY` ou l'alias `ARCHITEKT_API_KEY`) :
 
 ```bash
 export ARCHITEKT_API_KEY="architekt_live_xxxxxxxxxxxxxxxx"

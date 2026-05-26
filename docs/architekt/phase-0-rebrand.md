@@ -37,13 +37,13 @@ Tout le repo + la documentation + le cadre légal portent la marque **Architekt*
 
 ### Niveau 2 — Identifiants (P0-N2)
 
-- [ ] `MACARON_API_KEY` → `ARCHITEKT_API_KEY` (+ alias rétro-compatible 6 mois)
+- [ ] `ARCHITEKT_API_KEY` → `ARCHITEKT_API_KEY` (+ alias rétro-compatible 6 mois)
 - [ ] CLI : binaire `architekt` (alias `sf` gardé)
 - [x] `pyproject.toml` : `name = "architekt-factory-platform"`
 
 ### Niveau 3 — Runtime / packaging (PAS Phase 0, reporté Phase 3+)
 
-- [x] Package Python conteneur `architekt_platform` (+ alias `macaron_platform`) — vague E engagée
+- [x] Package Python conteneur `architekt_platform` (+ alias `architekt_platform`) — vague E engagée
 - [ ] Image Docker `architekt-platform` — reporté
 - [ ] Helm chart renommé — reporté
 
@@ -115,7 +115,7 @@ Tout le repo + la documentation + le cadre légal portent la marque **Architekt*
 ## Gate de passage
 
 - [ ] Marque Architekt appliquée partout (Niveau 1 + 2)
-- [ ] Anciens noms (Macaron / Software Factory) supprimés du visible
+- [ ] Anciens noms (Architekt / Software Factory) supprimés du visible
 - [ ] Licence décidée (ADR-006 mergé)
 - [ ] 7 templates commerciaux + legal prêts
 - [ ] Politique IP/IA écrite (ADR-013)

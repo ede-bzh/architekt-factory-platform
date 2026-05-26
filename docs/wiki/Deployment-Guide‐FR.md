@@ -22,14 +22,14 @@ Le dépôt utilise toujours le répertoire **`platform/`**. L'image Docker prod 
 |----------|---------------|------------------|
 | Dev local | `platform` | `platform/` à la racine du dépôt |
 | **Docker cible** (post-rebuild) | `architekt_platform` | `/app/architekt_platform/` |
-| Alias legacy (6 mois) | `macaron_platform` | Symlink → `architekt_platform` |
-| Image non reconstruite | `macaron_platform` | `/app/macaron_platform/` (répertoire réel) |
+| Alias legacy (6 mois) | `architekt_platform` | Symlink → `architekt_platform` |
+| Image non reconstruite | `architekt_platform` | `/app/architekt_platform/` (répertoire réel) |
 
 Détection dans le code : `platform/runtime.py` (`runtime_package_name()`, `container_code_dir()`).
 
 **Runbook opérationnel (rebuild, rollback, `.env` PG) :** [`docs/architekt/WAVE-E-RUNBOOK.md`](../architekt/WAVE-E-RUNBOOK.md).
 
-> Les **noms d'infra Azure** restent legacy tant qu'une migration dédiée n'est pas faite : arborescence VM `/opt/macaron`, hôte PG `macaron-platform-pg...`, base `macaron_platform` si `PG_DB` est défini dans `.env`. Seul le **package Python dans le conteneur** est rebrandé.
+> Les **noms d'infra Azure** restent legacy tant qu'une migration dédiée n'est pas faite : arborescence VM `/opt/architekt`, hôte PG `architekt-platform-pg...`, base `architekt_platform` si `PG_DB` est défini dans `.env`. Seul le **package Python dans le conteneur** est rebrandé.
 
 ## Comparaison des environnements
 
@@ -42,13 +42,13 @@ Détection dans le code : `platform/runtime.py` (`runtime_package_name()`, `cont
 | **LLM** | `PLATFORM_LLM_PROVIDER=demo` (mock) | Azure OpenAI `gpt-5-mini` |
 | **Package Python** | `platform` (layout dépôt) | `architekt_platform` dans le conteneur (cible) |
 | **Conteneur** | `software-factory-platform-1` | `deploy-platform-1` |
-| **Code sur la VM** | `/opt/software-factory/` | `/opt/macaron/platform/` (chemin hôte inchangé) |
-| **Fichier Compose** | `/opt/software-factory/platform/docker-compose.yml` | `/opt/macaron/platform/deploy/docker-compose-vm.yml` |
-| **Base de données** | SQLite | PostgreSQL (`PG_DB` via `.env`, souvent `macaron_platform`) |
+| **Code sur la VM** | `/opt/software-factory/` | `/opt/architekt/platform/` (chemin hôte inchangé) |
+| **Fichier Compose** | `/opt/software-factory/platform/docker-compose.yml` | `/opt/architekt/platform/deploy/docker-compose-vm.yml` |
+| **Base de données** | SQLite | PostgreSQL (`PG_DB` via `.env`, souvent `architekt_platform`) |
 | **Tracing** | Optionnel | OTEL `architekt-platform` → Jaeger `:16686` |
-| **Clé API (env)** | `ARCHITEKT_API_KEY` (recommandé) | `ARCHITEKT_API_KEY` ou legacy `MACARON_API_KEY` |
+| **Clé API (env)** | `ARCHITEKT_API_KEY` (recommandé) | `ARCHITEKT_API_KEY` ou legacy `ARCHITEKT_API_KEY` |
 
-Les nouvelles intégrations ciblent la **démo OVH** et le module `platform`. Les chemins **hôte** Azure restent sous `/opt/macaron` jusqu'à migration infra.
+Les nouvelles intégrations ciblent la **démo OVH** et le module `platform`. Les chemins **hôte** Azure restent sous `/opt/architekt` jusqu'à migration infra.
 
 ---
 
@@ -130,9 +130,9 @@ PLATFORM_LLM_PROVIDER=demo make run
 
 ---
 
-## Production Azure (VM `/opt/macaron`)
+## Production Azure (VM `/opt/architekt`)
 
-> **Arborescence hôte legacy** (`/opt/macaron`, hôte PG `macaron-platform-pg`). **Runtime conteneur** : vague E → import `architekt_platform` après rebuild d'image.
+> **Arborescence hôte legacy** (`/opt/architekt`, hôte PG `architekt-platform-pg`). **Runtime conteneur** : vague E → import `architekt_platform` après rebuild d'image.
 
 | Propriété | Valeur |
 |-----------|--------|
@@ -141,16 +141,16 @@ PLATFORM_LLM_PROVIDER=demo make run
 | LLM | Azure OpenAI / gpt-5-mini |
 | Conteneur | `deploy-platform-1` |
 | **Code conteneur (cible)** | `/app/architekt_platform/` |
-| **Symlink / ancienne image** | `/app/macaron_platform/` |
-| Compose sur la VM | `/opt/macaron/platform/deploy/docker-compose-vm.yml` |
-| Contexte de build | `/opt/macaron` |
-| Répertoire patches | `/opt/macaron/patches/` |
-| DB | PostgreSQL Azure + adaptateur dual ; garder `PG_DB=macaron_platform` dans `.env` jusqu'au renommage DB |
+| **Symlink / ancienne image** | `/app/architekt_platform/` |
+| Compose sur la VM | `/opt/architekt/platform/deploy/docker-compose-vm.yml` |
+| Contexte de build | `/opt/architekt` |
+| Répertoire patches | `/opt/architekt/patches/` |
+| DB | PostgreSQL Azure + adaptateur dual ; garder `PG_DB=architekt_platform` dans `.env` jusqu'au renommage DB |
 
 ### Rebuild complet (image vague E)
 
 ```bash
-cd /opt/macaron
+cd /opt/architekt
 docker compose --env-file .env -f platform/deploy/docker-compose-vm.yml up -d --build --no-deps platform
 ```
 
@@ -163,16 +163,16 @@ docker exec deploy-platform-1 python3 -c "from architekt_platform.runtime import
 
 ### Déploiement à chaud (CI ou manuel, sans rebuild)
 
-GitHub Actions (`.github/workflows/deploy-azure.yml`) copie vers `architekt_platform` ou `macaron_platform` selon l'image en cours.
+GitHub Actions (`.github/workflows/deploy-azure.yml`) copie vers `architekt_platform` ou `architekt_platform` selon l'image en cours.
 
 Rsync + redémarrage manuel :
 
 ```bash
-rsync -avz platform/ azureadmin@<AZURE_VM_IP>:/home/azureadmin/macaron_update/platform/
+rsync -avz platform/ azureadmin@<AZURE_VM_IP>:/home/azureadmin/architekt_update/platform/
 ssh azureadmin@<AZURE_VM_IP> '
   CONTAINER=$(docker ps --format "{{.Names}}" | grep -E "platform" | head -1)
-  PKG=$(docker exec $CONTAINER bash -c "[ -d /app/architekt_platform ] && echo architekt_platform || echo macaron_platform")
-  docker cp ~/macaron_update/platform/. $CONTAINER:/app/$PKG/
+  PKG=$(docker exec $CONTAINER bash -c "[ -d /app/architekt_platform ] && echo architekt_platform || echo architekt_platform")
+  docker cp ~/architekt_update/platform/. $CONTAINER:/app/$PKG/
   docker restart $CONTAINER
 '
 ```
@@ -180,7 +180,7 @@ ssh azureadmin@<AZURE_VM_IP> '
 ### Répertoire patches (optionnel)
 
 ```bash
-ssh <AZURE_VM_IP> "sudo cp /home/azureadmin/platform/web/routes/*.py /opt/macaron/patches/"
+ssh <AZURE_VM_IP> "sudo cp /home/azureadmin/platform/web/routes/*.py /opt/architekt/patches/"
 ```
 
 GitLab CI : `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE_USER`.
@@ -193,7 +193,7 @@ GitLab CI : `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZUR
 
 ## Helm (Kubernetes)
 
-Chart : `deploy/helm/architekt/` (`architekt-platform`). Le chart `deploy/helm/macaron/` reste en référence jusqu'à suppression.
+Chart : `deploy/helm/architekt/` (`architekt-platform`). Le chart `deploy/helm/architekt/` reste en référence jusqu'à suppression.
 
 ---
 

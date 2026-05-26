@@ -314,7 +314,7 @@ class SkillLibrary:
         errors = []
 
         clone_url = f"https://github.com/{repo}.git"
-        with tempfile.TemporaryDirectory(prefix="macaron_gh_") as tmp:
+        with tempfile.TemporaryDirectory(prefix="architekt_gh_") as tmp:
             clone_dir = Path(tmp) / "repo"
             try:
                 # Shallow clone (fast, no history)

@@ -87,7 +87,7 @@ from _FACTORY_CORE.llm_client import LLMClient
 ## Architecture Diagram
 
 ```
-/_MACARON-SOFTWARE/
+/_ARCHITEKT_FACTORY/
 │
 ├── _FACTORY_CORE/              # SHARED RESOURCES
 │   ├── subprocess_util.py      # Process management

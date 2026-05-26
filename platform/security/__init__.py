@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class AuthMiddleware(BaseHTTPMiddleware):
     """API key authentication for sensitive endpoints.
 
-    Set MACARON_API_KEY env var to enable. If not set, auth is disabled (dev mode).
+    Set ARCHITEKT_API_KEY env var to enable. If not set, auth is disabled (dev mode).
     Only protects API mutation endpoints and sensitive data — pages, static,
     health, docs, and SSE are always public.
     """
@@ -34,10 +34,10 @@ class AuthMiddleware(BaseHTTPMiddleware):
     )
 
     async def dispatch(self, request: Request, call_next):
-        api_key = os.getenv("MACARON_API_KEY")
+        api_key = os.getenv("ARCHITEKT_API_KEY")
         if not api_key:
             if os.getenv("ENVIRONMENT", "dev") != "dev":
-                logger.warning("AUTH DISABLED — set MACARON_API_KEY for production")
+                logger.warning("AUTH DISABLED — set ARCHITEKT_API_KEY for production")
             return await call_next(request)
 
         path = request.url.path

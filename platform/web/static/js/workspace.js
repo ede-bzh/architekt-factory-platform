@@ -1,5 +1,5 @@
 /**
- * Workspace management for Macaron Agent Platform.
+ * Workspace management for Architekt Agent Platform.
  * Handles panel resizing, keyboard shortcuts, and session management.
  */
 document.addEventListener("DOMContentLoaded", () => {

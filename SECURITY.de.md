@@ -24,7 +24,7 @@
 Wenn Sie eine Sicherheitsluecke entdecken, melden Sie diese bitte verantwortungsvoll:
 
 1. Eroeffnen Sie **keine** oeffentliche GitHub-Issue
-2. Senden Sie eine E-Mail an **security@macaron-software.com**
+2. Senden Sie eine E-Mail an **security@architekt.ai**
 3. Enthalten:
    - Beschreibung der Schwachstelle
    - Schritte zur Reproduktion

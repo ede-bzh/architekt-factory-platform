@@ -34,7 +34,7 @@ class TestHealth:
         r = client.get("/api/metrics/prometheus")
         assert r.status_code == 200
         text = r.text
-        assert "macaron_uptime_seconds" in text
+        assert "architekt_uptime_seconds" in text
 
     def test_monitoring_live(self, client):
         r = client.get("/api/monitoring/live")

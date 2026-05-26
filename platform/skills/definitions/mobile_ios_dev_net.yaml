@@ -28,7 +28,7 @@ system_prompt: |
   - Generic request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
   - SSE via URLSession.bytes: for try await line in url.lines { parse(line) }
 
-  API SERVER: https://agents.macaron.software
+  API SERVER: https://agents.architekt.ai
   AUTH: Bearer token dans header Authorization
 
   INTERDIT: Alamofire, Moya, tout framework HTTP tiers. URLSession natif uniquement.

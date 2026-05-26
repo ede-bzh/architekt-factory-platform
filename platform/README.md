@@ -112,8 +112,8 @@ cd platform
 docker compose up -d
 
 # Systemd
-sudo cp macaron-platform.service /etc/systemd/system/
-sudo systemctl enable --now macaron-platform
+sudo cp architekt-platform.service /etc/systemd/system/
+sudo systemctl enable --now architekt-platform
 ```
 
 ## Integration with Factory
@@ -182,5 +182,5 @@ platform/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── nginx.conf
-└── macaron-platform.service
+└── architekt-platform.service
 ```

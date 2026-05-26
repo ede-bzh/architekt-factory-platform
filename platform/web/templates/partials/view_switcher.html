@@ -18,7 +18,7 @@
 (function(){
   function initSwitcher(sw) {
     const page = sw.dataset.page;
-    const key = 'macaron_view_' + page;
+    const key = 'architekt_view_' + page;
     const saved = localStorage.getItem(key) || 'card';
     // Find closest grid: walk up then search, or fallback to document-level
     const grid = sw.closest('.main-area, .tab-toolbar, #tab-content')?.querySelector('[data-view-grid]')

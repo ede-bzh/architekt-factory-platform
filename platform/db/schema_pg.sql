@@ -1,4 +1,4 @@
--- Macaron Agent Platform — PostgreSQL Schema v3
+-- Architekt Agent Platform — PostgreSQL Schema v3
 -- Requires extensions: pg_trgm (optional: pgvector for vector search)
 
 -- ============================================================================

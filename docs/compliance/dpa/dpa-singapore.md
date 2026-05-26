@@ -92,7 +92,7 @@ Architekt may engage subprocessors subject to written authorization and equivale
 Architekt implements technical and organizational measures that are **reasonable and appropriate** under PDPA, including:
 
 - Encryption in transit (TLS 1.2+) and at rest for production data stores
-- Role-based access control and API authentication (`MACARON_API_KEY` / bearer tokens)
+- Role-based access control and API authentication (`ARCHITEKT_API_KEY` / bearer tokens)
 - Parameterized queries; no dynamic SQL concatenation
 - Security headers (HSTS, CSP, X-Frame-Options)
 - Adversarial output guards and prompt-injection mitigations (L0/L1)

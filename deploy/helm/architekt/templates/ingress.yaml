@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "macaron.fullname" . }}
+  name: {{ include "architekt.fullname" . }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -31,7 +31,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "macaron.fullname" $ }}
+                name: {{ include "architekt.fullname" $ }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}

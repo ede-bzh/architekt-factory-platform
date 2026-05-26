@@ -196,43 +196,32 @@ async def prometheus_metrics():
         lbl = f"{{{labels}}}" if labels else ""
         lines.append(f"{name}{lbl} {value}")
 
-    _m("macaron_uptime_seconds", snap["uptime_seconds"], "Platform uptime")
+    _m("architekt_uptime_seconds", snap["uptime_seconds"], "Platform uptime")
     _m(
-        "macaron_http_requests_total",
+        "architekt_http_requests_total",
         snap["http"]["total_requests"],
         "Total HTTP requests",
     )
-    _m("macaron_http_errors_total", snap["http"]["total_errors"], "Total HTTP errors")
-    _m("macaron_http_avg_ms", snap["http"]["avg_ms"], "Average HTTP latency ms")
+    _m("architekt_http_errors_total", snap["http"]["total_errors"], "Total HTTP errors")
+    _m("architekt_http_avg_ms", snap["http"]["avg_ms"], "Average HTTP latency ms")
     for code, cnt in snap["http"].get("by_status", {}).items():
-        _m("macaron_http_status", cnt, labels=f'code="{code}"')
-    _m("macaron_mcp_calls_total", snap["mcp"]["total_calls"], "Total MCP tool calls")
+        _m("architekt_http_status", cnt, labels=f'code="{code}"')
+    _m("architekt_mcp_calls_total", snap["mcp"]["total_calls"], "Total MCP tool calls")
     _m(
-        "macaron_process_cpu_percent",
+        "architekt_process_cpu_percent",
         round(proc.cpu_percent(interval=0), 1),
         "Process CPU",
     )
     mem = proc.memory_info()
-    _m("macaron_process_rss_bytes", mem.rss, "Process RSS bytes")
-    _m("macaron_process_threads", proc.num_threads(), "Process threads")
+    _m("architekt_process_rss_bytes", mem.rss, "Process RSS bytes")
+    _m("architekt_process_threads", proc.num_threads(), "Process threads")
     for provider, stats in snap.get("llm", {}).get("by_provider", {}).items():
-        _m("macaron_llm_calls", stats.get("calls", 0), labels=f'provider="{provider}"')
+        _m("architekt_llm_calls", stats.get("calls", 0), labels=f'provider="{provider}"')
         _m(
-            "macaron_llm_cost_usd",
+            "architekt_llm_cost_usd",
             stats.get("cost_usd", 0),
             labels=f'provider="{provider}"',
         )
-
-    # Architekt alias metrics (same values — ADR-001 dual naming)
-    architekt_lines = []
-    for line in lines:
-        if line.startswith("macaron_"):
-            architekt_lines.append(line.replace("macaron_", "architekt_", 1))
-        elif line.startswith("# HELP macaron_"):
-            architekt_lines.append(line.replace("macaron_", "architekt_", 1))
-        elif line.startswith("# TYPE macaron_"):
-            architekt_lines.append(line.replace("macaron_", "architekt_", 1))
-    lines.extend(architekt_lines)
 
     try:
         from ....metrics.finops_summary import global_summary

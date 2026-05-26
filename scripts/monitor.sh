@@ -1,8 +1,8 @@
 #!/bin/bash
 # Factory Monitor - Run every hour to check progress and detect blockers
 
-LOG_DIR="/Users/sylvain/_MACARON-SOFTWARE/_SOFTWARE_FACTORY/data/logs"
-DB="/Users/sylvain/_MACARON-SOFTWARE/_SOFTWARE_FACTORY/data/factory.db"
+LOG_DIR="/Users/sylvain/_ARCHITEKT_FACTORY/_SOFTWARE_FACTORY/data/logs"
+DB="/Users/sylvain/_ARCHITEKT_FACTORY/_SOFTWARE_FACTORY/data/factory.db"
 MONITOR_LOG="$LOG_DIR/monitor.log"
 
 log() {

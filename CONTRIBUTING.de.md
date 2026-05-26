@@ -21,7 +21,7 @@ Mit der Teilnahme stimmen Sie unserem [Verhaltenskodex](CODE_OF_CONDUCT.de.md) z
 
 ### Fehler melden
 
-1. Pruefen Sie [bestehende Issues](https://github.com/macaron-software/software-factory/issues), um Duplikate zu vermeiden
+1. Pruefen Sie [bestehende Issues](https://github.com/ede-bzh/architekt-factory-platform/issues), um Duplikate zu vermeiden
 2. Verwenden Sie die [Fehlerbericht-Vorlage](.github/ISSUE_TEMPLATE/bug_report.md)
 3. Enthalten: Schritte zur Reproduktion, erwartetes vs. tatsaechliches Verhalten, Umgebungsdetails
 
@@ -44,7 +44,7 @@ Mit der Teilnahme stimmen Sie unserem [Verhaltenskodex](CODE_OF_CONDUCT.de.md) z
 ## Entwicklungsumgebung
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
 cd software-factory
 cp .env.example .env
 python3 -m venv .venv && source .venv/bin/activate

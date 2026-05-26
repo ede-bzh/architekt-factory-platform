@@ -16,7 +16,7 @@ ingress:
   className: nginx
   annotations: {}
   hosts:
-    - host: macaron.local
+    - host: architekt.local
       paths:
         - path: /
           pathType: Prefix
@@ -37,8 +37,8 @@ env:
 
 # Mount API keys from existing secret
 envFromSecret: ""
-# Example: create secret first, then set envFromSecret: macaron-secrets
-# kubectl create secret generic macaron-secrets \
+# Example: create secret first, then set envFromSecret: architekt-secrets
+# kubectl create secret generic architekt-secrets \
 #   --from-literal=AZURE_OPENAI_API_KEY=sk-... \
 #   --from-literal=GITHUB_WEBHOOK_SECRET=whsec_...
 

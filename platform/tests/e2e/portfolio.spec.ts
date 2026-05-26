@@ -13,7 +13,7 @@ test.describe("Portfolio (Home) page", () => {
     await safeGoto(page, "/");
 
     // Title
-    await expect(page).toHaveTitle(/Macaron/i);
+    await expect(page).toHaveTitle(/Architekt/i);
 
     // Sidebar nav visible
     await expect(page.locator("nav.sidebar, .sidebar")).toBeVisible();

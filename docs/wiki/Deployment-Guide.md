@@ -22,14 +22,14 @@ The **repo layout** always uses the directory `platform/`. Inside Docker images 
 |---------|---------------|-------------------|
 | Local dev | `platform` | `platform/` at repo root |
 | **Target Docker** (post-rebuild) | `architekt_platform` | `/app/architekt_platform/` |
-| Legacy alias (6 months) | `macaron_platform` | Symlink → `architekt_platform` |
-| Pre-migration image (not rebuilt yet) | `macaron_platform` | `/app/macaron_platform/` (real directory) |
+| Legacy alias (6 months) | `architekt_platform` | Symlink → `architekt_platform` |
+| Pre-migration image (not rebuilt yet) | `architekt_platform` | `/app/architekt_platform/` (real directory) |
 
 Detection in code: `platform/runtime.py` (`runtime_package_name()`, `container_code_dir()`).
 
 **Operational runbook (rebuild, rollback, `.env` PG):** [`docs/architekt/WAVE-E-RUNBOOK.md`](../architekt/WAVE-E-RUNBOOK.md).
 
-> **Infra names on Azure stay legacy** until a separate migration: VM tree `/opt/macaron`, PostgreSQL host `macaron-platform-pg...`, database name `macaron_platform` when `PG_DB` is set in `.env`. Only the **in-container Python package path** is rebranded.
+> **Infra names on Azure stay legacy** until a separate migration: VM tree `/opt/architekt`, PostgreSQL host `architekt-platform-pg...`, database name `architekt_platform` when `PG_DB` is set in `.env`. Only the **in-container Python package path** is rebranded.
 
 ## Environment comparison
 
@@ -42,13 +42,13 @@ Detection in code: `platform/runtime.py` (`runtime_package_name()`, `container_c
 | **LLM** | `PLATFORM_LLM_PROVIDER=demo` (mock) | Azure OpenAI `gpt-5-mini` |
 | **Python package** | `platform` (repo layout) | `architekt_platform` in container (target) |
 | **Container** | `software-factory-platform-1` | `deploy-platform-1` |
-| **Code on VM** | `/opt/software-factory/` | `/opt/macaron/platform/` (host path unchanged) |
-| **Compose file** | `/opt/software-factory/platform/docker-compose.yml` | `/opt/macaron/platform/deploy/docker-compose-vm.yml` |
-| **Database** | SQLite | PostgreSQL (`PG_DB` from `.env`, often `macaron_platform`) |
+| **Code on VM** | `/opt/software-factory/` | `/opt/architekt/platform/` (host path unchanged) |
+| **Compose file** | `/opt/software-factory/platform/docker-compose.yml` | `/opt/architekt/platform/deploy/docker-compose-vm.yml` |
+| **Database** | SQLite | PostgreSQL (`PG_DB` from `.env`, often `architekt_platform`) |
 | **Tracing** | Optional | OTEL `architekt-platform` → Jaeger `:16686` |
-| **API key env** | `ARCHITEKT_API_KEY` (preferred) | `ARCHITEKT_API_KEY` or legacy `MACARON_API_KEY` |
+| **API key env** | `ARCHITEKT_API_KEY` (preferred) | `ARCHITEKT_API_KEY` or legacy `ARCHITEKT_API_KEY` |
 
-New integrations should target **OVH demo** paths and the `platform` module. Azure **host** paths remain under `/opt/macaron` until infra migration.
+New integrations should target **OVH demo** paths and the `platform` module. Azure **host** paths remain under `/opt/architekt` until infra migration.
 
 ---
 
@@ -130,9 +130,9 @@ PLATFORM_LLM_PROVIDER=demo make run
 
 ---
 
-## Azure production (VM `/opt/macaron`)
+## Azure production (VM `/opt/architekt`)
 
-> **Host layout is legacy-named** (`/opt/macaron`, PG host `macaron-platform-pg`). **Container runtime** follows Wave E: import `architekt_platform` after image rebuild.
+> **Host layout is legacy-named** (`/opt/architekt`, PG host `architekt-platform-pg`). **Container runtime** follows Wave E: import `architekt_platform` after image rebuild.
 
 | Property | Value |
 |----------|-------|
@@ -141,16 +141,16 @@ PLATFORM_LLM_PROVIDER=demo make run
 | LLM | Azure OpenAI / gpt-5-mini |
 | Container | `deploy-platform-1` |
 | **In-container code (target)** | `/app/architekt_platform/` |
-| **Legacy symlink / old image** | `/app/macaron_platform/` |
-| Compose on VM | `/opt/macaron/platform/deploy/docker-compose-vm.yml` |
-| Build context | `/opt/macaron` |
-| Patches dir | `/opt/macaron/patches/` (applied at container start) |
-| DB | Azure PostgreSQL + dual adapter; keep `PG_DB=macaron_platform` in `.env` until DB rename |
+| **Legacy symlink / old image** | `/app/architekt_platform/` |
+| Compose on VM | `/opt/architekt/platform/deploy/docker-compose-vm.yml` |
+| Build context | `/opt/architekt` |
+| Patches dir | `/opt/architekt/patches/` (applied at container start) |
+| DB | Azure PostgreSQL + dual adapter; keep `PG_DB=architekt_platform` in `.env` until DB rename |
 
 ### Full rebuild (Wave E image)
 
 ```bash
-cd /opt/macaron
+cd /opt/architekt
 docker compose --env-file .env -f platform/deploy/docker-compose-vm.yml up -d --build --no-deps platform
 ```
 
@@ -163,16 +163,16 @@ docker exec deploy-platform-1 python3 -c "from architekt_platform.runtime import
 
 ### Hot deploy (CI or manual, no rebuild)
 
-GitHub Actions (`.github/workflows/deploy-azure.yml`) copies into `architekt_platform` or `macaron_platform` depending on the running image.
+GitHub Actions (`.github/workflows/deploy-azure.yml`) copies into `architekt_platform` or `architekt_platform` depending on the running image.
 
 Manual rsync + restart:
 
 ```bash
-rsync -avz platform/ azureadmin@<AZURE_VM_IP>:/home/azureadmin/macaron_update/platform/
+rsync -avz platform/ azureadmin@<AZURE_VM_IP>:/home/azureadmin/architekt_update/platform/
 ssh azureadmin@<AZURE_VM_IP> '
   CONTAINER=$(docker ps --format "{{.Names}}" | grep -E "platform" | head -1)
-  PKG=$(docker exec $CONTAINER bash -c "[ -d /app/architekt_platform ] && echo architekt_platform || echo macaron_platform")
-  docker cp ~/macaron_update/platform/. $CONTAINER:/app/$PKG/
+  PKG=$(docker exec $CONTAINER bash -c "[ -d /app/architekt_platform ] && echo architekt_platform || echo architekt_platform")
+  docker cp ~/architekt_update/platform/. $CONTAINER:/app/$PKG/
   docker restart $CONTAINER
 '
 ```
@@ -180,7 +180,7 @@ ssh azureadmin@<AZURE_VM_IP> '
 ### Legacy patch directory (optional)
 
 ```bash
-ssh <AZURE_VM_IP> "sudo cp /home/azureadmin/platform/web/routes/*.py /opt/macaron/patches/"
+ssh <AZURE_VM_IP> "sudo cp /home/azureadmin/platform/web/routes/*.py /opt/architekt/patches/"
 ```
 
 GitLab CI: `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE_USER`.
@@ -193,7 +193,7 @@ GitLab CI: `.gitlab-ci.yml` — variables `AZURE_SSH_KEY`, `AZURE_VM_IP`, `AZURE
 
 ## Helm (Kubernetes)
 
-Chart: `deploy/helm/architekt/` (`architekt-platform`). Legacy chart `deploy/helm/macaron/` remains for reference until removed.
+Chart: `deploy/helm/architekt/` (`architekt-platform`). Legacy chart `deploy/helm/architekt/` remains for reference until removed.
 
 ---
 

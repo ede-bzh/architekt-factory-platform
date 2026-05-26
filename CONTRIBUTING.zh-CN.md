@@ -21,7 +21,7 @@
 
 ### 报告错误
 
-1. 查看[现有 Issues](https://github.com/macaron-software/software-factory/issues) 以避免重复
+1. 查看[现有 Issues](https://github.com/ede-bzh/architekt-factory-platform/issues) 以避免重复
 2. 使用[错误报告模板](.github/ISSUE_TEMPLATE/bug_report.md)
 3. 包括：重现步骤、预期行为与实际行为、环境详情
 
@@ -44,7 +44,7 @@
 ## 开发环境设置
 
 ```bash
-git clone https://github.com/macaron-software/software-factory.git
+git clone https://github.com/ede-bzh/architekt-factory-platform.git
 cd software-factory
 cp .env.example .env
 python3 -m venv .venv && source .venv/bin/activate

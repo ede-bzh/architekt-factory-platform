@@ -251,7 +251,7 @@ async def jira_sync_from_platform(mission_id: str, board_id: int = 8680) -> str:
                 summary=feat["title"],
                 issue_type="Feature",
                 description=feat.get("description", ""),
-                labels=["macaron-sync", f"mission-{mission_id[:8]}"],
+                labels=["architekt-sync", f"mission-{mission_id[:8]}"],
             )
             if "Created" in result:
                 jira_key = result.split(" ")[1]
@@ -275,7 +275,7 @@ async def jira_sync_from_platform(mission_id: str, board_id: int = 8680) -> str:
                 summary=story["title"],
                 issue_type="User Story",
                 description=story.get("acceptance_criteria", ""),
-                labels=["macaron-sync"],
+                labels=["architekt-sync"],
             )
             if "Created" in result:
                 jira_key = result.split(" ")[1]
@@ -298,7 +298,7 @@ async def jira_sync_from_platform(mission_id: str, board_id: int = 8680) -> str:
                 summary=task["title"],
                 issue_type="User Story",
                 description=task.get("description", ""),
-                labels=["macaron-sync"],
+                labels=["architekt-sync"],
             )
             if "Created" in result:
                 jira_key = result.split(" ")[1]
@@ -420,7 +420,7 @@ async def jira_kanban_sync(direction: str = "both") -> str:
 
         # ── Jira → Platform ──
         if direction in ("from_jira", "both"):
-            # Also check issues with macaron-sync label not yet linked
+            # Also check issues with architekt-sync label not yet linked
             for key, issue in jira_issues.items():
                 jira_status = issue["fields"]["status"]["name"]
                 new_kanban = _JIRA_TO_PLATFORM.get(jira_status, "funnel")
@@ -457,7 +457,7 @@ async def jira_kanban_sync(direction: str = "both") -> str:
                     project=project_key,
                     summary=f"[SF] {m['name'][:80]}",
                     issue_type="Feature",
-                    description=f"Auto-synced from Macaron Software Factory.\nMission ID: {m['id']}\nStatus: {m['status']}\nKanban: {m['kanban_status'] or 'funnel'}",
+                    description=f"Auto-synced from Architekt Factory Platform.\nMission ID: {m['id']}\nStatus: {m['status']}\nKanban: {m['kanban_status'] or 'funnel'}",
                 )
                 if "Created" in result:
                     jira_key = result.split(" ")[1]

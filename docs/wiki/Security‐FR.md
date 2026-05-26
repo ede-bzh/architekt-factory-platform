@@ -9,7 +9,7 @@ Modèle de sécurité de la **plateforme Architekt** (Architekt Factory) : authe
 | Variable | Rôle |
 |----------|------|
 | `ARCHITEKT_API_KEY` | **Principale** — à utiliser pour tous les nouveaux déploiements |
-| `MACARON_API_KEY` | **Alias 6 mois** — même secret ; conservée pour la rétrocompatibilité |
+| `ARCHITEKT_API_KEY` | **Alias 6 mois** — même secret ; conservée pour la rétrocompatibilité |
 
 `AuthMiddleware` (`platform/security.py`) valide les jetons Bearer par comparaison SHA-256. Les mutations (`POST`, `PATCH`, `DELETE` sur `/api/*`) exigent une clé valide lorsque l'une des variables est définie.
 

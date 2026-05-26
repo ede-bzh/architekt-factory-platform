@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Macaron Platform — Health Monitor.
+"""Architekt Platform — Health Monitor.
 
 Usage:
     python3 -m platform.ops.health           # Run all checks
@@ -26,7 +26,7 @@ from pathlib import Path
 
 VM_HOST = os.getenv("AZURE_VM_IP", "localhost")
 VM_USER = "azureadmin"
-STORAGE_ACCOUNT = "macaronbackups"
+STORAGE_ACCOUNT = "architektbackups"
 
 
 def _load_env():
@@ -56,7 +56,7 @@ def _run(cmd: str, timeout: int = 15) -> tuple[int, str]:
 def check_vm_http() -> dict:
     """Check VM HTTP 200."""
     code, out = _run(
-        f"curl -s -o /dev/null -w '%{{http_code}}' -u macaron:macaron http://{VM_HOST}/ --connect-timeout 10"
+        f"curl -s -o /dev/null -w '%{{http_code}}' -u architekt:architekt http://{VM_HOST}/ --connect-timeout 10"
     )
     status = out.strip()
     ok = status == "200"
@@ -189,7 +189,7 @@ def print_results(results: list[dict], as_json: bool = False):
     all_ok = all(r["ok"] for r in results)
     status = "✅ HEALTHY" if all_ok else "❌ DEGRADED"
     print(f"\n{'=' * 50}")
-    print(f"  MACARON HEALTH — {status}")
+    print(f"  ARCHITEKT HEALTH — {status}")
     print(
         f"  {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}"
     )
@@ -201,7 +201,7 @@ def print_results(results: list[dict], as_json: bool = False):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Macaron Health Monitor")
+    parser = argparse.ArgumentParser(description="Architekt Health Monitor")
     parser.add_argument(
         "--watch", action="store_true", help="Run continuously every 5min"
     )

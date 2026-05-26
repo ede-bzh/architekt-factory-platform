@@ -1,6 +1,6 @@
 id: dsi-platform-features
 name: DSI Platform — New Features
-description: Pipeline complet pour les nouvelles fonctionnalités de la plateforme Macaron. Discovery réseau → Comité stratégique
+description: Pipeline complet pour les nouvelles fonctionnalités de la plateforme Architekt. Discovery réseau → Comité stratégique
   GO/NOGO → Architecture → Sprint Dev (6 devs spécialisés) → CI/CD → QA parallèle → Deploy staging/prod → Rétrospective.
 icon: star
 is_builtin: true

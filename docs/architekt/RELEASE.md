@@ -23,7 +23,7 @@ Sur push de tag `v*` :
 
 ## Docker (vague E — hors release courante)
 
-Les **nouvelles** images Docker importent `architekt_platform` (symlink legacy `macaron_platform` 6 mois). Les conteneurs prod non reconstruits restent sur l’ancien layout jusqu’au rebuild — voir [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md).
+Les **nouvelles** images Docker importent `architekt_platform` (symlink legacy `architekt_platform` 6 mois). Les conteneurs prod non reconstruits restent sur l’ancien layout jusqu’au rebuild — voir [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md).
 
 ## Rollback
 

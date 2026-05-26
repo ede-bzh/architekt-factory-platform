@@ -24,7 +24,6 @@ RUN pip install --no-cache-dir playwright && \
     playwright install --with-deps chromium
 
 COPY platform/ /app/architekt_platform/
-RUN ln -sfn architekt_platform /app/macaron_platform
 COPY core/ /app/core/
 COPY skills/ /app/skills/
 COPY projects/ /app/projects/

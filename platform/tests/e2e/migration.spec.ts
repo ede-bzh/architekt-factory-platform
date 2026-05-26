@@ -95,7 +95,7 @@ test.describe("Migration Flow", () => {
   test("navigation between views works", async ({ page }) => {
     // Start at homepage
     await page.goto("/");
-    await expect(page).toHaveTitle(/Macaron/i);
+    await expect(page).toHaveTitle(/Architekt/i);
 
     // Navigate to agents via sidebar
     const agentsLink = page.locator('nav.sidebar a[href="/agents"]');

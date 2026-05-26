@@ -25,7 +25,7 @@ if _sf_dir not in sys.path:
 
 from cli import _output as out
 
-DEFAULT_URL = os.environ.get("MACARON_URL", "http://localhost:8090")
+DEFAULT_URL = os.environ.get("ARCHITEKT_URL", "http://localhost:8090")
 
 
 # ── Backend selection ──
@@ -834,7 +834,7 @@ def build_parser() -> argparse.ArgumentParser:
     # Global flags
     p.add_argument("--url", default=DEFAULT_URL, help="Platform URL")
     p.add_argument("--json", dest="json_output", action="store_true", help="Raw JSON output")
-    p.add_argument("--token", default=os.environ.get("MACARON_TOKEN"), help="Auth token")
+    p.add_argument("--token", default=os.environ.get("ARCHITEKT_TOKEN"), help="Auth token")
     p.add_argument("--api", action="store_true", help="Force API mode")
     p.add_argument("--db", action="store_true", help="Force DB mode")
     p.add_argument("--db-path", dest="db_path", help="SQLite DB path")

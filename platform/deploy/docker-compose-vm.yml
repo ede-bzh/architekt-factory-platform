@@ -16,7 +16,7 @@ services:
 
   platform:
     build:
-      context: /opt/macaron
+      context: /opt/architekt
       dockerfile: platform/deploy/Dockerfile
     expose:
       - "8090"
@@ -24,7 +24,7 @@ services:
       - 8.8.8.8
       - 8.8.4.4
     env_file:
-      - /opt/macaron/.env
+      - /opt/architekt/.env
     environment:
       - PLATFORM_LLM_PROVIDER=azure-openai
       - PLATFORM_LLM_MODEL=gpt-5-mini
@@ -48,9 +48,9 @@ services:
     volumes:
       - platform-data:/app/data
       - workspace-data:/app/workspace
-      - /opt/macaron/.factory-keys:/app/.config/factory:ro
+      - /opt/architekt/.factory-keys:/app/.config/factory:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      - /opt/macaron/repos:/opt/macaron/repos
+      - /opt/architekt/repos:/opt/architekt/repos
     depends_on:
       postgres:
         condition: service_healthy
@@ -64,7 +64,7 @@ services:
 
   android-builder:
     build:
-      context: /opt/macaron/platform/deploy/android-builder
+      context: /opt/architekt/platform/deploy/android-builder
       dockerfile: Dockerfile
     container_name: android-builder
     volumes:
@@ -79,7 +79,7 @@ services:
       - "80:80"
     volumes:
       - ./nginx-vm.conf:/etc/nginx/conf.d/default.conf:ro
-      - /opt/macaron/.htpasswd:/etc/nginx/.htpasswd:ro
+      - /opt/architekt/.htpasswd:/etc/nginx/.htpasswd:ro
     depends_on:
       - platform
     restart: unless-stopped

@@ -83,7 +83,7 @@ else
     echo "Option B: Azure CLI"
     echo "1. Install Azure CLI: https://aka.ms/azure-cli"
     echo "2. Run:"
-    echo "   az vm run-command invoke -g RG-MACARON -n vm-macaron \\"
+    echo "   az vm run-command invoke -g RG-ARCHITEKT -n vm-architekt \\"
     echo "     --command-id RunShellScript \\"
     echo "     --scripts 'docker exec deploy-platform-1 bash -c \"cd /app && git pull origin master\" && docker restart deploy-platform-1'"
     echo ""

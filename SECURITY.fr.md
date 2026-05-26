@@ -24,7 +24,7 @@
 Si vous decouvrez une vulnerabilite de securite, veuillez la signaler de maniere responsable :
 
 1. **N'ouvrez pas** une issue publique sur GitHub
-2. Envoyez un email a **security@macaron-software.com**
+2. Envoyez un email a **security@architekt.ai**
 3. Incluez :
    - Description de la vulnerabilite
    - Etapes de reproduction

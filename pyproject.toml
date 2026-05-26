@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Macaron Software", email = "dev@macaron.software"}
+    {name = "Architekt Software", email = "dev@architekt.ai"}
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -40,7 +40,7 @@ pydantic = [
 factory = "cli.factory:main"
 
 [project.urls]
-Repository = "https://github.com/macaron-software/software-factory"
+Repository = "https://github.com/ede-bzh/architekt-factory-platform"
 
 [tool.setuptools.packages.find]
 include = ["core*", "mcp_lrm*", "cli*", "analyzers*"]
