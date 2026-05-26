@@ -33,7 +33,7 @@ Gate **La Poste** : `tests/test_no_legacy_external_refs.py` (fichiers trackés) 
 | `Home‐ES.md`, `Home‐IT.md`, `Home‐PT.md`, `Home‐DE.md`, `Home‐JA.md`, `Home‐ZH.md` | Branding Macaron, clone legacy | **Hors scope i18n officiel** (ROADMAP : EN/FR seulement) — archiver ou supprimer |
 | `API-Reference.md` | `MACARON_API_KEY` seul | Manque `ARCHITEKT_API_KEY`, exemples curl, codes erreur |
 | `Security.md` | `MACARON_API_KEY`, user Docker `macaron` | Manque politique HITL, L2 LLM, CSP nonce (voir PR #13) |
-| `Deployment-Guide.md` | Chemins `/opt/macaron`, module `macaron_platform`, PG host `macaron-platform-pg` | OK pour vague E infra ; ajouter encart « prod legacy » + cible Architekt |
+| `Deployment-Guide.md` | Wave E : tableau `architekt_platform`, runbook, Azure rebuild/hotpatch | ✅ Livré (EN + `Deployment-Guide‐FR`) |
 | `Patterns.md` | 28 lignes, tableau seul | Pas de liens patterns ↔ missions, pas de FR dédié (lien `Patterns‐FR` absent) |
 | `_Sidebar.md` | Déjà « Architekt Factory » | Aligner avec Home après rebrand |
 

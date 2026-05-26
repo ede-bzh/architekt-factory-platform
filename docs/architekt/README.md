@@ -8,6 +8,7 @@ Internal documentation for **Architekt Factory Platform** (ede-bzh/architekt-fac
 |----------|---------|
 | [LOCAL-DEV.md](LOCAL-DEV.md) | Run the platform locally (`PLATFORM_LLM_PROVIDER=demo`, ports, CLI) |
 | [RELEASE.md](RELEASE.md) | Versioning (`platform/VERSION`), tags `v*`, CI gates, rollback |
+| [WAVE-E-RUNBOOK.md](WAVE-E-RUNBOOK.md) | Container rename `architekt_platform`, Azure rebuild, rollback |
 | [PLATFORM-BACKLOG.md](PLATFORM-BACKLOG.md) | Doc rebrand waves, wiki/README gates, completeness checklist |
 | [REBRAND-DOC-AUDIT.md](REBRAND-DOC-AUDIT.md) | Wave 8 audit: P0–P3 scope, forbidden-string gates, file inventory |
 
@@ -29,3 +30,4 @@ Internal documentation for **Architekt Factory Platform** (ede-bzh/architekt-fac
 - Root agent context: [CLAUDE.md](../../CLAUDE.md)
 - Rebrand ADR: [docs/adr/001-rebrand-architekt.md](../adr/001-rebrand-architekt.md)
 - User wiki (EN/FR): [docs/wiki/Home.md](../wiki/Home.md), [docs/wiki/Home‐FR.md](../wiki/Home‐FR.md)
+- Deployment (EN/FR): [docs/wiki/Deployment-Guide.md](../wiki/Deployment-Guide.md), [Deployment-Guide‐FR.md](../wiki/Deployment-Guide‐FR.md)
