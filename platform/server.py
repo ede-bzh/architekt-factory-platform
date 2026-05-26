@@ -21,6 +21,7 @@ from starlette.responses import JSONResponse
 
 from .config import get_config
 from .db.migrations import init_db
+from .runtime import default_otel_service_name, runtime_module
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,7 @@ if os.environ.get("OTEL_ENABLED"):
 
         _otel_resource = Resource.create(
             {
-                "service.name": os.environ.get("OTEL_SERVICE_NAME", "macaron-platform"),
+                "service.name": default_otel_service_name(),
                 "service.version": "1.2.0",
                 "deployment.environment": os.environ.get("PLATFORM_ENV", "production"),
             }
@@ -377,11 +378,7 @@ async def lifespan(app: FastAPI):
     # Start unified MCP SF server (platform + LRM tools merged)
     _mcp_procs: dict[str, Any] = {}
 
-    _mcp_sf_mod = (
-        "macaron_platform.mcp_platform.server"
-        if Path("/app/macaron_platform").exists()
-        else "platform.mcp_platform.server"
-    )
+    _mcp_sf_mod = runtime_module("mcp_platform.server")
 
     def _kill_port(port: int) -> None:
         """Kill any process holding the given TCP port (best-effort)."""

@@ -43,7 +43,7 @@ Tout le repo + la documentation + le cadre légal portent la marque **Architekt*
 
 ### Niveau 3 — Runtime / packaging (PAS Phase 0, reporté Phase 3+)
 
-- [ ] Package Python `macaron_platform` → `architekt_platform` — reporté
+- [x] Package Python conteneur `architekt_platform` (+ alias `macaron_platform`) — vague E engagée
 - [ ] Image Docker `architekt-platform` — reporté
 - [ ] Helm chart renommé — reporté
 

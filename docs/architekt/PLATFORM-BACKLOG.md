@@ -243,7 +243,7 @@ Pas de site vitrine client en phase 0.
 
 ### P2 — Infra (vague E)
 
-- [ ] Runbook `macaron_platform` → `architekt_platform`
+- [x] Runbook `macaron_platform` → `architekt_platform` — [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md)
 - [ ] Helm chart cible Architekt
 
 ### Critères de done Wave 8
@@ -295,7 +295,7 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 - [ ] **Multi-tenant** + isolation tenant (gate 10+ clients)
 - [ ] **Stripe** billing / usage LLM
 - [ ] **Pentest externe** (L3 regulated workflow)
-- [ ] **Docker rename** `architekt_platform` (alias `macaron_platform`)
+- [x] **Docker rename** `architekt_platform` (alias `macaron_platform` symlink 6 mois)
 - [ ] **Mutation testing** — seuil **50 %** modules critiques (mutmut CI)
 - [x] **Adversarial L2 LLM** — *done (wave 2)* (autres agents)
 - [x] **Dashboard `dashboard/`** rebrand — *done (wave 2)* (autres agents)

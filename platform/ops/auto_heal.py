@@ -36,7 +36,7 @@ _SEV_ORDER = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
 
 # Workflow ID for TMA missions
 TMA_WORKFLOW_ID = "tma-autoheal"
-TMA_PROJECT_ID = "macaron-platform"
+TMA_PROJECT_ID = "architekt-platform"
 
 
 @dataclass

@@ -23,7 +23,7 @@ Sur push de tag `v*` :
 
 ## Docker (vague E — hors release courante)
 
-Le package runtime reste `macaron_platform` dans les images existantes. Le renommage `architekt_platform` est documenté dans `docs/adr/001-rebrand-architekt.md` et traité en vague E séparée.
+Les **nouvelles** images Docker importent `architekt_platform` (symlink legacy `macaron_platform` 6 mois). Les conteneurs prod non reconstruits restent sur l’ancien layout jusqu’au rebuild — voir [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md).
 
 ## Rollback
 
