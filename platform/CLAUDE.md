@@ -35,7 +35,7 @@ KILL:   lsof -ti:8099 | xargs kill -9
 
 ## DEPLOY — prod legacy (Azure)
 
-> **Production Azure** (ADR-001 vague E): repo source `platform/`; **new images** install `/app/architekt_platform/` (symlink `architekt_platform` 6 mois). VM host tree **`/opt/architekt`** unchanged. See [`docs/architekt/WAVE-E-RUNBOOK.md`](../docs/architekt/WAVE-E-RUNBOOK.md).
+> **Production Azure** (ADR-001 vague E): repo source `platform/`; **new images** install `/app/architekt_platform/`. VM host tree **`/opt/architekt`** unchanged. See [`docs/architekt/WAVE-E-RUNBOOK.md`](../docs/architekt/WAVE-E-RUNBOOK.md).
 
 ```bash
 SSH_KEY="$HOME/.ssh/az_ssh_config/RG-ARCHITEKT-vm-architekt/id_rsa"
@@ -46,9 +46,9 @@ ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "cd /opt/architekt && docker compose --
 # FAST hotpatch (no rebuild, preserves container state):
 tar cf /tmp/update.tar <files...>
 scp -i "$SSH_KEY" /tmp/update.tar azureadmin@4.233.64.30:/tmp/
-ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platform-1:/tmp/ && docker exec deploy-platform-1 bash -c 'cd /app/architekt_platform 2>/dev/null || cd /app/architekt_platform; tar xf /tmp/update.tar' && docker restart deploy-platform-1"
+ssh -i "$SSH_KEY" azureadmin@4.233.64.30 "docker cp /tmp/update.tar deploy-platform-1:/tmp/ && docker exec deploy-platform-1 bash -c 'cd /app/architekt_platform && tar xf /tmp/update.tar' && docker restart deploy-platform-1"
 # ⚠️ Hotpatch is LOST on docker compose --build → always rsync BEFORE rebuild
-# Container code path: /app/architekt_platform/ (post-rebuild) or /app/architekt_platform/ (pre-rebuild)
+# Container code path: /app/architekt_platform/
 # Prod LLM: Azure OpenAI gpt-5-mini only (AZURE_DEPLOY=1, NO minimax fallback)
 # Legacy domain (nginx): sf.architekt.ai → 4.233.64.30:80
 # UID mismatch: /opt/architekt owned by 501 (macOS), azureadmin=1001 → use docker cp
@@ -479,7 +479,7 @@ platform/
 - HTTP 400 tool message ordering: `messages with role 'tool' must follow 'tool_calls'` — executor bug, non-fatal
 - UID mismatch on Azure: /opt/architekt owned by 501, azureadmin=1001 → docker cp workaround
 - `_mission_semaphore = Semaphore(1)` — only 1 mission runs at a time, others queue
-- Container path: `/app/architekt_platform/` (Dockerfile; legacy symlink `architekt_platform`)
+- Container path: `/app/architekt_platform/` (Dockerfile)
 - curl inside container: use docker network IP, NOT localhost (nginx proxies port 80→8090)
 
 ## CI/CD SECRETS

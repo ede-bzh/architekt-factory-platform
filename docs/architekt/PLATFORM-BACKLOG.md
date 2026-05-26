@@ -243,8 +243,8 @@ Pas de site vitrine client en phase 0.
 
 ### P2 — Infra (vague E)
 
-- [x] Runbook `architekt_platform` → `architekt_platform` — [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md)
-- [ ] Helm chart cible Architekt
+- [x] Runbook `macaron_platform` → `architekt_platform` — [`WAVE-E-RUNBOOK.md`](WAVE-E-RUNBOOK.md)
+- [x] Helm chart cible Architekt — `deploy/helm/architekt/`
 
 ### Critères de done Wave 8
 

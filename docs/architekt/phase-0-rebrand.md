@@ -45,7 +45,7 @@ Tout le repo + la documentation + le cadre légal portent la marque **Architekt*
 
 - [x] Package Python conteneur `architekt_platform` (+ alias `architekt_platform`) — vague E engagée
 - [ ] Image Docker `architekt-platform` — reporté
-- [ ] Helm chart renommé — reporté
+- [x] Helm chart renommé — `deploy/helm/architekt/` (vague E)
 
 ### Brand system minimal (nouveau Phase 0)
 
