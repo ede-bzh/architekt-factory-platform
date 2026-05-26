@@ -200,7 +200,7 @@ Détail par phase : `docs/architekt/phase-*.md`
 |----------|------|
 | [`docs/architekt/PLATFORM-BACKLOG.md`](architekt/PLATFORM-BACKLOG.md) | Checkboxes détaillées par wave |
 | [`docs/architekt/REBRAND-DOC-AUDIT.md`](architekt/REBRAND-DOC-AUDIT.md) | Audit doc Macaron/La Poste |
-| [`docs/AUDIT_REBRAND.md`](../AUDIT_REBRAND.md) | Audit UI vagues A–E |
+| [`docs/AUDIT_REBRAND.md`](AUDIT_REBRAND.md) | Audit UI vagues A–E |
 | [`docs/architekt/RELEASE.md`](architekt/RELEASE.md) | Process release semver |
-| [`platform/SPECS.md`](../platform/SPECS.md) | Spécifications techniques |
+| [`platform/SPECS.md`](../platform/SPECS.md) | Spécifications (racine repo) |
 | [Issues GitHub](https://github.com/ede-bzh/architekt-factory-platform/issues) | Suivi tâches |
