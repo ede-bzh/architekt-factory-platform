@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import os
+import secrets
 import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -37,12 +38,10 @@ if os.environ.get("OTEL_ENABLED"):
         from opentelemetry.sdk.trace import TracerProvider
         from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
-        from .version import get_platform_version
-
         _otel_resource = Resource.create(
             {
                 "service.name": os.environ.get("OTEL_SERVICE_NAME", "macaron-platform"),
-                "service.version": get_platform_version(),
+                "service.version": "1.2.0",
                 "deployment.environment": os.environ.get("PLATFORM_ENV", "production"),
             }
         )
@@ -259,8 +258,6 @@ async def lifespan(app: FastAPI):
 
     # Start evolution scheduler (nightly GA + RL retraining at 02:00 UTC)
     try:
-        from .ops.prune_llm_traces import prune_llm_traces
-        prune_llm_traces()
         from .agents.evolution_scheduler import start_evolution_scheduler as _evo_sched
 
         _asyncio.create_task(_evo_sched())
@@ -624,7 +621,7 @@ def create_app() -> FastAPI:
             response.headers["X-Frame-Options"] = "DENY"
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
                 "font-src 'self' https://fonts.gstatic.com; "
                 "img-src 'self' data: https://api.dicebear.com https://avatars.githubusercontent.com; "
@@ -1073,8 +1070,7 @@ def create_app() -> FastAPI:
         except Exception:
             _sha, _tag = "unknown", ""
     templates.env.globals["app_commit"] = _sha
-    from .version import get_platform_version
-    templates.env.globals["app_version"] = get_platform_version()
+    templates.env.globals["app_version"] = _tag or _sha
 
     # Middleware to set current language per-request
     from starlette.middleware.base import BaseHTTPMiddleware

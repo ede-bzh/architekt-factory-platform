@@ -5,7 +5,7 @@ Pas de site vitrine client en phase 0.
 
 > **Alignement tiers** : P0 = Tier **S** · P1 = Tier **A** · P2 = Tier **B** · P3 = Tier **C**
 > Catalogue complet : `docs/ROADMAP.md` § Catalogue features plateforme.
-> **Wave en cours** : **#13** (L2 LLM, mutation, CSP) — voir `docs/ROADMAP.md`.
+> **Wave en cours** : P2 scale (multi-tenant, mutation 50 % global) — voir `docs/ROADMAP.md`.
 
 ## Légende priorités
 
@@ -82,20 +82,15 @@ Pas de site vitrine client en phase 0.
 
 ## Wave 5 — livré (audit & durcissement)
 
-> PR #11 + #12 (merge `main`).
+> PR #11 + #12 + #13 (merge `main`).
 
-- [x] **CI verte 100 %** sur `main`
-- [x] **`run_guard` → L2** — pipeline L0→L2→L1
-- [x] **HITL deploy API** — `POST /api/missions/{id}/hitl/deploy` + `docs/architekt/HITL.md`
-- [x] **`MAX_ARCHITEKT_SKILLS`** — plafond par rôle (`skill_limits.py`, défaut 14)
-- [x] **i18n EN/FR** (ZH hors scope)
-- [x] **4 DPA templates** — `docs/compliance/dpa/` (SG, UAE, EU, US)
-- [x] **Dashboard legacy** documenté ; `monitoring.js` + `platform/metrics/live.py`
-- [x] **CI bandit + pip-audit bloquants**
-- [x] Wiki Darwin/Deployment enrichi ; Dependabot ; E2E `gateE2E`
-- [ ] **Adversarial L2 LLM** → **PR #13**
-- [ ] **Mutation testing** 50 % bloquant → **PR #13**
-- [ ] **Dashboard :8080** rebrand UI complet → **PR #13**
+- [x] CI verte, `run_guard` L0→L2→L1, HITL deploy API + `docs/architekt/HITL.md`
+- [x] `MAX_ARCHITEKT_SKILLS`, i18n EN/FR, 4 DPA (`docs/compliance/dpa/`)
+- [x] `monitoring.js`, Dependabot, E2E `gateE2E`, wiki Darwin/Deployment
+- [x] **Adversarial L2 LLM** (`check_l2_llm`, `tests/test_adversarial_l2_llm.py`)
+- [x] **Mutation gate** pragmatique CI (ADR-003) — adversarial ≥15 %, api_key ≥10 %
+- [x] **Dashboard :8080** rebrand minimal (`dashboard/` templates + landing)
+- [ ] Mutation **50 % global** bloquant (reporté Wave 7)
 
 ## P0 — Tier S (Phase 0–2)
 
@@ -145,7 +140,7 @@ Pas de site vitrine client en phase 0.
 
 ### Qualité & preuve client
 
-- [ ] Mutation testing (ADR-003) — mutmut sur modules critiques (seuil 50 %) → **Wave 5**
+- [x] Mutation testing (ADR-003) — mutmut 2.4 CI `scripts/ci/run_mutmut.sh` ; seuil global 50 % → **Wave 7**
 - [x] E2E Playwright smoke en CI (login + health — pas les 82 specs)
 - [x] Mini dashboard `/proof` (DORA, Lighthouse, a11y, SBOM)
 - [x] Case study generator (template + métriques mission)
@@ -196,14 +191,15 @@ Pas de site vitrine client en phase 0.
 ## P3 — Tier C (Phase 6–7+)
 
 > **Gate** : multi-tenant après 10+ clients ; SaaS = optionnel (Phase 7).
+> Items multi-tenant / Stripe / pentest / docker rename / mutation 50 % sont **trackés en Wave 7** (P2) — voir `ROADMAP-WAVE7.md`.
 
-- [ ] Multi-tenant + isolation tenant
-- [ ] Billing Stripe / facturation auto
+- [ ] Multi-tenant + isolation tenant → **Wave 7**
+- [ ] Billing Stripe / facturation auto → **Wave 7**
 - [ ] Marketplace skills/templates public
 - [ ] Canary deployment workflow prod (1%→100% + HITL)
 - [ ] Darwin teams / Thompson scoring agents
-- [ ] Pentest externe workflow (L3 regulated)
-- [ ] Packaging Docker `architekt_platform` (niveau 3 ADR)
+- [ ] Pentest externe workflow (L3 regulated) → **Wave 7**
+- [ ] Packaging Docker `architekt_platform` (niveau 3 ADR) → **Wave 7**
 
 ---
 
@@ -285,3 +281,21 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 - [x] **GA scheduler LIVE** — `evolution_scheduler.py` nightly 02:00 UTC (`server.py` lifespan)
 - [x] **RL hook** — `platform/agents/rl_hooks.py` + `patterns/engine.py` (`apply_rl_pattern_override`)
 - [x] Release job CI sur tags `v*` (SBOM artifact)
+- [x] Compteurs : ~163 agents, 41 workflows, 104 skills YAML
+
+
+---
+
+## Wave 7 — scale P2 & security polish (doc + CSP)
+
+> Détail : `docs/architekt/ROADMAP-WAVE7.md` · CSP : `docs/architekt/CSP.md`
+
+- [x] **CSP** — politique documentée (default vs workspace), lien `security_headers` middleware
+- [x] **`PLATFORM_CSP_NONCE=0|1`** — `ServerConfig.csp_nonce` + génération nonce optionnelle `script-src` (HTMX : `unsafe-inline` conservé)
+- [ ] **Multi-tenant** + isolation tenant (gate 10+ clients)
+- [ ] **Stripe** billing / usage LLM
+- [ ] **Pentest externe** (L3 regulated workflow)
+- [ ] **Docker rename** `architekt_platform` (alias `macaron_platform`)
+- [ ] **Mutation testing** — seuil **50 %** modules critiques (mutmut CI)
+- [x] **Adversarial L2 LLM** — *done (wave 2)* (autres agents)
+- [x] **Dashboard `dashboard/`** rebrand — *done (wave 2)* (autres agents)

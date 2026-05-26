@@ -1,74 +1,39 @@
-# ADR-003 : Mutation testing comme indicateur qualité réel des tests
+# ADR-003 : Mutation testing (pragmatic CI gate)
 
-- **Statut** : Proposé
-- **Date** : 2026-05-24
-- **Décideurs** : CTO, CAIO, Software Engineer (agent)
+- **Statut** : Accepté (wave P1)
+- **Date** : 2026-05-25
+- **Référence** : `scripts/ci/run_mutmut.sh`, `scripts/ci/mutation_gate.sh`, job `mutation` dans `.github/workflows/ci.yml`
 
 ## Contexte
 
-Le code coverage classique (% de lignes exécutées) **ment** : un test sans assertion donne 100% de coverage. Pour vendre des projets enterprise en Asie, Architekt doit pouvoir prouver la **qualité réelle** de sa suite de tests.
+Le coverage classique ne garantit pas que les tests détectent les régressions. Le mutation testing mute le code et vérifie que la suite échoue. Un objectif **global 50 %** sur `platform/` est reporté (coût CPU + surface 156 agents).
 
-Le **mutation testing** introduit de petites mutations dans le code et vérifie que les tests les détectent. Score &gt; 80 % = suite de tests sérieuse.
+## Décision (scope wave P1)
 
-## Décision
+| Cible | Fichier | Tests | Seuil minimal |
+|-------|---------|-------|----------------|
+| Garde-fous adversarial | `platform/agents/adversarial.py` (focus `check_l0`, `check_l2` via tests dédiés) | `tests/test_adversarial_l0.py`, `tests/test_adversarial_l2.py` | **15 %** |
+| Clé API | `platform/auth/api_key.py` | `test_get_platform_api_key_*` | **10 %** |
 
-**Mutation testing obligatoire** sur tout projet Architekt, avec outil par stack :
+- **Outil** : `mutmut==2.4.5` (compatible `--paths-to-mutate` ; évite le conflit stdlib `platform/` avec mutmut 3 en stats).
+- **CI** : timeout **900 s** par cible ; `--max-children=2` réservé à mutmut 3+ (non activé tant que le linking stats n’est pas fiable).
+- **Score** : `tués / (tués + survivants)` depuis `.mutmut-cache` (SQLite) ; mutants `untested` exclus.
+- **Job** : `continue-on-error: true` sur le job ; l’étape **Mutation gate** exécute `mutation_gate.sh` et **échoue** si le seuil n’est pas atteint (visible dans le résumé Actions).
 
-| Stack | Outil | Seuil "break" CI |
-|-------|-------|------------------|
-| JS / TS | **Stryker Mutator** | 60% |
-| Python | **mutmut** | 60% |
-| Java | **PIT (Pitest)** | 60% |
-| Rust | `cargo-mutants` | 60% (si projet Rust) |
+## Exécution locale
 
-**Mode d'exécution** :
-- PRs : `--incremental` (mutants des fichiers changés uniquement)
-- Nightly : run complet
-- Cible **80%** atteinte progressivement (mois 1 = 50%, mois 3 = 70%, mois 6 = 80%)
+```bash
+cd /workspace
+pip install mutmut==2.4.5 pytest pytest-asyncio
+export PLATFORM_ENV=test PLATFORM_LLM_PROVIDER=demo
 
-## Justification
-
-| Argument | Détail |
-|----------|--------|
-| Coverage ne suffit pas | 100% coverage avec tests vides = possible |
-| Standard 2026 | Stryker (JS/TS), mutmut (Py), PIT (Java) = matures, en CI |
-| Différenciant commercial | Peu d'agences l'utilisent → argument vente enterprise |
-| Aligne avec adversarial guard | Garde-fou "no fake tests" déjà dans la plateforme |
-| Reboucle TDD | Mutant survivant = test manquant → renforce TDD |
-
-## Intégration plateforme
-
-1. Ajouter `mutation_test` comme tool dans `platform/tools/build_tools.py` (wrapper Stryker/mutmut/PIT).
-2. Phase QA des workflows : appel `mutation_test` après `test`.
-3. Agent QA reçoit le rapport, doit ajouter tests pour tuer les mutants survivants.
-4. Gate adversarial L2 : si score &lt; seuil → veto.
-
-## Exemple configuration Stryker (projet pilote Architekt site)
-
-```js
-// stryker.conf.js
-module.exports = {
-  packageManager: 'npm',
-  reporters: ['html', 'clear-text', 'progress'],
-  testRunner: 'vitest',
-  coverageAnalysis: 'perTest',
-  mutate: ['src/**/*.ts', '!src/**/*.test.ts'],
-  thresholds: { high: 80, low: 60, break: 50 },
-  incremental: true,
-};
+bash scripts/ci/run_mutmut.sh api_key
+bash scripts/ci/run_mutmut.sh adversarial   # ~3–15 min selon machine
 ```
+
+Afficher les survivants : `env -u PYTHONPATH mutmut results` puis `mutmut show <id>`.
 
 ## Conséquences
 
-### Positives
-- Qualité réelle mesurable, communicable au client
-- Différenciant GTM Architekt vs agences classiques
-- Cohérent avec doctrine TDD existante
-
-### Négatives
-- Mutation testing coûteux en CPU (mitigé par mode incrémental)
-- Courbe d'apprentissage agents (à intégrer dans `skills/architekt-tech.md`)
-
-### Risques
-- Si seuil trop strict trop tôt → frustration
-- Mitigation : seuil progressif (50 → 70 → 80% sur 6 mois)
+- Gate honnête sur deux modules critiques sans bloquer tout le monorepo.
+- Améliorer le score adversarial → renforcer tests L0/L2 ou réduire la surface mutée (pragma / extraction) avant de viser 50 % global.

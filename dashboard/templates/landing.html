@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architekt Factory Monitor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --architekt-bg: #0f0a1a;
+            --architekt-accent: #a855f7;
+        }
+        body { background: var(--architekt-bg); color: #e9d5ff; }
+        .accent { color: var(--architekt-accent); }
+        .card {
+            background: rgba(30, 20, 50, 0.85);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+        }
+        a.link-card:hover { border-color: var(--architekt-accent); }
+    </style>
+</head>
+<body class="h-full min-h-screen flex flex-col">
+    <main class="flex-1 max-w-2xl mx-auto px-6 py-16 w-full">
+        <p class="text-sm uppercase tracking-wider accent mb-2">Port 8080 — legacy monitor</p>
+        <h1 class="text-3xl font-bold text-white mb-4">Architekt Factory Monitor</h1>
+        <p class="text-purple-200/80 mb-8 leading-relaxed">
+            This service is a lightweight local monitor for legacy factory SQLite data and daemons.
+            The <strong class="text-white">primary UI</strong> runs on the Architekt platform
+            (<code class="text-sm accent">{{ platform_url }}</code>). This dashboard does not proxy
+            the platform without <code class="text-sm">PLATFORM_URL</code> configuration.
+        </p>
+
+        <div class="space-y-3 mb-10">
+            <a href="{{ platform_url }}/monitoring"
+               class="link-card card block rounded-lg px-5 py-4 transition-colors">
+                <span class="font-semibold text-white">Live monitoring</span>
+                <span class="block text-sm text-purple-300/70 mt-1">{{ platform_url }}/monitoring</span>
+            </a>
+            <a href="{{ platform_url }}/proof"
+               class="link-card card block rounded-lg px-5 py-4 transition-colors">
+                <span class="font-semibold text-white">Proof &amp; audit</span>
+                <span class="block text-sm text-purple-300/70 mt-1">{{ platform_url }}/proof</span>
+            </a>
+            <a href="{{ platform_url }}/api/health"
+               class="link-card card block rounded-lg px-5 py-4 transition-colors">
+                <span class="font-semibold text-white">Platform health API</span>
+                <span class="block text-sm text-purple-300/70 mt-1">{{ platform_url }}/api/health</span>
+            </a>
+        </div>
+
+        <div class="card rounded-lg px-5 py-4 mb-6">
+            <p class="text-sm text-purple-200/90">
+                <span class="accent font-medium">Legacy monitor:</span>
+                <a href="/legacy" class="underline hover:text-white">/legacy</a> (tasks &amp; daemons),
+                <a href="/tasks" class="underline hover:text-white">/tasks</a>,
+                <a href="/health" class="underline hover:text-white">/health</a>
+            </p>
+        </div>
+
+        <p class="text-xs text-purple-400/60">
+            Set <code>PLATFORM_URL</code> if the platform is not on localhost:8099.
+        </p>
+    </main>
+    <footer class="text-center text-xs text-purple-500/50 py-6">
+        Architekt Factory Monitor — legacy · primary UI :8099
+    </footer>
+</body>
+</html>

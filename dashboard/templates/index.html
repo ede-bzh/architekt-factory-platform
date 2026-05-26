@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Software Factory{% endblock %}
+{% block title %}Legacy monitor — {{ brand_name }}{% endblock %}
 
 {% block content %}
 <!-- Global Stats Cards -->
@@ -28,7 +28,7 @@
 </div>
 
 <!-- Global Progress Bar -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-8">
+<div class="bg-[#1a1228] border border-purple-900/40 rounded-lg shadow p-4 mb-8">
     <div class="flex justify-between items-center mb-2">
         <span class="text-sm font-medium">Overall Progress</span>
         <span class="text-sm text-gray-500 dark:text-gray-400">{{ stats.success_pct }}% complete</span>
