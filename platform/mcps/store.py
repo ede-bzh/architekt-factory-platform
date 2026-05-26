@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Optional
 
 from ..config import DB_PATH
+from ..runtime import runtime_module
 
 logger = logging.getLogger(__name__)
 
@@ -289,7 +290,7 @@ BUILTIN_MCPS = [
         name="Solaris Design System",
         description="Solaris Design System — Figma components, variants, WCAG patterns, design tokens, validation reports.",
         command="python3",
-        args=["-m", "macaron_platform.mcp_solaris"],
+        args=["-m", runtime_module("mcp_solaris")],
         tools=[
             {
                 "name": "solaris_component",

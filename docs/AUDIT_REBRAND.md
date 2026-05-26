@@ -12,7 +12,7 @@ Méthode : commandes shell + `pytest` sur le dépôt (pas d’affirmation sans p
 | B — Documentation | **OK** | `README.md`/`README.fr.md` Architekt, `.env.example`, `docs/ROADMAP.md`, wiki EN/FR, screenshots `en`+`fr` seulement |
 | C — Rationalisation | **OK** | Chiffres ~160+ agents / 41 workflows dans wiki ; `platform/SPECS.md` §14.4 |
 | D — Sync externe | **OK** | outil de sync miroir supprimé, `.gitlab-ci.yml` optionnel (wiki) |
-| E — Docker `macaron_platform` | **Hors scope** | Inchangé volontairement |
+| E — Docker `architekt_platform` | **Engagé** | `platform/runtime.py`, Dockerfile, runbook vague E |
 
 ## i18n UI (EN/FR)
 

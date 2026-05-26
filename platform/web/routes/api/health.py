@@ -742,11 +742,19 @@ async def monitoring_live(request: Request, hours: int = 24):
                 }
 
             # Platform repo candidates
-            for candidate, lbl in [
-                ("/app", "platform"),
-                ("/opt/macaron", "platform"),
-                (os.getcwd(), "platform"),
-            ]:
+            from ....runtime import container_code_dir
+
+            _code_candidates: list[tuple[str, str]] = [("/app", "platform")]
+            _code_dir = container_code_dir()
+            if _code_dir is not None:
+                _code_candidates.insert(0, (str(_code_dir), "platform"))
+            _code_candidates.extend(
+                [
+                    ("/opt/macaron", "platform"),
+                    (os.getcwd(), "platform"),
+                ]
+            )
+            for candidate, lbl in _code_candidates:
                 info = _git_repo_info(candidate, lbl)
                 if info:
                     git_info.append(info)

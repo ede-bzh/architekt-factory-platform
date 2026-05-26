@@ -1,6 +1,6 @@
 # ADR-001 : Rebrand de Software Factory / Macaron vers Architekt
 
-- **Statut** : Proposé
+- **Statut** : Accepté (niveaux 1–2 livrés ; niveau 3 engagé vague E 2026-05-24)
 - **Date** : 2026-05-24
 - **Décideurs** : CPO, CTO
 - **Contexte business** : création de la société **Architekt Pte. Ltd.** (Singapour), studio agentique pour livrer sites & plateformes en Asie.
