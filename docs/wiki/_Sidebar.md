@@ -2,7 +2,7 @@
 
 **[Home](Home)** · 🇫🇷 [Français](Home‐FR)
 
-### Pages
+### Pages (EN)
 - [Architecture](Architecture)
 - [Deployment Guide](Deployment-Guide)
 - [API Reference](API-Reference)
@@ -12,3 +12,13 @@
 - [Security](Security)
 - [LLM Configuration](LLM-Configuration)
 - [Darwin Teams](Darwin-Teams)
+
+### Pages (FR)
+- [Architecture](Architecture‐FR)
+- [Déploiement](Deployment-Guide‐FR)
+- [API](API-Reference‐FR)
+- [Agents](Agents‐FR)
+- [Workflows](Workflows‐FR)
+- [Patterns](Patterns‐FR)
+- [Sécurité](Security‐FR)
+- [LLM](LLM-Configuration‐FR)

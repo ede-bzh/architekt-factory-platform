@@ -8,19 +8,19 @@
 
 | Section | Description |
 |---------|-------------|
-| [Architecture](Architecture) | Architecture de la plateforme, composants, flux de données |
-| [Guide de déploiement](Deployment-Guide) | 3 environnements : Azure, OVH, Local |
-| [Référence API](API-Reference) | Endpoints REST, authentification |
-| [Agents](Agents) | ~163 agents répartis en 9 domaines |
-| [Workflows](Workflows) | 41 workflows intégrés |
-| [Patterns](Patterns) | 15 patterns d'orchestration |
-| [Sécurité](Security) | Auth, validation adversariale, secrets |
-| [Configuration LLM](LLM-Configuration) | Configuration multi-fournisseur LLM |
+| [Architecture](Architecture‐FR) | Architecture de la plateforme, composants, flux de données |
+| [Guide de déploiement](Deployment-Guide‐FR) | Demo Architekt (OVH/local) et prod legacy Azure |
+| [Référence API](API-Reference‐FR) | Endpoints REST, authentification |
+| [Agents](Agents‐FR) | ~163 agents répartis en 9 domaines |
+| [Workflows](Workflows‐FR) | 41 workflows intégrés |
+| [Patterns](Patterns‐FR) | 15 patterns d'orchestration |
+| [Sécurité](Security‐FR) | Auth, validation adversariale, secrets |
+| [Configuration LLM](LLM-Configuration‐FR) | Fournisseurs, budget, Darwin LLM |
 | [Darwin Teams](Darwin-Teams) | Sélection évolutive d'équipes + Thompson Sampling LLM |
 
 ## Langues
 
-La documentation est disponible en **anglais** et **français** uniquement.
+🇬🇧 [English](Home) · documentation **française** sur cette page et les pages `*‐FR` ci-dessus.
 
 ## Démarrage rapide
 

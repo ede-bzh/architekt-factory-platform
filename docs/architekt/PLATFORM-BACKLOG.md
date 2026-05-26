@@ -254,7 +254,7 @@ Cf. liste complète `docs/ROADMAP.md` § Ne pas construire tôt.
 - [x] `Deployment-Guide.md` — colonnes « demo Architekt » vs « prod legacy macaron_* »
 - [x] Compléter **`Patterns.md`** (cas d'usage, lien missions / adversarial)
 - [x] Archiver ou supprimer wiki **Home‐ES/DE/IT/PT/JA/ZH** (hors scope i18n EN/FR officiel)
-- [ ] Pages FR manquantes référencées (`Security‐FR`, `Patterns‐FR`, etc.) — créer ou retirer les liens morts
+- [x] Pages FR manquantes référencées (`Security‐FR`, `Patterns‐FR`, etc.) — créer ou retirer les liens morts
 
 ### P1 — Développeur & gates
 
